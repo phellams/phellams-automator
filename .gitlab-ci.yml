@@ -79,7 +79,7 @@ deploy-image-dockerhub:
   script:
     - |
       echo "GENERATE -> SEMVER version from git history"
-      semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion -branch dev).Version") # Capture version
+      semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion -branch main).Version") # Capture version
       echo "GENERATED -> SEMVER -> $semver"
       SEMVER_VERSION=$semver
       docker pull "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
