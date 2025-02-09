@@ -1,5 +1,5 @@
 # Use Debian latest as the base image
-FROM debian:12.7-slim
+FROM debian:12.9-slim
 
 # Set environment variables for non-interactive installation
 ENV DEBIAN_FRONTEND=noninteractive
