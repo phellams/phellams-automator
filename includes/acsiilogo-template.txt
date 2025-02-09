@@ -1,0 +1,41 @@
+                  ___
+              ........          
+        .    ..xxxxxx...   .   
+          ≡-«( •)xx( •)»-≡                    _  _ 
+              ..xxxx..                 /     // //  
+               x[--]x.            _   /_  _ // // __.  ______  _  
+            ....xxxx....         /_)_/ /_</_</_</_(_/|_/ / / <_/_)_
+          ...xxxxxxxxxx...      / [P]owers[HELL][A]uto[M]ation[S]
+       .... .xxxxxxxxxx. ....  `
+      ...   .xxxxxxxxxx.   ...  
+      ..    ..x......x..    ..  
+     ....    .x.    .x.    .... 
+    .////.  ..x.    .x... .    .
+    ..//.    .x.    .x.   ./=/..
+      /     .:x.    .x:. -| ■ Phellam PowerShell Module Builder      
+      ┋    ../..    ..\..-| ■ [ MIT ][ License ]
+      ┋    -----    ----- | ■ v0.1.0                    
+      ┋     ┋INFO┋
+      ┋     ├▣ Default Shell  ─•  pwsh
+      ┋     └▣ Distro Release ─• [base-distro-release]
+      ┋         └○ [kernel-version]
+      ┋
+      ┋     ┋BINARIES┋
+      ┋     ├─▣ pwsh    ✜─• [pwsh-version] 
+      ┋     ├─▣ dotnet  ✜─• [dotnet-version]
+      ┋     └─▣ nuget   ✜─• [nuget-version]
+      ┋ 
+      ┋     ┋MODULES┋
+      ┋     ├─▣ PSScriptAnalyzer   ✜─•[psscriptanalyzer-version]
+      ┋     ├─▣ Pester             ✜─•[pester-version]
+      ┋     ├─▣ PowerShell-Yaml    ✜─•[powerShell-yaml-version]
+      ┋     ├─▣ ColorConsole       ✜─•[colorconsole-version]
+      ┋     ├─▣ quicklog           ✜─•[quicklog-version]
+      ┋     ├─▣ Nupsforge          ✜─•[nupsforge-version]
+      ┋     ├─▣ Psmpacker          ✜─•[psmpacker-version]
+      ┋     ├─▣ Csverify           ✜─•[csverify-version]
+      ┋     ├─▣ GitaAutoVersion    ✜─•[gitautoversion-version]
+      ┋     └─▣ Get-ImageInfo      ✜─•[Get-ImageInfo-version] 
+  ┌───┴───┐
+  ▙ Shell ▟
+─── ─ ••• ─ ─ ─────────────────────
