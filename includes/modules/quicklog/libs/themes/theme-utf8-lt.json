@@ -1,0 +1,218 @@
+{
+  "theme": "utf8-ascii",
+  "props": [
+    {
+      "id": "default-icon",
+      "name": "default-icon",
+      "Description": "Default logicon",
+      "emoji": "⊂⬣⊃",
+      "logname": "COM"
+    },
+    {
+      "id": "Complete",
+      "name": "Complete",
+      "Description": "Success log Message Icon",
+      "emoji": "●",
+      "Logname": "COM"
+    },
+    {
+      "id": "Success",
+      "name": "Success",
+      "Description": "Success log Message Icon",
+      "emoji": "●",
+      "Logname": "SUC"
+    },
+    {
+      "id": "Error",
+      "name": "Error",
+      "Description": "Error log Message Icon",
+      "emoji": "●",
+      "Logname": "ERR"
+    },
+    {
+      "id": "Error2",
+      "name": "Error2",
+      "Description": "Error2 log Message Icon",
+      "emoji": "❓",
+      "Logname": "ER2"
+    },
+    {
+      "id": "info",
+      "name": "info",
+      "Description": "Info log Message Icon",
+      "emoji": "●",
+      "Logname": "INF"
+    },
+    {
+      "id": "action",
+      "name": "action",
+      "Description": "action log Message Icon",
+      "emoji": "●",
+      "Logname": "ACT"
+    },
+    {
+      "id": "request",
+      "name": "request",
+      "Unicode": "#1F310",
+      "Description": "request log Message Icon",
+      "emoji": "●",
+      "Logname": "REQ"
+    },
+    {
+      "id": "response",
+      "name": "response",
+      "Unicode": "#1F30E",
+      "Description": "response log Message Icon",
+      "emoji": "●",
+      "Logname": "RES"
+    },
+    {
+      "id": "seperator",
+      "name": "seperator",
+      "Unicode": "#1F539",
+      "Description": "Miscellaneous symbol",
+      "emoji": "💠",
+      "Logname": "SEP"
+    },
+    {
+      "id": "seperator2",
+      "name": "seperator2",
+      "Unicode": "#1F538",
+      "Description": "Miscellaneous symbol",
+      "emoji": "⇾"
+    },
+    {
+      "id": "logpointer",
+      "name": "logpointer",
+      "Unicode": "#276F",
+      "Description": "Before log message text",
+      "emoji": "⇰",
+      "Logname": "LOG"
+    },
+    {
+      "id": "logtime",
+      "name": "logtime",
+      "Unicode": "#23F0",
+      "Description": "Used for log datetime inbetween logname and datetime",
+      "emoji": ":",
+      "Logname": "TIME"
+    },
+    {
+      "id": "download",
+      "name": "download",
+      "Unicode": "#23EC",
+      "Description": "Download",
+      "emoji": "●",
+      "Logname": "DWN"
+    },
+    {
+      "id": "progress",
+      "name": "progress",
+      "Unicode": "#1F300",
+      "Description": "Used with the Write-LogtasticProgress function to show progress of a download",
+      "emoji": "●",
+      "Logname": "PRG"
+    },
+    {
+      "id": "upload",
+      "name": "upload",
+      "Unicode": "#23EB",
+      "Description": "Used for upload purposes",
+      "emoji": "●",
+      "Logname": "UPL"
+    },
+    {
+      "id": "prop",
+      "name": "prop",
+      "Description": "Used to proptune output ",
+      "emoji": "⬡",
+      "Logname": "PROP"
+    },
+    {
+      "id": "open-bracket",
+      "name": "open-backet",
+      "Description": "Used to proptune output ",
+      "emoji": "⌠",
+      "Logname": "OPTBRK"
+    },
+    {
+      "id": "close-bracket",
+      "name": "close-backet",
+      "Description": "Used to proptune output ",
+      "emoji": "⌡",
+      "Logname": "OPTBRK"
+    },
+    {
+      "id": "submessage",
+      "name": "submessage",
+      "Description": "Used to denote a submessage",
+      "emoji": "↪",
+      "Logname": "SUB"
+    },
+    {
+    "id": "tick",
+    "name": "tick",
+    "Unicode": "#2714",
+    "Description": "Used to denote a tick",
+    "emoji": "✔",
+    "Logname": "TICK"
+    },
+    {
+      "id": "exectime",
+      "name": "exectime",
+      "Unicode": "#23F1",
+      "Description": "Used to denote a exectime",
+      "emoji": "↔",
+      "Logname": "TIME"
+    },
+    {
+      "id": "datastream",
+      "name": "datastream",
+      "Unicode": "#1F4C8",
+      "Description": "Used to denote a datastream",
+      "emoji": "●",
+      "Logname": "DS"
+
+    },
+    {
+      "id":"bandwidth",
+      "name":"bandwidth",
+      "Unicode":"#1F38F",
+      "Description":"Used to denote a bandwidth",
+      "emoji":"●",
+      "Logname":"BW"
+    },
+    {
+      "id":"id",
+      "name":"id",
+      "Unicode":"#1F194",
+      "Description":"Used to denote a id",
+      "emoji":"🆔",
+      "Logname":"ID"
+    },
+    {
+      "id":"ok",
+      "name":"ok",
+      "Unicode":"#1F197",
+      "Description":"Used to denote a ok",
+      "emoji":"🆗",
+      "Logname":"OK"
+    },
+    {
+      "id": "read",
+      "name": "read",
+      "Unicode": "#1F4BD",
+      "Description": "Used to denote a read",
+      "emoji": "●",
+      "Logname": "RDE"
+    },
+    {
+      "id": "write",
+      "name": "write",
+      "Unicode": "#1F4BE",
+      "Description": "Used to denote a read",
+      "emoji": "●",
+      "Logname": "WRE"
+    }
+  ]
+} 

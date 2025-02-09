@@ -1,0 +1,285 @@
+{
+  "theme": "ascii",
+  "properties": [
+    {
+      "id": "log-name",
+      "Description": "Log name color",
+      "name": "log-name",
+      "color": "cyan"
+
+    },
+    {
+      "id": "default-icon",
+      "name": "default-icon",
+      "Description": "Default log icon seen after first [",
+      "icon": "╮",
+      "logname": "",
+      "color": "darkcyan"
+    },
+    {
+      "id": "complete",
+      "name": "complete",
+      "Description": "complete log icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "COM",
+      "color": "green"
+    },
+    {
+      "id": "success",
+      "name": "success",
+      "Description": "Success log icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "SUC",
+      "color": "Green"
+    },
+    {
+      "id": "error",
+      "name": "error",
+      "Description": "Error log icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "✸",
+      "Logname": "ERR",
+      "color": "red"
+    },
+    {
+      "id": "error-q",
+      "name": "error-q",
+      "Description": "error-q log icon seen in error message and sub messages, logname will be used to if no icon is set",
+      "icon": "☂",
+      "Logname": "ERQ",
+      "color": "red"
+    },
+    {
+      "id": "info",
+      "name": "info",
+      "Description": "Info log icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "INF",
+      "color": "white"
+    },
+    {
+      "id": "action",
+      "name": "action",
+      "Description": "Action log icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "ACT",
+      "color": "blue"
+    },
+    {
+      "id": "request",
+      "name": "request",
+      "Description": "Request log Message Icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "REQ",
+      "color": "cyan"
+    },
+    {
+      "id": "response",
+      "name": "response",
+      "Description": "response log Message Icon seen after the first ], logname will be used to if no icon is set",
+      "icon": "❂",
+      "Logname": "RES",
+      "color": "magenta"
+    },
+    {
+      "id": "download",
+      "name": "download",
+      "Description": "Download",
+      "icon": "❂",
+      "Logname": "DWN",
+      "color": "darkcyan"
+    },
+    {
+      "id": "progress",
+      "name": "progress",
+      "Description": "Used with the Write-LogtasticProgress function to show progress of a download",
+      "icon": "❂",
+      "Logname": "PRG",
+      "color": "Green"
+    },
+    {
+      "id": "upload",
+      "name": "upload",
+      "Description": "Used for upload purposes",
+      "icon": "❂",
+      "Logname": "UPL",
+      "color": "darkmagenta"
+    },
+    {
+      "id": "separator",
+      "name": "separator",
+      "Description": "Miscellaneous symbol, used in execution timer",
+      "icon": "⇾",
+      "logname": "⇾",
+      "color": "cyan"
+    },
+    {
+      "id": "log-pointer",
+      "name": "log-pointer",
+      "Description": "Before log message text",
+      "icon": "┅",
+      "Logname": "LOG",
+      "color": "magenta"
+    },
+    {
+      "id": "log-time",
+      "name": "log-time",
+      "Description": "Used for log date time in between logname and date time",
+      "icon": ":",
+      "Logname": ":",
+      "color": "gray"
+    },
+    {
+      "id": "open-bracket",
+      "name": "open-bracket",
+      "Description": "Used to prop-tune output ",
+      "icon": "⌠",
+      "Logname": "⌠",
+      "color": "yellow"
+    },
+    {
+      "id": "close-bracket",
+      "name": "close-bracket",
+      "Description": "Used to prop-tune output ",
+      "icon": "⌡",
+      "Logname": "⌡",
+      "color": "yellow"
+    },
+    {
+      "id": "open-bracket-progress",
+      "name": "open-bracket-progress",
+      "Description": "Used at the start of quick logs progress bar",
+      "icon": "⊆",
+      "Logname": "⊆",
+      "color": "yellow"
+    },
+    {
+      "id": "close-bracket-progress",
+      "name": "close-bracket-progress",
+      "Description": "Used at the end of quick logs progress bar",
+      "icon": "⊇",
+      "Logname": "⊇",
+      "color": "yellow"
+    },
+    {
+      "id": "progress-pointer",
+      "name": "progress-pointer",
+      "Description": "Used at progress bar pointer",
+      "icon": "⊆",
+      "Logname": "⊆",
+      "color": "magenta"
+    },
+    {
+      "id": "progress-fill",
+      "name": "progress-fill",
+      "Description": "Used at progress bar complete",
+      "icon": "≡",
+      "Logname": "≡",
+      "color": "cyan"
+    },
+    {
+      "id": "progress-empty",
+      "name": "progress-empty",
+      "Description": "Used at progress bar un-complete",
+      "icon": "⠒",
+      "Logname": "⠒",
+      "color": "gray"
+    },
+    {
+      "id": "sub-message",
+      "name": "sub-message",
+      "Description": "Used to denote a sub-message, color hangle",
+      "icon": "↪",
+      "Logname": "SUB",
+      "color": "yellow"
+    },
+    {
+      "id": "proptune",
+      "name": "proptune",
+      "Description": "Used to proptune output ",
+      "icon": "⬡═",
+      "Logname": "PROP",
+      "color": "yellow"
+    },
+    {
+      "id": "proptune-property-name",
+      "name": "proptune-property-name",
+      "Description": "Used to denote a icon:'prop':value in logs",
+      "icon": "↪",
+      "Logname": "PN",
+      "color": "yellow"
+    },
+    {
+      "id": "proptune-property-value",
+      "name": "proptune-property-value",
+      "Description": "Used to denote a icon:'prop':value in logs",
+      "icon": "↪",
+      "Logname": "PV",
+      "color": "gray"
+    },
+    {
+      "id": "tick",
+      "name": "tick",
+      "Unicode": "#2714",
+      "Description": "Used to denote a tick",
+      "icon": "☑",
+      "Logname": "☑",
+      "color": "green"
+    },
+    {
+      "id": "exec-time",
+      "name": "exec-time",
+      "Description": "Used to denote a exec-time",
+      "icon": "↨",
+      "Logname": "↨",
+      "color": "darkcyan"
+    },
+    {
+      "id": "data-stream",
+      "name": "data-stream",
+      "Description": "Used to denote a data-stream ",
+      "icon": "❂",
+      "Logname": "DTS",
+      "color": "darkmagenta"
+    },
+    {
+      "id": "bandwidth",
+      "name": "bandwidth",
+      "Description": "Used to denote a bandwidth",
+      "icon": "⇵",
+      "Logname": "BW",
+      "color": "yellow"
+    },
+    {
+      "id": "id",
+      "name": "id",
+      "Description": "Used to denote a id",
+      "icon": "🆔",
+      "Logname": "ID",
+      "color": "Green"
+    },
+    {
+      "id": "ok",
+      "name": "ok",
+      "Description": "Used to denote a ok",
+      "icon": "☀",
+      "Logname": "OK",
+      "color": "Green"
+    },
+    {
+      "id": "read",
+      "name": "read",
+      "Description": "Used to denote a read",
+      "icon": "❂",
+      "Logname": "RDE",
+      "color": "Green"
+    },
+    {
+      "id": "write",
+      "name": "write",
+      "Description": "Used to denote a read",
+      "icon": "❂",
+      "Logname": "WRT",
+      "color": "yellow"
+    }
+  ]
+}
