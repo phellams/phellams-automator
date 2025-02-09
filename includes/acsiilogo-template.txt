@@ -12,9 +12,9 @@
      ....    .x.    .x.    .... 
     .////.  ..x.    .x... .    .
     ..//.    .x.    .x.   ./=/..
-      /     .:x.    .x:. -| ■ Phellam PowerShell Module Builder      
+      /     .:x.    .x:. -| ■ Phellam Automator      
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
-      ┋    -----    ----- | ■ v0.1.0                    
+      ┋    -----    ----- | ■ v0.3.0                    
       ┋     ┋INFO┋
       ┋     ├▣ Default Shell  ─•  pwsh
       ┋     └▣ Distro Release ─• [base-distro-release]
