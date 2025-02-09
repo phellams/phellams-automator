@@ -28,10 +28,7 @@ Function Get-GitAutoVersion {
     [CmdletBinding()]
     [OutputType([Pscustomobject])]
     [Alias('cfav')]
-    param (
-        [Parameter(Mandatory = $false)]
-        [string]$Branch
-    )
+    param ()
     begin {
         if(!$branch){ $branch = "main" }
     }
@@ -46,11 +43,8 @@ Function Get-GitAutoVersion {
                 throw "Git is not installed, please install git and try again"
             }
             else {
-                if($branch){
-                    $gitCommits = git log $Branch --pretty=format:"%s%n%b"
-                }else{  
-                    $gitCommits = git log --pretty=format:"%s%n%b"
-                }
+
+                $gitCommits = git log --pretty=format:"%s%n%b"
 
                 for($l=$gitcommits.count -1; $l -gt 0; $l--) {
                     if ([regex]::Matches($gitCommits[$l], "Build: major", [RegexOptions]::IgnoreCase)) {
