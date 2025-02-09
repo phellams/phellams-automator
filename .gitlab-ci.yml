@@ -13,9 +13,9 @@ build-image-commit_sha:
   script:
     - echo "BUILD -> build-image-commit_sha"
     - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-    - docker build -t phellams-psm-builder -f phellams-psm-builder.dockerfile .
-    - docker tag phellams-psm-builder "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
-    - docker push "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
+    - docker build -t phellams-automator -f phellams-automator.dockerfile .
+    - docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+    - docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
   # artifacts:
   #   reports:
   #     dotenv: build.env
@@ -24,7 +24,7 @@ build-image-commit_sha:
 
 test-image-commit_sha:
   stage: test
-  image: $DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA
+  image: $DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA
   needs:
     - build-image-commit_sha
   tags:
@@ -55,11 +55,11 @@ test-image-commit_sha:
 #   after_script:
 #     - docker logout
 #   script:
-#     - docker pull "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
-#     - docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-psm-builder:latest"
-#     - docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-psm-builder:$VERSION" # Use job level variable
-#     - docker push "$PROGET_HOST/docker/phellams-psm-builder:latest"
-#     - docker push "$PROGET_HOST/docker/phellams-psm-builder:$VERSION"
+#     - docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+#     - docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-automator:latest"
+#     - docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-automator:$VERSION" # Use job level variable
+#     - docker push "$PROGET_HOST/docker/phellams-automator:latest"
+#     - docker push "$PROGET_HOST/docker/phellams-automator:$VERSION"
 
 deploy-image-dockerhub:
   stage: deploy
@@ -84,8 +84,8 @@ deploy-image-dockerhub:
       semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion).Version") # Capture version
       echo "GENERATED -> SEMVER -> $semver"
       SEMVER_VERSION=$semver
-      docker pull "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
-      docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-psm-builder:latest"
-      docker push "$DOCKERHUB_USER/phellams-psm-builder:latest"
-      docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-psm-builder:$SEMVER_VERSION"
-      docker push "$DOCKERHUB_USER/phellams-psm-builder:$SEMVER_VERSION"
+      docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+      docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:latest"
+      docker push "$DOCKERHUB_USER/phellams-automator:latest"
+      docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
+      docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
