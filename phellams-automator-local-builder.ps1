@@ -35,7 +35,7 @@ docker run phellams-psm-builder:latest pwsh -c get-module -list
 # docker tag phellams-psm-builder $ENV:DOCKERHUB_USER/phellams-psm-builder:latest
 # docker push $ENV:DOCKERHUB_USER/phellams-psm-builder:latest
 # docker logout  
-$ENV:DOCKERHUB_API_KEY | docker login -u sgkens --password-stdin
-docker tag phellams-psm-builder sgkens/phellams-psm-builder:latest
-docker push sgkens/phellams-psm-builder:latest
-docker logout 
+# $ENV:DOCKERHUB_API_KEY | docker login -u sgkens --password-stdin
+# docker tag phellams-psm-builder sgkens/phellams-psm-builder:latest
+# docker push sgkens/phellams-psm-builder:latest
+# docker logout 
