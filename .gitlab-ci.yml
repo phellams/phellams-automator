@@ -1,0 +1,89 @@
+stages:
+  - build
+  - test
+  - deploy # on main only
+
+# ----------STAGE: BUILD----------
+
+build-image-commit_sha:
+  stage: build
+  tags:
+    - linux
+  # before_script:
+  script:
+    - echo "BUILD -> build-image-commit_sha"
+    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+    - docker build -t phellams-psm-builder -f phellams-psm-builder.dockerfile .
+    - docker tag phellams-psm-builder "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
+    - docker push "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
+  # artifacts:
+  #   reports:
+  #     dotenv: build.env
+
+# ----------STAGE: TEST----------
+
+test-image-commit_sha:
+  stage: test
+  image: $DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA
+  needs:
+    - build-image-commit_sha
+  tags:
+    - docker
+  script:
+    - echo "TEST -> test-image-commit_sha"
+    - pwsh -c '$PSVersionTable.PSVersion.ToString()'
+    - pwsh -c 'nuget help | Select-Object -First 1'
+    - pwsh -c 'dotnet --info'
+
+
+# ----------STAGE: DEPLOY----------
+# docker login with: echo "$PROGET_API_KEY" | docker login --username "admin" --password-stdin $PROGET_HOST fails
+# perhaps something to do with selfhosted setup, used as backup, disabled for now.
+# deploy-image-proget:
+#   stage: deploy
+#   tags:
+#     - linux
+#   dependencies:
+#     - build-image-commit_sha
+#   needs:
+#     - build-image-commit_sha
+#     - test-image-commit_sha
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main"
+#   before_script:
+#     - echo "$PROGET_API_KEY" | docker login --username "admin" --password-stdin $PROGET_HOST
+#   after_script:
+#     - docker logout
+#   script:
+#     - docker pull "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
+#     - docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-psm-builder:latest"
+#     - docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$PROGET_HOST/docker/phellams-psm-builder:$VERSION" # Use job level variable
+#     - docker push "$PROGET_HOST/docker/phellams-psm-builder:latest"
+#     - docker push "$PROGET_HOST/docker/phellams-psm-builder:$VERSION"
+
+deploy-image-dockerhub:
+  stage: deploy
+  dependencies:
+    - build-image-commit_sha # load build.env from build-image-commit_sha
+  needs:
+    - build-image-commit_sha
+    - test-image-commit_sha
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  before_script: 
+    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+  after_script:
+    - docker logout
+  tags:
+    - linux
+  script:
+    - |
+      echo "GENERATE -> SEMVER version from git history"
+      semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion -branch dev).Version") # Capture version
+      echo "GENERATED -> SEMVER -> $semver"
+      SEMVER_VERSION=$semver
+      docker pull "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA"
+      docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-psm-builder:latest"
+      docker push "$DOCKERHUB_USER/phellams-psm-builder:latest"
+      docker tag "$DOCKERHUB_USER/phellams-psm-builder:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-psm-builder:$SEMVER_VERSION"
+      docker push "$DOCKERHUB_USER/phellams-psm-builder:$SEMVER_VERSION"
