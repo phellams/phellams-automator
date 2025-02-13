@@ -12,7 +12,8 @@ RUN apt update && \
     gnupg \
     apt-transport-https \
     software-properties-common \
-    ca-certificates
+    ca-certificates \
+    git
 
 RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell_7.4.5-1.deb_amd64.deb -O /tmp/powershell.deb && \
     dpkg -i /tmp/powershell.deb && \
@@ -45,16 +46,6 @@ RUN pwsh -command 'Find-Module -Name Pester -RequiredVersion 5.5.0 -Repository P
     pwsh -command 'Find-Module -Name PSScriptAnalyzer -Repository PSGallery | Install-Module -Force' && \
     pwsh -command 'Find-Module -Name powershell-yaml -Repository PSGallery | Install-Module -Force'
 
-# Add installed and copied modules to profile
-# Add Custom output with ascii art and included software versions
-# RUN touch /root/.config/powershell/Microsoft.PowerShell_profile.ps1 && \
-#     echo 'Import-Module -Name Pester' >> /root/.config/powershell/Microsoft.PowerShell_profile.ps1 && \
-#     echo 'Import-Module -Name PSScriptAnalyzer' >> /root/.config/powershell/Microsoft.PowerShell_profile.ps1 && \
-#     echo 'Import-Module -Name powershell-yaml' >> /root/.config/powershell/Microsoft.PowerShell_profile.ps1 && \
-#     echo '[Console]::write("---------------------[pwsh-version: $($PSVersionTable.PSVersion.ToString())]`n")' && \
-#     echo '[Console]::write("---------------------[nuget-version: $(nuget help | select -First 1]`n")' && \
-#     echo '[Console]::write("---------------------[dotnet-version: $($(dotnet --info).Where({$_ -like "*Version*"}).replace(" ","-")]`n")'
-
 RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-default-keyring --keyring /root/trustedkeys.gpg --import && \
     wget 'https://uploader.codecov.io/latest/linux/codecov' && \
     wget 'https://uploader.codecov.io/latest/linux/codecov.SHA256SUM' && \
@@ -70,9 +61,8 @@ RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
     pwsh -command 'nuget help | select -First 1' && \
     pwsh -command 'dotnet --info'
 
-# quicklog psmpacker, nupsforge, csverfy dependencies
+# copy quicklog dependency for: psmpacker, nupsforge
 COPY ./includes/modules/quicklog /root/.local/share/powershell/Modules/quicklog
-
 # copy psmpacker
 COPY ./includes/modules/psmpacker /root/.local/share/powershell/Modules/psmpacker
 # copy nupsforge
