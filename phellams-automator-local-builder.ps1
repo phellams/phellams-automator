@@ -10,9 +10,9 @@ $semver = (Get-GitAutoVersion).Version
         Set-Content -Path .\includes\acsiilogo-template.txt
 
 # Build the Docker image
-docker build -t phellams-psm-builder:latest -f phellams-psm-builder.dockerfile .
+docker build -t phellams-automator:LocalBuild -f phellams-automator.dockerfile .
 # test the image
-docker run phellams-psm-builder:latest pwsh -c get-module -list
+docker run phellams-automator:LocalBuild pwsh -c get-module -list
 # push to proget - Currently Accessing proget via password passed in via stdin fails
 # normal login works however: docker login -u user
 # --------------

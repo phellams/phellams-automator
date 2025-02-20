@@ -34,6 +34,8 @@
       ┋     ├─▣ Nupsforge          ✜─•[nupsforge-version]
       ┋     ├─▣ Psmpacker          ✜─•[psmpacker-version]
       ┋     ├─▣ Csverify           ✜─•[csverify-version]
+      ┋     ├─▣ ShellDock          ✜─•[shelldock-version]
+      ┋     ├─▣ tadpol             ✜─•[tadpol-version]
       ┋     ├─▣ GitaAutoVersion    ✜─•[gitautoversion-version]
       ┋     └─▣ Get-ImageInfo      ✜─•[Get-ImageInfo-version] 
   ┌───┴───┐
