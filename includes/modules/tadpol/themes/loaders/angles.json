@@ -1,0 +1,12 @@
+{
+    "theme": "angles",
+    "levels": [
+        {"1":"◤"},
+        {"2":"◥"},
+        {"3":"◢"},
+        {"4":"◣"}   
+    ],
+    "complete": "C",
+    "waiting": "W",
+    "themepath": "themes/loaders/angles.json"
+}

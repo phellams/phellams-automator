@@ -1,0 +1,10 @@
+{
+    "theme": "Arrowheads",
+    "open": "[",
+    "close": "]",
+    "completed": ">",
+    "incomplete": ".",
+    "pointer": ".",
+    "example": "[>>>>>>..............] 50% Complete",
+    "themepath": "themes/arrowheads"
+}

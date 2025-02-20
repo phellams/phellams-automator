@@ -13,7 +13,7 @@ Name of the log file. (Optional)
 Specifies char for the log name. (Optional)
 
 .EXAMPLE
-$qlm = New-Quicklog-Name "Log1" -unicode $null
+$qlm = New-Quicklog -Name "Log1" -unicode $null
 $qlm.enablelogdate()
 $qlm.enablelogicon()
 $qlm.WriteMessage("This is an information message", "info", $false)

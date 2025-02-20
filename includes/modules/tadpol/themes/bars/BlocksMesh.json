@@ -1,0 +1,10 @@
+{
+    "theme": "BlocksMesh",
+    "open": "[",
+    "close": "]",
+    "completed": "▩",
+    "incomplete": " ",
+    "pointer": " ",
+    "example": "[▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩▩                               (40%)]",
+    "themepath": "themes/BlocksMesh"
+}

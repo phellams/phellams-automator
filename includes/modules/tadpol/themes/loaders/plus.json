@@ -1,0 +1,12 @@
+{
+    "theme": "plus",
+    "levels": [
+        {"1":"|"},
+        {"2":"-"},
+        {"3":"_"},
+        {"4":"."}
+    ],
+    "complete": "Y",
+    "waiting": "N",
+    "themepath": "themes/loaders/plus.json"
+}

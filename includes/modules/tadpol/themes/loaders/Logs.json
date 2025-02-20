@@ -1,0 +1,10 @@
+{
+    "theme": "Logs",
+    "levels": [
+        {"1":"▖"},
+        {"2":"▝"},
+        {"3":"▗"},
+        {"4":"▘"}
+    ],
+    "themepath": "themes/loaders/logs.json"
+}

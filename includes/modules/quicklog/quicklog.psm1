@@ -18,7 +18,14 @@ Y8,    "88,,8P  88       88  88  8b          8888[      88  8b       d8  8b     
 
 $global:_quicklog = @{                                                                         
     rootpath     = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+    themeConfig  = @{}
 }
+# init $global:_quicklog instance allowing access to the initialized rootpath
+$global:_quicklog.themeConfig.utfe = Get-Content -Path "$($global:_quicklog.rootpath)\libs\themes\theme-utf8-lt.json" -raw | ConvertFrom-Json
+$global:_quicklog.themeConfig.nerdf = Get-Content -Path "$($global:_quicklog.rootpath)\libs\themes\theme-nerdfont-lt.json" -raw | ConvertFrom-Json
+$global:_quicklog.themeConfig.ascii = Get-Content -Path "$($global:_quicklog.rootpath)\libs\themes\theme-ascii-lt.json" -raw | ConvertFrom-Json
+
+
 # Set up the quicklog instance
 $quicklog_instance = New-Object -TypeName quicklog
 $quicklog_instance.Theme = 'ascii' # Set the default theme to ascii (nerdf, utfe, ascii, noemoji)

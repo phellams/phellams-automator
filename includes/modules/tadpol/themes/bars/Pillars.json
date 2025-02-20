@@ -1,0 +1,10 @@
+{
+    "theme": "pillars",
+    "open": "[",
+    "close": "]",
+    "completed": "▌",
+    "incomplete": "_",
+    "pointer": "_",
+    "example": "[▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌___] 10%",
+    "themepath": "themes/pillars"
+}

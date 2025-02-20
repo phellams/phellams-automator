@@ -1,0 +1,12 @@
+{
+    "theme": "clock",
+    "levels": [
+        {"1":"◑"},
+        {"2":"◒"},
+        {"3":"◐"},
+        {"4":"◑"}
+    ],
+    "complete": "=",
+    "waiting": "-",
+    "themepath": "themes/loaders/clock.json"
+}

@@ -30,11 +30,10 @@ class quicklog {
     
 
     quicklog() {
-        $module_root = $global:_quicklog.rootpath
         $this.themeProperties = [PSCustomObject]@{ ascii = ""; utfe = ""; nerdf = ""; custom = ""; }
-        $this.themeProperties.utfe  = Get-Content -Path "$module_root\libs\themes\theme-utf8-lt.json" -raw | ConvertFrom-Json
-        $this.themeProperties.nerdf = Get-Content -Path "$module_root\libs\themes\theme-nerdfont-lt.json" -raw | ConvertFrom-Json
-        $this.themeProperties.ascii = Get-Content -Path "$module_root\libs\themes\theme-ascii-lt.json" -raw | ConvertFrom-Json
+        $this.themeProperties.utfe  = $global:_quicklog.themeConfig.utfe
+        $this.themeProperties.nerdf = $global:_quicklog.themeConfig.nerdf
+        $this.themeProperties.ascii = $global:_quicklog.themeConfig.ascii 
         switch ($this.theme) {
             "utfe" {
                 $this.themeType = "utfe"
