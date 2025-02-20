@@ -1,5 +1,3 @@
-using module ..\shelldock\New-ShellDock.psm1
-
 <#
 .SYNOPSIS
     A function that creates a new .nuspec manifest file for a Chocolatey package.

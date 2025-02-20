@@ -23,7 +23,7 @@
 ─── ─ ••• ─ ─ ─────────────────────
 ```
 
-![Static Badge](https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a)
+![Static Badge][license-badge]
 
 ## About The Project
 
@@ -178,6 +178,8 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [ ] Add toml support with ptoml
 - [ ] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported.
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
+- [ ] tadpol progress bar module
+- [ ] update nupsforge to support gitlab packages
 
 ## Contributing
 
@@ -206,7 +208,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [docker-url]: https://hub.docker.com/r/sgkens/phellams-automator/tags
 [docker-size]: https://img.shields.io/docker/image-size/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
 [docker-pulls]: https://img.shields.io/docker/pulls/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
-[build-status]:https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=for-the-badge&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
+[build-status]: https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=for-the-badge&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
 [build-url]: https://gitlab.com/phellams/phellams-automator/-/pipelines
 [gitlab-badge]: https://img.shields.io/badge/gitlab-4B0082?style=for-the-badge&logo=gitlab&logoColor=orange
 [github-badge]: https://img.shields.io/badge/github-383838?style=for-the-badge&logo=github&logoColor=white
+[license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a

@@ -61,18 +61,20 @@ RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
     pwsh -command 'nuget help | select -First 1' && \
     pwsh -command 'dotnet --info'
 
-# copy quicklog dependency for: psmpacker, nupsforge
+# copy dependency for: psmpacker, nupsforge
 COPY ./includes/modules/quicklog /root/.local/share/powershell/Modules/quicklog
-# copy psmpacker
-COPY ./includes/modules/psmpacker /root/.local/share/powershell/Modules/psmpacker
-# copy nupsforge
-COPY ./includes/modules/nupsforge /root/.local/share/powershell/Modules/nupsforge
-# copy csverfy
-COPY ./includes/modules/csverify /root/.local/share/powershell/Modules/csverify
-
-# Copy local cmdlets to /root/.config/powershell
+COPY ./includes/modules/tadpol /root/.local/share/powershell/Modules/tadpol
+COPY ./includes/modules/shelldock /root/.local/share/powershell/Modules/shelldock
 COPY ./includes/modules/colorconsole /root/.local/share/powershell/Modules/colorconsole
 COPY ./includes/modules/gitautoversion /root/.local/share/powershell/Modules/gitautoversion
+
+# copy csverfy checksum module
+COPY ./includes/modules/csverify /root/.local/share/powershell/Modules/csverify
+# copy psmpacker module builder
+COPY ./includes/modules/psmpacker /root/.local/share/powershell/Modules/psmpacker
+# copy nupsforge package builder
+COPY ./includes/modules/nupsforge /root/.local/share/powershell/Modules/nupsforge
+# Copy custom ascii artwork cmdlets
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
 # copy template profile
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1

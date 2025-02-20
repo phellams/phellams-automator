@@ -44,12 +44,16 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     #
-    RequiredModules   = @(
-        @{
-            ModuleName = "quicklog"; 
-            ModuleVersion = "1.0.1.0" 
-        }
-    )
+    # RequiredModules   = @(
+    #     @{
+    #         ModuleName = "quicklog"; 
+    #         ModuleVersion = "0.2.1" 
+    #     },
+    #      @{
+    #         ModuleName = "tadpol"; 
+    #         ModuleVersion = "0.1.8" 
+    #     }
+    # )
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()

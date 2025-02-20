@@ -1,0 +1,10 @@
+{
+    "theme": "squaresLight",
+    "open": "|",
+    "close": "|",
+    "completed": "▒",
+    "incomplete": "░",
+    "pointer": "░",
+    "example": "[▒▒▒▒░░░░░░░░░░░░░░░░░] Complete 20%",
+    "themepath": "unicode/squaresLight"
+}

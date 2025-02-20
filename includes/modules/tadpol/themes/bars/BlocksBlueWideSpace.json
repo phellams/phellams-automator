@@ -1,0 +1,10 @@
+{
+    "theme": "BlocksBlueWideSpace",
+    "open": "[",
+    "close": "]",
+    "completed": "🟦",
+    "incomplete": "⬜",
+    "pointer": "⬜",
+    "themepath": "themes/BlocksBlueWideSpace",
+    "example": "[🟦🟦🟦🟦⬜⬜⬜⬜⬜⬜⬜(40%)]"
+}
