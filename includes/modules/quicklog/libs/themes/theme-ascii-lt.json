@@ -44,7 +44,7 @@
       "id": "error-q",
       "name": "error-q",
       "Description": "error-q log icon seen in error message and sub messages, logname will be used to if no icon is set",
-      "icon": "☂",
+      "icon": "↮",
       "Logname": "ERQ",
       "color": "red"
     },
