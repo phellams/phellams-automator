@@ -1,0 +1,10 @@
+{
+    "theme": "pillarsSolid",
+    "open": "[",
+    "close": "]",
+    "completed": "▉",
+    "incomplete": "▌",
+    "pointer": "▌",
+    "example": "[▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▉▉▉▉▉▉] 10%",
+    "themepath": "themes/pillarsSolid"
+}

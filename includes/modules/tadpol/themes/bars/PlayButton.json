@@ -1,0 +1,10 @@
+{
+    "theme": "PlayButton",
+    "open": "[",
+    "close": "]",
+    "completed": "▶",
+    "incomplete": "▷",
+    "pointer": "▷",
+    "example": "[▶▶▶▶▶▷▷▷▷▷▷▷▷▷▷▷] 50% Complete",
+    "themepath": "themes/play_button"
+}

@@ -1,0 +1,10 @@
+{
+    "theme": "braille",
+    "open": "[",
+    "close": "]",
+    "completed": "⣿",
+    "incomplete": ".",
+    "pointer": "⣟",
+    "example": "[⣿⣿⣿⣿⣀⡀...] 60%",
+    "themepath": "themes/braille"
+}

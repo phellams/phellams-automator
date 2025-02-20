@@ -1,0 +1,10 @@
+{
+    "theme": "extendedBridge",
+    "open": "[",
+    "close": "]",
+    "completed": "▬",
+    "incomplete": ".",
+    "pointer": ".",
+    "example": "[▬▬▬▬▬▬▬▬▬▬▬▬▬........] 60% Complete",
+    "themepath": "themes/extendedBridge"
+}
