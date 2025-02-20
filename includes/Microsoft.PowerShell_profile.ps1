@@ -7,6 +7,8 @@ import-module -Name Pester -RequiredVersion 5.5.0
 import-module -Name PSScriptAnalyzer
 import-module -Name powershell-yaml
 import-module -Name colorconsole
+import-module -name tadpol
+import-module -name shelldock
 import-module -Name gitautoversion
 import-module -Name csverify
 import-module -name quicklog
@@ -73,6 +75,8 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "$pwsh_version" -c yellow
               -replace "\[csverify-version\]", "$(csole -s "$(gmv('csverify'))" -c yellow)" `
               -replace "\[quicklog-version\]", "$(csole -s "$(gmv('quicklog'))" -c yellow)" `
               -replace "\[psmpacker-version\]", "$(csole -s "$(gmv('psmpacker'))" -c yellow)" `
+              -replace "\[tadpol-version\]", "$(csole -s "$(gmv('tadpol'))" -c yellow)" `
+              -replace "\[shelldock-version\]", "$(csole -s "$(gmv('shelldock'))" -c yellow)" `
               -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
 
 #output final logo
