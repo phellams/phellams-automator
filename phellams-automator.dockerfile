@@ -15,7 +15,7 @@ RUN apt update && \
     ca-certificates \
     git
 
-RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/powershell_7.5.1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/powershell_7.5.1-1.deb_amd64.deb -O /tmp/powershell.deb && \
     dpkg -i /tmp/powershell.deb && \
     apt install -f -y  # Fix dependencies if needed
 
@@ -33,7 +33,7 @@ RUN apt install -y nuget
 
 # Install .net 8SDK
 RUN wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
-    chmod +x /tmp/dotnet-install.sh && \
+    chmod +x /tmp/dotnet1-install.sh && \
     /tmp/dotnet-install.sh --channel 8.0
 
 # Set environment variables globally for all shells
