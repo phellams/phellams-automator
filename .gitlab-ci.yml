@@ -8,7 +8,7 @@ stages:
 build-image-commit_sha:
   stage: build
   tags:
-    - linux
+    - linux-shell
   # before_script:
   script:
     - echo "BUILD -> build-image-commit_sha"
@@ -75,7 +75,7 @@ deploy-image-dockerhub:
   after_script:
     - docker logout
   tags:
-    - linux
+    - linux-shell
   script:
   # git fetch --all required to pull down full commit history for semver generation
     - |
