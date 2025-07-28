@@ -8,14 +8,15 @@ stages:
 build-image-commit_sha:
   stage: build
   tags:
-    - linux
+    - linux-shell
   # before_script:
   script:
-    - echo "BUILD -> build-image-commit_sha"
-    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-    - docker build -t phellams-automator -f phellams-automator.dockerfile .
-    - docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
-    - docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+    - |
+      echo "BUILD -> build-image-commit_sha"
+      echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+      docker build -t phellams-automator -f phellams-automator.dockerfile .
+      docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+      docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
   # artifacts:
   #   reports:
   #     dotenv: build.env
@@ -30,10 +31,11 @@ test-image-commit_sha:
   tags:
     - docker
   script:
-    - echo "TEST -> test-image-commit_sha"
-    - pwsh -c '$PSVersionTable.PSVersion.ToString()'
-    - pwsh -c 'nuget help | Select-Object -First 1'
-    - pwsh -c 'dotnet --info'
+    - |
+      echo "TEST -> test-image-commit_sha"
+      pwsh -c '$PSVersionTable.PSVersion.ToString()'
+      pwsh -c 'nuget help | Select-Object -First 1'
+      pwsh -c 'dotnet --info'
 
 
 # ----------STAGE: DEPLOY----------
@@ -75,7 +77,7 @@ deploy-image-dockerhub:
   after_script:
     - docker logout
   tags:
-    - linux
+    - linux-shell
   script:
   # git fetch --all required to pull down full commit history for semver generation
     - |
@@ -89,3 +91,5 @@ deploy-image-dockerhub:
       docker push "$DOCKERHUB_USER/phellams-automator:latest"
       docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
+      docker remove "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+      echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
