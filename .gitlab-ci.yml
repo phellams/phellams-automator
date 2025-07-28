@@ -91,5 +91,6 @@ deploy-image-dockerhub:
       docker push "$DOCKERHUB_USER/phellams-automator:latest"
       docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
-      docker remove "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+      docker rmi "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+      docker image prune -f
       echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
