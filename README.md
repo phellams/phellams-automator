@@ -4,11 +4,11 @@
 
 ## About The Project
 
-Debian base docker image base on *Debian-slim*, Used to build:
+Debian base docker image base on *Debian-slim*, Usecase:
  - **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
  - **Dotnet** binaries.
  - **Nuget** packages for **psgallary** **gitlab**, **github**, and **chocolatey**.
- - **codecov** results.
+ - **codecov** results/reports upload.
 
 ## Features
  - Copy Build files: `Build-Module` see the **Psmpacker** [README](https://github.com/phellams/psmpacker/blob/main/README.md) for more information on how to use **Psmpacker**.
@@ -30,8 +30,8 @@ Debian base docker image base on *Debian-slim*, Used to build:
 
 
 ***🔵 Binaries***
-- ✅ [**.Net Core SDK channel 8.0**](https://dotnet.microsoft.com/download/dotnet-core/current)
-- ✅ [**PowerShell Core 7.4.5**](https://github.com/PowerShell/PowerShell)
+- ✅ [**.Net Core SDK v8.0.412**](https://dotnet.microsoft.com/download/dotnet-core/current)
+- ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
 - ✅ [**Nuget**](https://www.nuget.org/downloads)
 - ✅ [**Codecov**](https://codecov.io)
 
@@ -106,6 +106,7 @@ sudo pwsh -c './phellams-automator-local-builder.ps1'
 ```bash
 docker run --rm phellams-automator
 ```
+
 🟢 Mount paths examples for running commands inside the container.
 
 ```bash
