@@ -4,7 +4,7 @@
 
 ## About The Project
 
-Debian base docker image base on *Debian-slim*, Usecase:
+Debian based docker image derived from *Debian-slim*, Usecase:
  - **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
  - **Dotnet** binaries.
  - **Nuget** packages for **psgallary** **gitlab**, **github**, and **chocolatey**.
