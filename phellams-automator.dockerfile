@@ -32,9 +32,17 @@ RUN apt install -y nuget
 #     pwsh -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; /opt/chocolatey/install.ps1"
 
 # Install .net 8SDK
-RUN wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
-    chmod +x /tmp/dotnet1-install.sh && \
-    /tmp/dotnet-install.sh --channel 8.0
+
+# RUN wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
+#     chmod +x /tmp/dotnet1-install.sh && \
+#     /tmp/dotnet-install.sh --channel 8.0
+
+# Install .NET SDK v8.0.412
+# FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9
+RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz && \
+    mkdir -p /root/.dotnet && \
+    tar zxf /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz -C /root/.dotnet && \
+    rm /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz
 
 # Set environment variables globally for all shells
 ENV DOTNET_ROOT=/root/.dotnet
