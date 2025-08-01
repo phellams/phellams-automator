@@ -58,17 +58,19 @@ $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
 [string]$dotnet_version = (dotnet --info | Select-String -Pattern "Version:" | Select-Object -first 1) -replace "Version:", ""
 [string]$nuget_version = (nuget help | Select-Object -First 1) -replace "NuGet Version:", ""
 [string]$Kernel_version = (uname -rov)
+[string]$codecov_version = (codecov --version)
+[string]$coveralls_version = (coveralls --version)
 
 $pwsh_version = $PSVersionTable.PSVersion.ToString()
 
 # - Update Versions
-$logo = $logo -replace "\[pwsh-version\]", "$(csole -s "$pwsh_version" -c yellow)" `
-              -replace "\[dotnet-version\]", "$(csole -s "$($dotnet_version.Trim())" -c yellow)" `
-              -replace "\[nuget-version\]", "$(csole -s "$($nuget_version.Trim())" -c yellow)" `
+$logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yellow)" `
+              -replace "\[dotnet-version\]", "$(csole -s "v$($dotnet_version.Trim())" -c yellow)" `
+              -replace "\[nuget-version\]", "$(csole -s "v$($nuget_version.Trim())" -c yellow)" `
               -replace "\[base-distro-release\]", "$(csole -s "$($distro_release.Trim())" -c yellow)" `
               -replace "\[colorconsole-version\]", "$(csole -s "$(gmv('colorconsole'))" -c yellow)" `
               -replace "\[gitautoversion-version\]", "$(csole -s "$(gmv('gitautoversion'))" -c yellow)" `
-              -replace "\[kernel-version\]", "$(csole -s "$Kernel_version" -c yellow)" `
+              -replace "\[kernel-version\]", "$(csole -s "v$Kernel_version" -c yellow)" `
               -replace "\[pester-version\]", "$(csole -s "$(gmv('Pester'))" -c yellow)" `
               -replace "\[psscriptanalyzer-version\]", "$(csole -s "$(gmv('PSScriptAnalyzer'))" -c yellow)" `
               -replace "\[powershell-yaml-version\]", "$(csole -s "$(gmv('powershell-yaml'))" -c yellow)" `
@@ -77,6 +79,8 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "$pwsh_version" -c yellow
               -replace "\[psmpacker-version\]", "$(csole -s "$(gmv('psmpacker'))" -c yellow)" `
               -replace "\[tadpol-version\]", "$(csole -s "$(gmv('tadpol'))" -c yellow)" `
               -replace "\[shelldock-version\]", "$(csole -s "$(gmv('shelldock'))" -c yellow)" `
+              -replace "\[codecov-version\]", "$(csole -s "v$codecov_version" -c yellow)" `
+              -replace "\[coveralls-version\]", "$(csole -s "v$coveralls_version" -c yellow)" `
               -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
 
 #output final logo
