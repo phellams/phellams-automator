@@ -25,18 +25,6 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/power
 # Install NuGet
 RUN apt install -y nuget
 
-# Install Chocolatey (using the script)
-# RUN mkdir -p /opt/chocolatey && \
-#     curl -L https://chocolatey.org/install.ps1 -o /opt/chocolatey/install.ps1 && \
-#     chmod +x /opt/chocolatey/install.ps1 && \
-#     pwsh -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; /opt/chocolatey/install.ps1"
-
-# Install .net 8SDK
-
-# RUN wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
-#     chmod +x /tmp/dotnet1-install.sh && \
-#     /tmp/dotnet-install.sh --channel 8.0
-
 # Install .NET SDK v8.0.412
 # FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9
 RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz && \
@@ -46,14 +34,14 @@ RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.4
 
 # Set environment variables globally for all shells
 ENV DOTNET_ROOT=/root/.dotnet
-ENV PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-
+ENV PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
 
 # Install PowerShell Modules from PSGallery
 RUN pwsh -command 'Find-Module -Name Pester -RequiredVersion 5.5.0 -Repository PSGallery | Install-Module -Force' && \
     pwsh -command 'Find-Module -Name PSScriptAnalyzer -Repository PSGallery | Install-Module -Force' && \
     pwsh -command 'Find-Module -Name powershell-yaml -Repository PSGallery | Install-Module -Force'
 
+# Install Codecov Uploader
 RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-default-keyring --keyring /root/trustedkeys.gpg --import && \
     wget 'https://uploader.codecov.io/latest/linux/codecov' && \
     wget 'https://uploader.codecov.io/latest/linux/codecov.SHA256SUM' && \
@@ -62,7 +50,12 @@ RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-defau
 RUN shasum -a 256 -c codecov.SHA256SUM && \
     chmod +x codecov && \
     mv codecov /usr/local/bin/codecov && \
-    codecov --help
+    codecov --version
+
+# Install Coverails
+RUN curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/coveralls && \
+    coveralls --version
 
 # Verify installations
 RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
