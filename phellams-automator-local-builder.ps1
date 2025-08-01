@@ -11,7 +11,7 @@ $semver = (Get-GitAutoVersion).Version
 
 # Build the Docker image
 docker build -t phellams-automator:LocalBuild -f phellams-automator.dockerfile .
-# test the image
+# test the image output with a simple command
 docker run phellams-automator:LocalBuild pwsh -c get-module -list
 # push to proget - Currently Accessing proget via password passed in via stdin fails
 # normal login works however: docker login -u user
