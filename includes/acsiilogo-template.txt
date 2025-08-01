@@ -15,29 +15,31 @@
       /     .:x.    .x:. -| ■ Phellam Automator      
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
       ┋    -----    ----- | ■ v0.3.0                    
-      ┋     ┋INFO┋
+      ┋     ┋ INFO     ┋
       ┋     ├▣ Default Shell  ─•  pwsh
       ┋     └▣ Distro Release ─• [base-distro-release]
       ┋         └○ [kernel-version]
       ┋
-      ┋     ┋BINARIES┋
-      ┋     ├─▣ pwsh    ✜─• [pwsh-version] 
-      ┋     ├─▣ dotnet  ✜─• [dotnet-version]
-      ┋     └─▣ nuget   ✜─• [nuget-version]
+      ┋     ┋ BINARIES ┋
+      ┋     ├─▣ pwsh      ✜─ • [pwsh-version] 
+      ┋     ├─▣ dotnet    ✜─ • [dotnet-version]
+      ┋     └─▣ nuget     ✜─ • [nuget-version]
+      ┋     └─▣ codecov   ✜─ • [codecov-version]
+      ┋     └─▣ coveralls ✜─ • [coveralls-version]
       ┋ 
-      ┋     ┋MODULES┋
-      ┋     ├─▣ PSScriptAnalyzer   ✜─•[psscriptanalyzer-version]
-      ┋     ├─▣ Pester             ✜─•[pester-version]
-      ┋     ├─▣ PowerShell-Yaml    ✜─•[powerShell-yaml-version]
-      ┋     ├─▣ ColorConsole       ✜─•[colorconsole-version]
-      ┋     ├─▣ quicklog           ✜─•[quicklog-version]
-      ┋     ├─▣ Nupsforge          ✜─•[nupsforge-version]
-      ┋     ├─▣ Psmpacker          ✜─•[psmpacker-version]
-      ┋     ├─▣ Csverify           ✜─•[csverify-version]
-      ┋     ├─▣ ShellDock          ✜─•[shelldock-version]
-      ┋     ├─▣ tadpol             ✜─•[tadpol-version]
-      ┋     ├─▣ GitaAutoVersion    ✜─•[gitautoversion-version]
-      ┋     └─▣ Get-ImageInfo      ✜─•[Get-ImageInfo-version] 
+      ┋     ┋ MODULES  ┋
+      ┋     ├─▣ PSScriptAnalyzer   ✜─ • [psscriptanalyzer-version]
+      ┋     ├─▣ Pester             ✜─ • [pester-version]
+      ┋     ├─▣ PowerShell-Yaml    ✜─ • [powerShell-yaml-version]
+      ┋     ├─▣ ColorConsole       ✜─ • [colorconsole-version]
+      ┋     ├─▣ quicklog           ✜─ • [quicklog-version]
+      ┋     ├─▣ Nupsforge          ✜─ • [nupsforge-version]
+      ┋     ├─▣ Psmpacker          ✜─ • [psmpacker-version]
+      ┋     ├─▣ Csverify           ✜─ • [csverify-version]
+      ┋     ├─▣ ShellDock          ✜─ • [shelldock-version]
+      ┋     ├─▣ tadpol             ✜─ • [tadpol-version]
+      ┋     └─▣ GitaAutoVersion    ✜─ • [gitautoversion-version]
+      ┋
   ┌───┴───┐
   ▙ Shell ▟
 ─── ─ ••• ─ ─ ─────────────────────
