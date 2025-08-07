@@ -5,6 +5,7 @@ using module libs\cmdlets\New-NuspecPackageFile.psm1
 using module libs\cmdlets\New-ChocoNuspecFile.psm1
 using module libs\cmdlets\New-ChocoPackage.psm1
 using module libs\cmdlets\New-NupkgPackage.psm1
+using module libs\cmdlets\New-NupkgIcon.psm1
 
 $global:LOGTASTIC_MOD_NAME = 'forge'
 $global:_nupsforge = @{
@@ -18,7 +19,8 @@ $ExportedFunctions = @{
         'New-NuspecPackageFile',
         'New-NupkgPackage',
         'New-ChocoPackage',
-        'New-ChocoNuspecFile'
+        'New-ChocoNuspecFile',
+        'New-NupkgIcon'
     )
 }
 <#

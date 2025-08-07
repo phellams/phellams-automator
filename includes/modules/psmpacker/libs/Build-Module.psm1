@@ -101,11 +101,13 @@ function Build-Module {
         [parameter(Mandatory = $false)]
         [string[]]$FoldersToCopy = @(),
         [parameter(mandatory = $false)]
-        [switch]$Manifest = $false, 
-        [parameter(mandatory = $false)]
-        [array]$dependencies,
+        [switch]$Manifest = $false,
         [parameter(mandatory = $false)]
         [switch]$ScriptFile = $false, 
+        [parameter(Mandatory = $false)]
+        [switch]$GenericModule = $false, 
+        [parameter(mandatory = $false)]
+        [array]$dependencies,
         [parameter(Mandatory = $false)]
         [switch]$Zipbuild = $false,
         [parameter(Mandatory = $false)]
@@ -368,7 +370,7 @@ $logo = @"
         Write-Quicklog -name "pmp" -message "@{pt:{name=$name}} @{pt:{version=$BuildNumber}}" -type "complete" -submessage
         $buildfoldersize = [math]::round((Get-childitem $ouputpath -Recurse | Measure-Object -Property length -Sum).Sum / 1MB, 2)
                 
-        #^ HEAD
+        # HEAD
         write-host "[-| $(Format-Inco -String 'Build Info' -Color Grey) |--o"
         write-host "|" -ForegroundColor yellow
         write-host "|>Build Details _________,"
@@ -378,6 +380,7 @@ $logo = @"
         else { write-host "|  Folder: $($name +"::"+ $ouputpath)" -ForegroundColor Green; }
         
         # MANIFEST CONFIGURATION
+
         if($Manifest -ne $false){
             Write-Host "|>$(Format-Inco -String 'Module Configuration' -Color Magenta) _________," -Foregroundcolor yellow
             # Parse out Test-ModuleManifest noteproperties that are not null
@@ -471,7 +474,7 @@ $logo = @"
                 }
             }
         }
-        # SCRIPTFILE CONFIGURATION
+        # SCRIPT FILE CONFIGURATION
         if($ScriptFile -ne $false){
             Write-Host "|>$(Format-Inco -String 'ScriptFile Configuration' -Color Magenta) _________," -Foregroundcolor yellow
             # Parse out Test-ScriptFileInfo noteproperties that are not null
@@ -483,6 +486,12 @@ $logo = @"
             }
 
         }
+        # Generic MODULE CONFIGURATION
+        # for non-powershell modules
+        if($bashModule -ne $false){
+            # TODO: Expand the list for basic build configuration for modules other than psmodules
+        }
+        
         write-host "o-------------------------------o"
     }
 }
