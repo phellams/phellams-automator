@@ -4,23 +4,31 @@
 
 ## About The Project
 
-Debian based docker image derived from *Debian-slim*, Usecase:
- - **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
- - **Dotnet** binaries.
- - **Nuget** packages for **psgallary** **gitlab**, **github**, and **chocolatey**.
- - **codecov** results/reports upload.
+Debian based docker image derived from *Debian-slim*, Use case:
+ - Build: **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
+ - Build: **Dotnet** binaries.
+ - Build: **Nuget** packages:
+   - Package: **Nuget** packages:
+   - Gitlab `.nupkg` packages.
+   - Chocolatey `.nupkg` packages.
+   - Proget nuget `.nupkg` packages.
+   - Proget chocolatey `.nupkg` packages.
+ - Send: **codecov** results/reports upload.
+ - Send: **coveralls** results/reports upload.
 
 ## Features
+
  - Copy Build files: `Build-Module` see the **Psmpacker** [README](https://github.com/phellams/psmpacker/blob/main/README.md) for more information on how to use **Psmpacker**.
  - Build `DotNet` binaries: `dotnet build` see the [README](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build) for more information on how to use `dotnet build`.
- - Package `Nuget` packages using `nuget pack` see:
-   - [creating-a-package](https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package) for more information on how to create a Nuget package.
-   - [using nuget pack](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-pack) for more information on how to use nuget pack.
- - Build **Chocolatey** packages using `New-ChocoNuspecfile` and `New-ChocolateyPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
- - Build **nuget** packages compatible with **proget**: `New-NupecFile` and `New-NugetPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
+ - Package **.nupkg** packages using `nuget pack` see:
+    - [creating-a-package](https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package) for more information on how to create a Nuget package.
+    - [using nuget pack](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-pack) for more information on how to use nuget pack.
+ - Package **.nupkg** packages compatible with **proget**: `New-NuspecPackageFile` and `New-NupkgPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
+ - Build **Chocolatey** packages using `New-ChocoNuspecfile` and `New-ChocoPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
  - Generate **Verification Checksums**: `New-VerificationFile` from [csverify](https://github.com/sgkens/csverify) see the [README](https://github.com/phellams/csverify/blob/main/README.md) for more information on how to use `csverify`.
- - Generate Semantic Version: `Get-SemanticVersion` from [csverify](https://github.com/sgkens/csverify) see the [README](https://github.com/phellams/csverify/blob/main/README.md) for more information on how to use `csverify`.
+ - Generate Semantic Version using `Get-GitAutoVersion` cmdlet. 
  - Publish code coverage results to [codecov](https://codecov.io)
+ - Publish code coverage results to [coveralls](https://coveralls.io)
  - Run Powershell commands and scripts using default shell: `pwsh -c './phellams/myscript.ps1'`
 
 
@@ -29,15 +37,18 @@ Debian based docker image derived from *Debian-slim*, Usecase:
 [![arc][arc-version]][arc-url] [![docker][docker-version]][docker-url] ![docker][docker-size] ![docker][docker-pulls]
 
 
-***🔵 Binaries***
-- ✅ [**.Net Core SDK v8.0.412**](https://dotnet.microsoft.com/download/dotnet-core/current)
+***🟣 Binaries***
+- ✅ [**DotNet SDK v8.0.412**](https://dotnet.microsoft.com/download/dotnet-core/current)
 - ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
+- ✅ [**Git**](https://git-scm.com/)
+- ✅ [**Chocolatey**](https://chocolatey.org/)
+  - For Choco Packages `choco pack` and `choco push` use the offical choco docker image: https://github.com/chocolatey/choco-docker, you can build the .nupkg file with nupsforge and using choco docker image to to deploy.
 - ✅ [**Nuget**](https://www.nuget.org/downloads)
 - ✅ [**Codecov**](https://codecov.io)
-
-***🔵 Common Binaries***
 - ✅ [**curl**](https://everything.curl.dev/)
 - ✅ [**wget**](https://www.gnu.org/software/wget/)
+
+***🟡 Common Binaries***
 - ✅ [**gpg**](https://www.gnupg.org/)
 - ✅ [**apt-transport-https**](https://packages.debian.org/bookworm/apt-transport-https)
 - ✅ [**software-properties-common**](https://packages.debian.org/bookworm/software-properties-common)
@@ -63,9 +74,8 @@ Debian based docker image derived from *Debian-slim*, Usecase:
 
 ***🔵 Powershell Profile***
 - ✅ ***powerShell.profile.ps1***
-  - Custom powershell profile with default output displaying image information: e.g. modules and binaries info included in the image.
-
-
+  - Custom powershell profile with default output displaying image information.
+  - Import modules and functions from `./includes/`.
 
 ## Build
 
@@ -154,10 +164,11 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [ ] Add Ruby support to allow building of jekyll websites
   - [ ] Add RubyGems support - required dependencies
 - [ ] Add toml support with ptoml
-- [ ] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported.
+- [x] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported, use mono and compile choco for mono, use choco offical package, `docker.io/chocolatey/choco:latest`
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
-- [ ] tadpol progress bar module
-- [ ] update nupsforge to support gitlab packages
+- [x] update nupsforge to support gitlab packages
+- [ ] Add coveralls
+- [ ] add codecov
 
 ## Contributing
 
@@ -171,7 +182,6 @@ Feel free to contribute!  Fork the repo and submit a **merge request** with your
 3. Commit your Changes `git commit -m 'Add some AmazingFeature'`
 4. Push to the Branch `git push origin feature/AmazingFeature`
 5. [Open a Merge Request](https://gitlab.com/phellams/phellams-automator/-/merge_requests/new)
-
 
 <!-- LICENSE -->
 ## License
@@ -191,3 +201,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [gitlab-badge]: https://img.shields.io/badge/gitlab-4B0082?style=for-the-badge&logo=gitlab&logoColor=orange
 [github-badge]: https://img.shields.io/badge/github-383838?style=for-the-badge&logo=github&logoColor=white
 [license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a
+

@@ -60,6 +60,7 @@ $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
 [string]$Kernel_version = (uname -rov)
 [string]$codecov_version = (codecov --version)
 [string]$coveralls_version = (coveralls --version)
+[string]$git_version = (git --version).split(" ")[2]
 
 $pwsh_version = $PSVersionTable.PSVersion.ToString()
 
@@ -81,6 +82,7 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[shelldock-version\]", "$(csole -s "$(gmv('shelldock'))" -c yellow)" `
               -replace "\[codecov-version\]", "$(csole -s "v$codecov_version" -c yellow)" `
               -replace "\[coveralls-version\]", "$(csole -s "v$coveralls_version" -c yellow)" `
+              -replace "\[git-version\]", "$(csole -s "v$git_version" -c yellow)" `
               -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
 
 #output final logo

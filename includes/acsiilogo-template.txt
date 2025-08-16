@@ -26,6 +26,7 @@
       ┋     └─▣ nuget     ✜─ • [nuget-version]
       ┋     └─▣ codecov   ✜─ • [codecov-version]
       ┋     └─▣ coveralls ✜─ • [coveralls-version]
+      ┋     ├─▣ git       ✜─ • [git-version]     
       ┋ 
       ┋     ┋ MODULES  ┋
       ┋     ├─▣ PSScriptAnalyzer   ✜─ • [psscriptanalyzer-version]

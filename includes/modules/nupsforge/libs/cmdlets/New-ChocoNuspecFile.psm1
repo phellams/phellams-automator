@@ -179,28 +179,36 @@ function New-ChocoNuspecFile {
             
             #? https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
             $RelativePath = $_.fullname.Replace($DirectoryProperty.FullName, "").TrimStart("\")
+
+            if ($_.length -eq 0) {
+                Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warning" -Submessage
+                return
+            }
+            
             try {
+
                 # replace souce path with empty string to get relative path 
-                if($_.name -match "(I|i)(con.png)") {
-                    Write-QuickLog -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                if($_.name -match "(I|i)con.png") {
+                    Write-QuickLog -Message "{cs:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)
-                }
-                elseif($_.name -match "(R|r)(eadme|EADME).md") {
-                    Write-QuickLog -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                } 
+                if($_.name -match "(readme|README).md") {
+                    Write-QuickLog -Message "{cs:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)       
-                }else{
-                    Write-QuickLog -Message "@{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
-                    # Add files to the manifest in root path
-                    $fileElement = $nuspec.CreateElement("file")
-                    $fileElement.SetAttribute("target", $RelativePath)
-                    $fileElement.SetAttribute("src", $RelativePath)
                 }
+                
+                Write-QuickLog -Message "@{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                # Add files to the manifest in root pat22h
+                $fileElement = $nuspec.CreateElement("file")
+                $fileElement.SetAttribute("target", $RelativePath)
+                $fileElement.SetAttribute("src", $RelativePath)
+                
                 # Append the new <file> element to the <files> node
                 $nuspec.SelectSingleNode("//files").AppendChild($fileElement) | Out-Null
             }

@@ -26,8 +26,7 @@ build-image-commit_sha:
 test-image-commit_sha:
   stage: test
   image: $DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA
-  needs:
-    - build-image-commit_sha
+  needs: [build-image-commit_sha]
   tags:
     - docker
   script:
@@ -65,11 +64,13 @@ test-image-commit_sha:
 
 deploy-image-dockerhub:
   stage: deploy
-  dependencies:
-    - build-image-commit_sha # load build.env from build-image-commit_sha
-  needs:
-    - build-image-commit_sha
-    - test-image-commit_sha
+  # dependencies:
+  #   - build-image-commit_sha # load build.env from build-image-commit_sha
+  needs: [build-image-commit_sha, test-image-commit_sha]
+    # - job: build-image-commit_sha
+    #   artifacts: false
+    # - job: test-image-commit_sha
+    #   artifacts: false
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   before_script: 

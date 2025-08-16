@@ -1,19 +1,30 @@
-using module colortune\Get-ColorTune.psm1
+using module modules\colortune\Get-ColorTune.psm1
+
 Function Read-CheckSum {
     [cmdletbinding()]
     [OutputType([pscustomobject])]
     param(
-        [Parameter(Mandatory=$false)]
-        [string]$Path,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
+        [string]$File,
+        [Parameter(Mandatory = $false)]
         [string]$FromString
     )
-    if ($path -eq '.\') { $path = "$((Get-Location).Path)\tools" }
 
-    if($FromString){
-        $verification = $FromString 
-    }else{
-        $verification = (Get-Content -Path "$Path\VERIFICATION.txt" -Raw)
+    try {
+
+        if ($FromString) {
+            $verification = $FromString 
+            [console]::write("-─◉ reading checksums from string`n")            
+        }
+        else {
+            $File = $(Get-ItemProperty $File).FullName
+            [console]::write("  └─◉ parsing checksums from $($global:_csverify.prop.invoke((Get-ItemProperty $File).fullname))`n")
+            $verification = (Get-Content -Path $File -Raw)
+        }
+    }
+    catch {
+        [console]::write("  └─◉ $(Get-ColorTune -Text "Error: " -color red) $($_.Exception.Message)`n")
+        return;
     }
 
     $checksumObject = @()
@@ -27,7 +38,6 @@ Function Read-CheckSum {
         }
 
     }
-
     return $checksumObject
 }
 Export-ModuleMember -Function Read-CheckSum

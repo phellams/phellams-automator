@@ -81,7 +81,7 @@ function New-NuspecPackageFile {
     )
     $logo = Get-Content -Path "$($global:_nupsforge.rootpath)\libs\icon-nuget.txt" -raw
     $logo
-    Write-QuickLog -Message "Getting Metadata @{pt:{module=$ModuleName}} @{pt:{package=$ModuleName`.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
+    Write-QuickLog -Message "getting metadata @{pt:{module=$ModuleName}} @{pt:{package=$ModuleName`.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
     try {
         # Set Defaults
         # Set PreRelease
@@ -130,21 +130,21 @@ function New-NuspecPackageFile {
   </files>
 </package>
 "@
-        Write-QuickLog -Message "Done" -Name $global:LOGTASTIC_MOD_NAME -Type "success" -submessage
+        Write-QuickLog -Message "done" -Name $global:LOGTASTIC_MOD_NAME -Type "success" -submessage
     }
     catch [System.Exception] {
-        Write-QuickLog -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
+        Write-QuickLog -Message "[NUSPECPACKAGEFILE] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
     }
-    Write-QuickLog -Message "Generating File Manifest" -Name $global:LOGTASTIC_MOD_NAME -Type "Info"
-    Write-QuickLog -Message "Adding files @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+    Write-QuickLog -Message "generating file manifest" -Name $global:LOGTASTIC_MOD_NAME -Type "Info"
+    Write-QuickLog -Message "adding files @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
     #! check for readme.txt and icon.png 
     # Update and add all files to the manifest
     try {
-        Write-QuickLog -Message "Getting file properties" -Name $global:LOGTASTIC_MOD_NAME -Type "Info" -Submessage
+        Write-QuickLog -Message "getting file properties" -Name $global:LOGTASTIC_MOD_NAME -Type "Info" -Submessage
         $DirectoryProperty = Get-itemProperty -Path $path
     }
     catch [System.Exception] {
-        Write-QuickLog -Message "Get-ItemProperty Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
+        Write-QuickLog -Message "get-itemproperty failed error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
         return
     }
 
@@ -153,47 +153,54 @@ function New-NuspecPackageFile {
             
             # https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
             $RelativePath = $_.fullname.Replace($DirectoryProperty.FullName, "").TrimStart("\")
+            
+            # check if files are empty
+            if ($_.length -eq 0) {
+                Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warning" -Submessage
+                return
+            }
+
             try {
                 # replace souce path with empty string to get relative path 
-                if ($_.name -match "(i|I)(con).png") {
-                    Write-QuickLog -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                if ($_.name -match "(i|I)con.png") {
+                    Write-QuickLog -Message "{cs:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)
                 }
-                elseif ($_.name -match "(r|R)(eadme|EADNE).md") {
-                    Write-QuickLog -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                if ($_.name -match "(readme|README).md") {
+                    Write-QuickLog -Message "{cs:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)                  
                 }
-                else {
-                    Write-QuickLog -Message "@{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
-                    # Add files to the manifest in root path
-                    $fileElement = $nuspec.CreateElement("file")
-                    $fileElement.SetAttribute("target", $RelativePath)
-                    $fileElement.SetAttribute("src", $RelativePath)
-                }
+                
+                Write-QuickLog -Message "@{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+                # Add files to the manifest in root path
+                $fileElement = $nuspec.CreateElement("file")
+                $fileElement.SetAttribute("target", $RelativePath)
+                $fileElement.SetAttribute("src", $RelativePath)
+                
                 # Append the new <file> element to the <files> node
                 $nuspec.SelectSingleNode("//files").AppendChild($fileElement) | Out-Null
             }
             catch [System.Exception] {
-                Write-QuickLog -Message "Get-ItemProperty Failed Error: $($_.Exception.Message) " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
+                Write-QuickLog -Message "get-itemproperty failed error: $($_.Exception.Message) " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
                 #break;
             }
         }
     }
-    Write-QuickLog -Message "Finished." -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
+    Write-QuickLog -Message "finished." -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
     
     # Add dependancies to the manifest
     # xmlnode nuspec.package.metadata.dependencies.dependency
     if ($dependencies.Count -ne 0) {
         try {
-            Write-QuickLog -Message "Adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
+            Write-QuickLog -Message "adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
             foreach ($dependency in $dependencies) {
-                Write-QuickLog -Message "Dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Action" -Submessage
+                Write-QuickLog -Message "dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Action" -Submessage
                 $dependencyElement = $nuspec.CreateElement("dependency")
                 $dependencyElement.SetAttribute("id", $dependency.id)
                 $dependencyElement.SetAttribute("version", $dependency.version)
@@ -202,7 +209,7 @@ function New-NuspecPackageFile {
             Write-QuickLog -Message "Done." -Name $global:LOGTASTIC_MOD_NAME -Type "success" -Submessage
         }
         catch [system.exception] {
-            Write-QuickLog -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage
+            Write-QuickLog -Message "error: @{pt:{error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage
         }
     }
 
@@ -215,7 +222,7 @@ function New-NuspecPackageFile {
  
     # output the nuspec file
     try {
-        Write-QuickLog -Message "Exporting .nuspec @{pt:{File=$outpath\$modulename.nuspec)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
+        Write-QuickLog -Message "exporting .nuspec @{pt:{File=$outpath\$modulename.nuspec)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
         $nuspec.Save("$path\$ModuleName`.nuspec")
         Write-QuickLog -Message "Exported" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
         Write-QuickLog -Message "@{pt:{Path=$outpath\$modulename.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
