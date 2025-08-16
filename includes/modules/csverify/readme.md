@@ -1,33 +1,29 @@
-# <img width="25" src="https://raw.githubusercontent.com/sgkens/resources/main/modules/csverify/dist/v1/csverify-icon-x128.png"/> **CSVERIFY** *PowerShell Module*
+# <img width="25" src="https://raw.githubusercontent.com/phellams/phellams-general-resources/main/modules/csverify/dist/svg/csverify-x.svg"/> **CSVERIFY**
 
-[TOC]
+![license][license-badge]
 
-<!--license-->
-<a href="https://github.com/sgkens/csverify/">
-  <img src="https://img.shields.io/badge/MIT-License-blue?style=&logo=unlicense&color=%23004481"></a>
-<!--Code Factor-->
-<a href="https://www.codefactor.io/repository/github/sgkens/csverify/">
-  <img src="https://www.codefactor.io/repository/github/sgkens/csverify/badge"></a>
-<!--Choco-->
-<a href="https://community.chocolatey.org/packages/davilion.csverify">
-  <img src="https://img.shields.io/chocolatey/dt/davilion.csverify?label=Choco"></a>
-<!--[psgallary]-->
-<a href="https://www.powershellgallery.com/packages/csverify">
-  <img src="https://img.shields.io/powershellgallery/dt/csverify?label=psgallary"></a>
 
-The ***CSVERIFY*** module is designed to assist in ensuring the integrity of a codebase by generating and verifying a **VERIFICATION.txt** file.
+PowerShell module designed to assist in ensuring the integrity of a codebase by generating and verifying a **VERIFICATION.txt** file.
+
+## Features
+ - Generates and returns `sha256` hash for each file within the specified folder
+ - Reads the verification file and returns a `PSCustomObject` *array* containg the file, path, size and hash.
+ - Unitilizes `New-Checksum` & `Read-CheckSum`
+ - Read and save checksums to `VERIFICATION.txt` file with `New-VerificationFile`.
 
 ## Verification File
 
 **`New-VerificationFile`** generates the verification file. recersivlly compiles a list of all files present. For each file, it computes the SHA256 hash and records the **file**, **path**, **size** and its **hash** in the verification file(**VERIFICATION.txt**).
 
+>Default output .\tools\VERIFICATION.txt
+
 ```powershell
-#Default output .\tools\VERIFICATION.txt
 cd /path/to/folder
 New-VerificationFile 
 ```
 
-> VERIFICATION.txt output example
+⚪ **VERIFICATION.txt** output example:
+
 <pre>
 VERIFICATION
 Verification is intended to assist the moderators and community
@@ -49,7 +45,7 @@ ___________________
 
 **`Test-Verification`** is used to verify the integrity of the codebase base it compares the `SHA256` values from **VERIFICATION.txt** file and Returns file report
 
-> Verification output
+⚪ Verification output
 <pre>
 Running Verification: Hashed Checksums
   └─ Verified o--(5 / 5 Files » Found 1 that could not be verified)
@@ -62,87 +58,150 @@ Verified EB749553314E1280C22EB6CD2E7CF3687EBF0A8D6C259A59C33AA4DFB215D85D .\csve
 Verified 7E246407DE6B586B7BB2C46E82E089B72064AB6941F7EE83EDFBF9E0BD7D4CD3 .\.gitlab-ci.yml                    1.14KB
 </pre>
 
-## Installation Methods
 
-### 💾 Source
+## Build
 
-🎫 Clone the repository from GitHub `git clone https://github.com/sgkens/csverify.git` \
-🎫 Open a *PowerShell* session and navigate to the cloned repository directory. \
-🎫 **Run** the *Module Import* via the command below:
+
+[![build][build-status]][build-url]
+
+🟣 Building the container locally.
+
+From:
+
+![gitlab-logo][gitlab-badge]
+
+```bash
+git clone https://gitlab.com/phellams/csverify.git
+# download and install psmpacker with provides the `build-module` cmdlet
+find-module -name csverify | install-module | import-module
+
+cd csverify
+import-module .\
+```
 
 ```powershell
-# Import the module
+# or use `phellams-automator-local-builder.ps1` powershell script
+pwsh -c './phellams-automator-local-builder.ps1'
+``` 
+
+![github-logo][github-badge]
+
+```bash
+git clone https://github.com/phellams/csverify.git
+# download and install psmpacker with provides the `build-module` cmdlet
+find-module -name csverify | install-module | import-module
+
+cd csverify
+import-module .\
+```
+
+## Install
+
+**CSVerify** can be installed by cloning the repository and importing the module or from the **psgallary**(PowerShell Gallary), **choco**(chocolatey), **gitlab** packages.
+
+### 🟡 Clone
+
+ 1. Clone the repository from GitHub `git clone https://github.com/sgkens/csverify.git`
+ 2. Open a *PowerShell* session and navigate to the cloned repository directory. 
+ 3. **Run** the *Module Import* via the command `import-module`.
+
+```bash
 git clone https://github.com/sgkens/csverify.git
 cd csverify
 Import-Module -Name csverify
-Get-Module -Name csverify
-
-# Check imported Module Functions
-Get-Module -Name csverify | Select-Object -expand ExportedFunctions
-Get-Module -Name csverify | select-object version
+Get-Module -Name csverify # Check imported module
 ```
 
-### 💼 Releases
+### 🔵 PSGallery **📦 Package**
 
-Download the latest release from the [**Releases**](https://github.com/sgkens/csverify/releases) page.
+[![psgallarry][psgallary-badge]][psgallary-link]
 
-### 📦 Package Repositories
-
-[<img src="https://img.shields.io/powershellgallery/v/csverify?include_prereleases&style=for-the-badge&logo=powershell"/>](https://www.powershellgallery.com/packages/commitfusion/0.4.3) <img src="https://img.shields.io/powershellgallery/dt/csverify?label=Downloads&style=for-the-badge">
-
-```powershell
-# Install The Module from the PsGal
-Install-Module -Name csverify -force
-
-# Import Module into you powershell session
-Import-Module -Name csverify
-```
+Install The Module from the **PSGallary** into default powershell module directory for user.
 
 > *Note!*  
 > You may need to `Set-ExecutionPolicy` to `RemoteSigned` or `Unrestricted` to install from the PSGallary.
 
-[<img src="https://img.shields.io/chocolatey/v/csverify?style=for-the-badge&logo=chocolatey"/>](https://Chocolatory.org/sgkens/commitfusion) <img src="https://img.shields.io/chocolatey/dt/csverify?label=Downloads&style=for-the-badge">
-
 ```powershell
-# Install The Module from the PsGal
-choco install davilion.csverify
-
-# Import Module into you powershell session
-Import-Module -Name csverify
+Find-Module -Name csverify | Install-Module -force | Import-Module
+Get-Module -Name csverify 
 ```
+
+### 🟤 Choco **📦 Package**
+
+[![chocolatey][choco-badge]][choco-link]
+
+Install The Module from the **choco** into default powershell module directory for user
 
 > *How-to!* \
 > Installing *Chocolatey* Package Repository
 [**How to Install**](https)  [🧷https://chocolatey.org/install](https://chocolatey.org/install)
 
-## 📒 Documentaiton
 
-### CMDLETS
+```powershell
+choco install csverify --installdir "$ENV:USERPROFILE\Documents\WindowsPowerShell\Modules"
+Import-Module -Name csverify
+Get-Module -Name csverify # Check imported module
+```
 
-#### New-CheckSum
+### 🟠 Gitlab **📦 Package**
+
+Install The Module from the **Gitlab Packages** `nuget` repository into default powershell module directory for user.
+
+```powershell
+# Install The Module from the Gitlab Packages
+nuget install csverify -source https://gitlab.com/phellams/nuget/v3/index.json
+Import-Module -Name csverify
+Get-Module -Name csverify # Check imported module
+```
+
+
+## Releases
+
+Download the latest release from the [**Releases**](https://github.com/sgkens/csverify/releases) page.
+
+
+## Usage
+
+#### 🟣 New-CheckSum
 New-CheckSum generates and returns sha256 hash for each within the specified folder. New-Verification unitilizes `New-Checksum` & `Read-CheckSum`.
 
 ```powershell
 New-CheckSum -Path .\
 ```
 
-#### Read-CheckSum
+#### 🟣 Read-CheckSum
 Read-CheckSum reads the verification file and returns a `PSCustomObject` *array* containg the file, path, size and hash.
 
 ```powershell
 Read-CheckSum -Path .\
 ```
 
-#### New-VerificationFile
+#### 🟣 New-VerificationFile
 New-VerificationFile generates the verification file. recersivlly compiles a list of all files present. For each file, it computes the SHA256 hash and records the **file**, **path**, **size** and its **hash** in the verification file(**VERIFICATION.txt**).
 
-```powershell
-New-VerificationFile
-```
+ * **Syntax:** `New-VerificationFile -RootPath <String> -OutPutPath <String>`
+ * **Parameters:**
+   * `RootPath` `<String>` - The path to the folder to generat
+ * **Example:**
+    ```powershell
+    New-VerificationFile
+    ```
 
-#### Test-Verification
+#### 🟣 Test-Verification
 Test-Verification is used to verify the integrity of the codebase base it compares the `SHA256` values from **VERIFICATION.txt** file and Returns file report.
 
 ```powershell 
 Test-Verification
 ```
+
+
+<!--LINKS AND BADGES-->
+[psgallary-badge]: https://img.shields.io/powershellgallery/v/csverify?include_prereleases&style=for-the-badge&logo=powershell
+[psgallary-link]: https://www.powershellgallery.com/packages/csverify
+[choco-badge]: https://img.shields.io/chocolatey/v/csverify?style=for-the-badge&logo=chocolatey
+[choco-link]: https://chocolatey.org/packages/csverify
+[build-status]: https://img.shields.io/gitlab/pipeline-status/csverify?style=for-the-badge&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
+[build-url]: https://gitlab.com/phellams/csverify/-/pipelines
+[gitlab-badge]: https://img.shields.io/badge/gitlab-4B0082?style=for-the-badge&logo=gitlab&logoColor=orange
+[github-badge]: https://img.shields.io/badge/github-383838?style=for-the-badge&logo=github&logoColor=white
+[license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%**2317202a**

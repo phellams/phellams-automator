@@ -1,5 +1,5 @@
-using module colortune\Get-ColorTune.psm1
-using module cfbytes\cfbytes-class.psm1
+using module modules\colortune\Get-ColorTune.psm1
+using module modules\cfbytes\cfbytes-class.psm1
 <#
 .SYNOPSIS
 #>
@@ -7,10 +7,10 @@ Function New-CheckSum (){
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True,Position=1)]
-        [String]$Path,
-        [Parameter(Mandatory=$false)]
-        [String]$Outpath
+        [String]$Path
     )
+
+    $path = $(Get-ItemProperty $Path).FullName
 
     $VerificationText = @'
 VERIFICATION
@@ -21,14 +21,16 @@ To Verify the files in this package, please download/Install module csverify fro
 Install-Module -Name csverify
 Import-Module -Name csverify
 
+Alternatively, you can download the latest release from the Releases >> (https://github.com/nytescipts/csverify/releases page.
+
 Then run the following command:
 Test-Verification
 
 -[checksum hash]-
 ___________________
 '@
-    if ($path -eq '.\') { $path = (Get-Location).Path }else { $path = Resolve-Path -Path $path }
-
+    [console]::write("-─◉ generating new checksums from path $($global:_csverify.prop.invoke("$Path\*"))`n")
+    
     # Get all files in the module folder recursively
     $files = Get-ChildItem -Path $path -Recurse -Exclude "VERIFICATION.txt",".git" | 
         Where-Object { $_.PSIsContainer -eq $false } | 
