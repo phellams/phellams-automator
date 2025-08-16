@@ -17,7 +17,7 @@ Function New-VerificationFile {
     $rootpath = $(Get-ItemProperty $rootpath).FullName
     $outPath = $(Get-ItemProperty $OutputPath).FullName
    
-    New-CheckSum -Path $path | Out-File -FilePath "$outPath\verification.txt" -Encoding utf8
+    New-CheckSum -Path $rootpath | Out-File -FilePath "$outPath\verification.txt" -Encoding utf8
     
     [console]::write("  └─◉ $(Get-ColorTune -Text "verification file created" -color green) $($global:_csverify.prop.invoke("$outPath\verification.txt"))`n")
     
