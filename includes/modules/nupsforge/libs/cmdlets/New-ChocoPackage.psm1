@@ -27,7 +27,9 @@ Function New-ChocoPackage() {
         [Parameter(Mandatory = $true)]
         [string]$Path,
         [Parameter(Mandatory = $true)]
-        [string]$OutPath
+        [string]$OutPath,
+        [Parameter(Mandatory = $false)]
+        [string]$CustomTag
     )
     begin{
         $rootpath = (Get-itemProperty -Path $Path).FullName
@@ -58,15 +60,21 @@ Function New-ChocoPackage() {
         }
         Write-QuickLog -Message "[{ct:green:Choco-Package-Creator}]" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -submessage
         $PackageName = "$($nuspecfile.package.metadata.id).$($nuspecfile.package.metadata.version).nupkg"
-        New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-choco-nupkg-packager' -ScriptBlock {
-            Set-Location -path "$($args.rootpath)"
-            choco pack --outputdirectory "$($args.exportPath)"
-        } -Arguments (
-            [PSObject]@{
-                rootpath = $rootpath; 
-                exportpath = $exportpath;
-            }
-        )
+        if ($CI){
+            Set-Location -path "$($rootpath)"
+            choco pack --outputdirectory "$($exportPath)"
+        }else {
+            New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-choco-nupkg-packager' -ScriptBlock {
+                Set-Location -path "$($args.rootpath)"
+                choco pack --outputdirectory "$($args.exportPath)"
+            } -Arguments (
+                [PSObject]@{
+                    rootpath   = $rootpath; 
+                    exportpath = $exportpath;
+                }
+            )
+        }
+
 
         # - TotalProcessorTime : 00:00:00.6250000
         # - id : 26036

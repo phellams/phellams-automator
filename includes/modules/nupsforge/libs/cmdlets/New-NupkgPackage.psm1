@@ -29,7 +29,9 @@ Function New-NupkgPackage() {
         [Parameter(Mandatory = $true)]
         [string]$OutPath,
         [Parameter(Mandatory = $false)]
-        [string]$prerelease
+        [string]$prerelease,
+        [Parameter(Mandatory = $false)]
+        [switch]$CI
     )
     begin{
         $rootpath = (Get-itemProperty -Path $Path).FullName
@@ -64,14 +66,20 @@ Function New-NupkgPackage() {
         }
         Write-QuickLog -Message "[{cs:green:PackPackage}]" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -submessage
         $PackageName = "$($nuspecfile.package.metadata.id).$($nuspecfile.package.metadata.version)-$prerelease.nupkg"
-        New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-nupkg-packager' -ScriptBlock {
-            nuget pack -build $args.rootpath -OutputDirectory $args.exportPath
-        } -Arguments (
-            [PSObject]@{
-                rootpath = $rootpath; 
-                exportPath = $exportPath 
-            }
-        )
+        # Shelldock will not run in CI correclty, so we use the CI variable to check if we are in a CI environment
+        if($CI){
+            nuget pack -build $rootpath -OutputDirectory $exportPath
+        }else{
+            New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-nupkg-packager' -ScriptBlock {
+                nuget pack -build $args.rootpath -OutputDirectory $args.exportPath
+            } -Arguments (
+                [PSObject]@{
+                    rootpath   = $rootpath; 
+                    exportPath = $exportPath 
+                }
+            )
+        }
+
         Write-QuickLog -Message "response -OutputDirectory $exportPath" -Name $global:LOGTASTIC_MOD_NAME -Type "Success" -Submessage
         Write-QuickLog -Message "nupkg package created" -Name $global:LOGTASTIC_MOD_NAME -Type "Success"
         Write-QuickLog -Message "@{pt:{package=$exportPath`\$PackageName}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete" -Submessage
