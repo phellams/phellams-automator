@@ -61,6 +61,7 @@ $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
 [string]$codecov_version = (codecov --version)
 [string]$coveralls_version = (coveralls --version)
 [string]$git_version = (git --version).split(" ")[2]
+[string]$dotnet_nuget_version = (dotnet nuget --version)[1]
 
 $pwsh_version = $PSVersionTable.PSVersion.ToString()
 
@@ -83,7 +84,8 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[codecov-version\]", "$(csole -s "v$codecov_version" -c yellow)" `
               -replace "\[coveralls-version\]", "$(csole -s "v$coveralls_version" -c yellow)" `
               -replace "\[git-version\]", "$(csole -s "v$git_version" -c yellow)" `
-              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
+              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)" `
+              -replace "\[dotnet_nuget_version\]", "$(csole -s "v$dotnet_nuget_version" -c yellow)" `
 
 #output final logo
 $logo 
