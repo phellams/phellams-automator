@@ -247,11 +247,12 @@ function New-ChocoNuspecFile {
     #nuspec.package.metadata.requireLicenseAcceptance = $requireLicenseAcceptance
  
     # output the nuspec file
+    $savepath = [System.IO.Path]::Combine($DirectoryProperty.fullname, "$modulename.nuspec")
     try {
         Write-QuickLog -Message "Exporting .nuspec @{pt:{File=$outpath\$modulename.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
-        $nuspec.Save("$path\$ModuleName.nuspec")
+        $nuspec.Save($savepath)
         Write-QuickLog -Message "Exported" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
-        Write-QuickLog -Message "@{pt:{Path=$PWD`\$modulename`.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
+        Write-QuickLog -Message "@{pt:{Path=$savepath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
     }
     catch [system.exception] {
         Write-QuickLog -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage

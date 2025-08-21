@@ -152,7 +152,7 @@ function New-NuspecPackageFile {
         if ($_.PSIsContainer -eq $false) {
             
             # https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
-            $RelativePath = $_.fullname.Replace($DirectoryProperty.FullName, "").TrimStart("\")
+            $RelativePath = ".$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
             
             # check if files are empty
             if ($_.length -eq 0) {

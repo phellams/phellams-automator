@@ -71,22 +71,10 @@ Function New-NupkgPackage() {
         # Shelldock will not run in CI correclty, so we use the CI variable to check if we are in a CI environment
         if($CI){
             Write-QuickLog -Message "running on CI" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
-            if ($isLinux -or $UseDotNetNugetPacker) {
-                Write-Quicklog -Message "running on Linux" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
-                dotnet nuget pack $rootpath -OutputDirectory $exportPath
-            }else{
-                Write-Quicklog -Message "running on Windows" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
-                nuget pack $rootpath -OutputDirectory $exportPath
-            }
+            nuget pack $rootpath -OutputDirectory $exportPath
         }else{
             New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-nupkg-packager' -ScriptBlock {
-                if($isLinux -or $UseDotNetNugetPacker){
-                    Write-QuickLog -Message "running on Linux" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
-                    dotnet nuget pack $args.rootpath -OutputDirectory $args.exportPath
-                }else{
-                    Write-QuickLog -Message "running on Windows" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
-                    nuget pack $args.rootpath -OutputDirectory $args.exportPath
-                }
+                nuget pack $args.rootpath -OutputDirectory $args.exportPath
             } -Arguments (
                 [PSObject]@{
                     rootpath   = $rootpath; 
