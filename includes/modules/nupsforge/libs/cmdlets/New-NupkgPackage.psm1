@@ -31,11 +31,13 @@ Function New-NupkgPackage() {
         [Parameter(Mandatory = $false)]
         [string]$prerelease,
         [Parameter(Mandatory = $false)]
-        [switch]$CI
+        [switch]$CI,
+        [Parameter(Mandatory = $false)]
+        [switch]$UseDotNetNugetPacker
     )
     begin{
         $rootpath = (Get-itemProperty -Path $Path).FullName
-        $exportPath = (Get-itemProperty -Path $OutPath).FullName 
+        $exportPath = (Get-itemProperty -Path $OutPath).FullName
     }
     process{
         try{
@@ -68,10 +70,23 @@ Function New-NupkgPackage() {
         $PackageName = "$($nuspecfile.package.metadata.id).$($nuspecfile.package.metadata.version)-$prerelease.nupkg"
         # Shelldock will not run in CI correclty, so we use the CI variable to check if we are in a CI environment
         if($CI){
-            nuget pack -build $rootpath -OutputDirectory $exportPath
+            Write-QuickLog -Message "running on CI" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+            if ($isLinux -or $UseDotNetNugetPacker) {
+                Write-Quicklog -Message "running on Linux" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+                dotnet nuget pack $rootpath -OutputDirectory $exportPath
+            }else{
+                Write-Quicklog -Message "running on Windows" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+                nuget pack $rootpath -OutputDirectory $exportPath
+            }
         }else{
             New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-nupkg-packager' -ScriptBlock {
-                nuget pack -build $args.rootpath -OutputDirectory $args.exportPath
+                if($isLinux -or $UseDotNetNugetPacker){
+                    Write-QuickLog -Message "running on Linux" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+                    dotnet nuget pack $args.rootpath -OutputDirectory $args.exportPath
+                }else{
+                    Write-QuickLog -Message "running on Windows" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
+                    nuget pack $args.rootpath -OutputDirectory $args.exportPath
+                }
             } -Arguments (
                 [PSObject]@{
                     rootpath   = $rootpath; 
@@ -82,7 +97,7 @@ Function New-NupkgPackage() {
 
         Write-QuickLog -Message "response -OutputDirectory $exportPath" -Name $global:LOGTASTIC_MOD_NAME -Type "Success" -Submessage
         Write-QuickLog -Message "nupkg package created" -Name $global:LOGTASTIC_MOD_NAME -Type "Success"
-        Write-QuickLog -Message "@{pt:{package=$exportPath`\$PackageName}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete" -Submessage
+        Write-QuickLog -Message "@{pt:{package=$exportPath\$PackageName}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete" -Submessage
         Write-QuickLog -Message "complete" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
     }
 }
