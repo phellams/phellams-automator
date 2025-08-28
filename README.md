@@ -186,7 +186,15 @@ Feel free to contribute!  Fork the repo and submit a **merge request** with your
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE.txt` for more information. 
+
+## Changelog
+
+### v1.0.0
+
+- Updated Powershell to v7.5.1
+- Updated NuPsforge to latest version
+- Updated CsVerify To the Latest Version
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
