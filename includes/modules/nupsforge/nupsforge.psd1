@@ -4,7 +4,7 @@
     RootModule        = 'nupsforge.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.5.6.0'
+    ModuleVersion     = '0.6.0.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -16,10 +16,10 @@
     Author            = 'Garvey k. Snow'
 
     # Company or vendor of this module
-    CompanyName       = 'davilion'
+    CompanyName       = 'phellams'
 
     # Copyright statement for this module
-    Copyright         = '2023 Garvey k. Snow All rights reserved.'
+    Copyright         = '2025 Garvey k. Snow All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = "NuPSForge is a PowerShell module that aids in the creation of .nupkg files for psgal, choco, GitLab packages, and GitHub packages. These are intended for PowerShell modules and scripts, which can be deployed to NuGet repositories. See https://github.com/sgkens/NuPSForge for more information."
