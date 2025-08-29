@@ -16,31 +16,30 @@
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
       ┋    -----    ----- | ■ v0.3.0                    
       ┋     ┋ INFO     ┋
-      ┋     ├▣ Default Shell  ─•  pwsh
+      ┋     ├▣ Default Shell  ─• pwsh
       ┋     └▣ Distro Release ─• [base-distro-release]
       ┋         └○ [kernel-version]
       ┋
       ┋     ┋ BINARIES ┋
-      ┋     ├─▣ pwsh            ✜─ • [pwsh-version] 
-      ┋     ├─▣ dotnet          ✜─ • [dotnet-version]
-      ┋     ├─▣ dotnet Nuget    ✜─ • [dotnet-nuget-version]
-      ┋     └─▣ nuget           ✜─ • [nuget-version]
-      ┋     └─▣ codecov         ✜─ • [codecov-version]
-      ┋     └─▣ coveralls       ✜─ • [coveralls-version]
-      ┋     ├─▣ git             ✜─ • [git-version]     
+      ┋     ├─▣ pwsh               ✜─ •> [pwsh-version] 
+      ┋     ├─▣ dotnet             ✜─ •> [dotnet-version]
+      ┋     └─▣ nuget              ✜─ •> [nuget-version]
+      ┋     └─▣ codecov            ✜─ •> [codecov-version]
+      ┋     └─▣ coveralls          ✜─ •> [coveralls-version]
+      ┋     ├─▣ git                ✜─ •> [git-version]     
       ┋ 
       ┋     ┋ MODULES  ┋
-      ┋     ├─▣ PSScriptAnalyzer   ✜─ • [psscriptanalyzer-version]
-      ┋     ├─▣ Pester             ✜─ • [pester-version]
-      ┋     ├─▣ PowerShell-Yaml    ✜─ • [powerShell-yaml-version]
-      ┋     ├─▣ ColorConsole       ✜─ • [colorconsole-version]
-      ┋     ├─▣ quicklog           ✜─ • [quicklog-version]
-      ┋     ├─▣ Nupsforge          ✜─ • [nupsforge-version]
-      ┋     ├─▣ Psmpacker          ✜─ • [psmpacker-version]
-      ┋     ├─▣ Csverify           ✜─ • [csverify-version]
-      ┋     ├─▣ ShellDock          ✜─ • [shelldock-version]
-      ┋     ├─▣ tadpol             ✜─ • [tadpol-version]
-      ┋     └─▣ GitaAutoVersion    ✜─ • [gitautoversion-version]
+      ┋     ├─▣ PSScriptAnalyzer   ✜─ •> [psscriptanalyzer-version]
+      ┋     ├─▣ Pester             ✜─ •> [pester-version]
+      ┋     ├─▣ PowerShell-Yaml    ✜─ •> [powerShell-yaml-version]
+      ┋     ├─▣ ColorConsole       ✜─ •> [colorconsole-version]
+      ┋     ├─▣ Quicklog           ✜─ •> [quicklog-version]
+      ┋     ├─▣ Nupsforge          ✜─ •> [nupsforge-version]
+      ┋     ├─▣ Psmpacker          ✜─ •> [psmpacker-version]
+      ┋     ├─▣ Csverify           ✜─ •> [csverify-version]
+      ┋     ├─▣ ShellDock          ✜─ •> [shelldock-version]
+      ┋     ├─▣ TadPol             ✜─ •> [tadpol-version]
+      ┋     └─▣ GitaAutoVersion    ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐
   ▙ Shell ▟
