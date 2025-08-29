@@ -1,5 +1,5 @@
 # Use Debian latest as the base image
-FROM debian:12.9-slim
+FROM debian:12.11-slim
 
 # Set environment variables for non-interactive installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,9 +24,9 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/power
 
 # Install NuGet
 # NOTE: the default repo only has nuget 2.8.x as debian only has stable packages that are well tested which in turn could be quite old.
-# TODO: Install nuget directly using the official nuget install script or download the latest binary from nuget.org
-# TODO: nuget exe is a windows binary, so we need mono to run this
-# TODO: update nupsforge with sitch param to check if is Linux and run mono
+#// TODO: Install nuget directly using the official nuget install script or download the latest binary from nuget.org
+#// TODO: nuget exe is a windows binary, so we need mono to run this
+#// TODO: update nupsforge with sitch param to check if is Linux and run mono
 #RUN apt install -y nuget
 # RUN apt update && apt install -y ca-certificates gnupg wget && \
 #     gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
@@ -82,7 +82,7 @@ RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
     pwsh -command 'nuget help | select -First 1' && \
     pwsh -command 'dotnet --info'
 
-# copy dependency for: psmpacker, nupsforge
+# copy dependencies for: psmpacker, nupsforge
 COPY ./includes/modules/quicklog /root/.local/share/powershell/Modules/quicklog
 COPY ./includes/modules/tadpol /root/.local/share/powershell/Modules/tadpol
 COPY ./includes/modules/shelldock /root/.local/share/powershell/Modules/shelldock
