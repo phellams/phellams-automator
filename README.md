@@ -43,7 +43,9 @@ Debian based docker image derived from *Debian-slim*, Use case:
 - ✅ [**Git**](https://git-scm.com/)
 - ✅ [**Chocolatey**](https://chocolatey.org/)
   - For Choco Packages `choco pack` and `choco push` use the offical choco docker image: https://github.com/chocolatey/choco-docker, you can build the .nupkg file with nupsforge and using choco docker image to to deploy.
+  - Choco is not supported by Linux. but can be run throw mono.
 - ✅ [**Nuget**](https://www.nuget.org/downloads)
+  - Nuget 6.x is is executed through mono and can be call by the default nuget executable.
 - ✅ [**Codecov**](https://codecov.io)
 - ✅ [**curl**](https://everything.curl.dev/)
 - ✅ [**wget**](https://www.gnu.org/software/wget/)
@@ -63,6 +65,12 @@ Debian based docker image derived from *Debian-slim*, Use case:
   - PowerShell YAML parser.
 - ✅ [**ColorConsole**](https://github.com/phellams/colorconsole)
   - Colorful console output using ANSI escape sequences default powershell console color pallete.
+- ✅ [**Tadpol**](https://github.com/phellams/tadpol)
+  - Progressbars, loaders, and spinners generator.
+- ✅ [**ShellDock**](https://github.com/phellams/shelldock)
+  - Simple Runspace Executor with progress indicator.
+- ✅ [**Quicklog**](https://github.com/phellams/quicklog)
+  - Console logger with color support.
 - ✅ [**Nupsforge**](https://github.com/phellams/nupsforge)
   - Nuget Package Generator: supports: **psgallary**, **chocolatey**, **proget**(psgallary,chocolatey), **gitlab packages**, **github packages**.
 - ✅ [**Psmpacker**](https://github.com/phellams/psmpacker)
@@ -81,9 +89,9 @@ Debian based docker image derived from *Debian-slim*, Use case:
 
 [![build][build-status]][build-url]
 
-🟣 Building the container locally.
+🟣 Building the container locally.a
 
-From:
+The Gitlab docker build is is managed by the Phellams-Automator docker image, using the gitab workflow ci pipeline.
 
 ![gitlab-logo][gitlab-badge]
 
@@ -92,10 +100,14 @@ git clone https://gitlab.com/phellams/phellams-automator.git
 cd phellams-automator
 docker build -t phellams-automator -f phellams-automator.dockerfile .
 docker image inspect phellams-automator #| jq
+```
 
+Using local bulid script
+
+```powershell
 # or use `phellams-automator-local-builder.ps1` powershell script
-sudo pwsh -c './phellams-automator-local-builder.ps1'
-``` 
+sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
+```
 
 ![github-logo][github-badge]
 
@@ -104,31 +116,45 @@ git clone https://github.com/phellams/phellams-automator.git
 cd phellams-automator
 docker build -t phellams-automator -f phellams-automator.dockerfile .
 docker image inspect phellams-automator #| jq
-
-# or use `phellams-automator-local-builder.ps1` powershell script
-sudo pwsh -c './phellams-automator-local-builder.ps1'
 ```
+
+Using local bulid script
+
+```powershell
+# or use `phellams-automator-local-builder.ps1` powershell script
+sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
+```
+> Local builds are tagged with `:localbuild`
 
 ## Usage
 
 🟣 Output container information.
+> Default shell is `pwsh` and will output the container information.
 
 ```bash
 docker run --rm phellams-automator
 ```
 
-🟢 Mount paths examples for running commands inside the container.
+🟢 Mount path examples for running commands inside the container.
 
 ```bash
 # dynamic path
-docker run -it -v .:/phellams-automator docker.io/sgkens/phellams-automator
+docker run -it -v .:/phellams-automator docker.io/sgkens/phellams-automator 
+
 # absolute path
 docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
+
 ```
 Or, if you want to use the absolute path with WSL2:
 
-```bash 
+```bash
+# Wsl2
 docker run -it -v $(wslpath -w $(pwd)):/phellams-automator docker.io/sgkens/phellams-automator
+```
+
+```bash
+# Linux
+docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
 ```
 
 
@@ -137,12 +163,16 @@ docker run -it -v $(wslpath -w $(pwd)):/phellams-automator docker.io/sgkens/phel
 ```bash
 # nuget
 docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator nuget pack ./
+
 # pester
-docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator invoke-pester -script .\tests\tests.ps1
+docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator invoke-pester -script ./tests/tests.ps1
+
 # psscriptanalyzer
-docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator invoke-psscriptanalyzer -script .\tests\tests.ps1
+docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator invoke-psscriptanalyzer -script ./tests/tests.ps1
+
 # dotnet
 docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator dotnet build
+
 # gitautoversion
 docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator (Get-Gitautoversion).Version
 ```
@@ -167,8 +197,9 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [x] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported, use mono and compile choco for mono, use choco offical package, `docker.io/chocolatey/choco:latest`
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
 - [x] update nupsforge to support gitlab packages
-- [ ] Add coveralls
-- [ ] add codecov
+- [x] Add coveralls
+- [x] add codecov
+- [x] add nuget via mono to access nuget v 6.x + in debian 12
 
 ## Contributing
 
@@ -190,12 +221,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Changelog
 
-### v1.0.0
-
-- Updated Powershell to v7.5.1
-- Updated NuPsforge to latest version
-- Updated CsVerify To the Latest Version
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [arc-version]: https://img.shields.io/badge/Debian-12.9_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
@@ -207,6 +232,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [build-status]: https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=for-the-badge&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
 [build-url]: https://gitlab.com/phellams/phellams-automator/-/pipelines
 [gitlab-badge]: https://img.shields.io/badge/gitlab-4B0082?style=for-the-badge&logo=gitlab&logoColor=orange
-[github-badge]: https://img.shields.io/badge/github-383838?style=for-the-badge&logo=github&logoColor=white
+[github-badge]: https://img.shields.io/badge/github-mirror-383838?style=for-the-badge&logo=github&logoColor=white
 [license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a
 
