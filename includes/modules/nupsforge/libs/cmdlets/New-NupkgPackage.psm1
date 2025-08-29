@@ -72,9 +72,13 @@ Function New-NupkgPackage() {
         if($CI){
             Write-QuickLog -Message "running on CI" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
             nuget pack $rootpath -OutputDirectory $exportPath
+            # for ci pipline failure by using exit code
+            if($LASTEXITCODE -ne 0) { throw [System.Exception] "nuget pack failed"; exit 1 }
         }else{
             New-ShellDock -LogName $global:LOGTASTIC_MOD_NAME -Name 'nuget-nupkg-packager' -ScriptBlock {
                 nuget pack $args.rootpath -OutputDirectory $args.exportPath
+                # for ci pipline failure by using exit code
+                if ($LASTEXITCODE -ne 0) { throw [System.Exception] "nuget pack failed"; exit 1 }
             } -Arguments (
                 [PSObject]@{
                     rootpath   = $rootpath; 
