@@ -1,5 +1,5 @@
 # Use Debian latest as the base image
-FROM debian:12.9-slim
+FROM debian:12.11-slim
 
 # Set environment variables for non-interactive installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,8 +23,28 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/power
 #RUN apt install -y powershell
 
 # Install NuGet
-RUN apt install -y nuget
-
+# NOTE: the default repo only has nuget 2.8.x as debian only has stable packages that are well tested which in turn could be quite old.
+#// TODO: Install nuget directly using the official nuget install script or download the latest binary from nuget.org
+#// TODO: nuget exe is a windows binary, so we need mono to run this
+#// TODO: update nupsforge with sitch param to check if is Linux and run mono
+#RUN apt install -y nuget
+# RUN apt update && apt install -y ca-certificates gnupg wget && \
+#     gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+#     echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/debian stable-bookworm main" > /etc/apt/sources.list.d/mono-official-stable.list && \
+#     apt update && \
+#     apt install -y mono-complete && \
+#     rm -rf /var/lib/apt/lists/* && \
+#     wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
+#     echo '#!/bin/bash' > /usr/local/bin/nuget && \
+#     echo 'mono /usr/local/bin/nuget.exe "$@"' >> /usr/local/bin/nuget && \
+#     chmod +x /usr/local/bin/nuget
+RUN apt update && apt install -y mono-complete wget && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
+    echo '#!/bin/bash' > /usr/local/bin/nuget && \
+    echo 'mono /usr/local/bin/nuget.exe "$@"' >> /usr/local/bin/nuget && \
+    chmod +x /usr/local/bin/nuget
+    
 # Install .NET SDK v8.0.412
 # FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9
 RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz && \
@@ -62,7 +82,7 @@ RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
     pwsh -command 'nuget help | select -First 1' && \
     pwsh -command 'dotnet --info'
 
-# copy dependency for: psmpacker, nupsforge
+# copy dependencies for: psmpacker, nupsforge
 COPY ./includes/modules/quicklog /root/.local/share/powershell/Modules/quicklog
 COPY ./includes/modules/tadpol /root/.local/share/powershell/Modules/tadpol
 COPY ./includes/modules/shelldock /root/.local/share/powershell/Modules/shelldock

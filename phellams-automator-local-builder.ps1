@@ -20,15 +20,15 @@ $semver = (Get-GitAutoVersion).Version
 Switch ($buildMode) {
     'choco' {
         # Build the Docker image
-        docker build -t phellams-automator-choco:LocalBuild -f phellams-automator-choco.dockerfile .
+        docker build -t phellams-automator-choco:localbuild -f phellams-automator-choco.dockerfile .
         # test the image output with a simple command
-        docker run phellams-automator-choco:LocalBuild pwsh -c get-module -list
+        docker run phellams-automator-choco:localbuild pwsh -c get-module -list
     }
     'Base' {
         # Build the Docker image
-        docker build -t phellams-automator:LocalBuild -f phellams-automator.dockerfile .
+        docker build -t phellams-automator:localbuild -f phellams-automator.dockerfile .
         # test the image output with a simple command
-        docker run phellams-automator:LocalBuild pwsh -c get-module -list
+        docker run phellams-automator:localbuild pwsh -c get-module -list
         # push to proget - Currently Accessing proget via password passed in via stdin fails
         # normal login works however: docker login -u user
         # --------------
