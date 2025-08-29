@@ -16,7 +16,7 @@ import-module -name psmpacker
 import-module -Name nupsforge
 
 
-# Define functions
+# # Define functions
 function gmv($name) {
     [string]$version_prerelease
     $moduleInfo = Get-Module -Name $name
@@ -31,41 +31,37 @@ function gmv($name) {
 }
 
 
-# Alter logo
-# ----------
-$logo = Get-Content -Path /root/.config/powershell/acsiilogo-template.txt -Raw
+# # Alter logo
+# # ----------
+[string]$logo = Get-Content -Path /root/.config/powershell/acsiilogo-template.txt -Raw
+
 $logo = $logo -replace "X", "$(csole -s "x" -c green)" `
               -replace "■", "$(csole -s "■" -c cyan)" `
               -replace "▣", "$(csole -s "▣" -c magenta)" `
-              -replace "▣", "$(csole -s "▣" -c magenta)" `
               -replace "\.\.", "$(csole -s ".." -c darkcyan)" `
-              -replace "✜", "$(csole -s "✜" -c darkyellow)" `
               -replace "✜", "$(csole -s "✜" -c darkyellow)"
 
-# Alter info area
-# ---------------
+# # Alter info area
+# # ---------------
 $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
               -replace "BINARIES", "$(csole -s "BINARIES" -c yellow)" `
               -replace "MODULES", "$(csole -s "MODULES" -c yellow)" `
               -replace "SCRIPTS", "$(csole -s "SCRIPTS" -c yellow)"
 
-# template Biniary Versions
-# -------------------------
-#$logo = $logo -replace "pwsh", "$(csole -s "pwsh" -c green)"
-
-#  - Get Versions
+# # template Biniary Versions
+# # -------------------------
+# #  - Get Versions
 [string]$distro_release = (lsb_release --all | select-string -pattern "Description") -replace "Description:", ""
 [string]$dotnet_version = (dotnet --info | Select-String -Pattern "Version:" | Select-Object -first 1) -replace "Version:", ""
-[string]$nuget_version = (nuget help | Select-Object -First 1) -replace "NuGet Version:", ""
+[string]$nuget_version = (nuget help)[0] -replace "NuGet Version:", ""
 [string]$Kernel_version = (uname -rov)
 [string]$codecov_version = (codecov --version)
 [string]$coveralls_version = (coveralls --version)
 [string]$git_version = (git --version).split(" ")[2]
-[string]$dotnet_nuget_version = (dotnet nuget --version)[1]
 
 $pwsh_version = $PSVersionTable.PSVersion.ToString()
 
-# - Update Versions
+# # - Update Versions
 $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yellow)" `
               -replace "\[dotnet-version\]", "$(csole -s "v$($dotnet_version.Trim())" -c yellow)" `
               -replace "\[nuget-version\]", "$(csole -s "v$($nuget_version.Trim())" -c yellow)" `
@@ -84,8 +80,7 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[codecov-version\]", "$(csole -s "v$codecov_version" -c yellow)" `
               -replace "\[coveralls-version\]", "$(csole -s "v$coveralls_version" -c yellow)" `
               -replace "\[git-version\]", "$(csole -s "v$git_version" -c yellow)" `
-              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)" `
-              -replace "\[dotnet_nuget_version\]", "$(csole -s "v$dotnet_nuget_version" -c yellow)" `
+              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
 
-#output final logo
-$logo 
+# #output final logo
+$logo
