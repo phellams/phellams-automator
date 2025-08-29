@@ -153,7 +153,7 @@ function New-NuspecPackageFile {
             
             # https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
             if($isLinux){
-                $RelativePath = ".$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('/'))"
+                $RelativePath = "./$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('/'))"
             }
             if($isWindows){
                 $RelativePath = "./$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
