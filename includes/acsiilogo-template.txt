@@ -14,7 +14,7 @@
     ..//.    .x.    .x.   ./=/..
       /     .:x.    .x:. -| ■ Phellam Automator      
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
-      ┋    -----    ----- | ■ v0.3.0                    
+      ┋    -----    ----- | ■ Debian image                  
       ┋     ┋ INFO     ┋
       ┋     ├▣ Default Shell  ─• pwsh
       ┋     └▣ Distro Release ─• [base-distro-release]
