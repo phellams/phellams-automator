@@ -15,7 +15,7 @@ RUN apt update && \
     ca-certificates \
     git
 
-RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.1/powershell_7.5.1-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/powershell_7.5.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
     dpkg -i /tmp/powershell.deb && \
     apt install -f -y  # Fix dependencies if needed
 
