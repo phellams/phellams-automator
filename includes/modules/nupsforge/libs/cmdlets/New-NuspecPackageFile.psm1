@@ -95,37 +95,26 @@ function New-NuspecPackageFile {
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <!-- Identifier that must be unique within the hosting gallery -->
     <id>$ModuleName</id>
-    <!-- Package version number that is used when resolving dependencies -->
     <version>$ModuleVersion</version>
-    <!-- Authors contain text that appears directly on the gallery -->
     <authors>$Author</authors>
-    <!-- Owners are typically nuget.org identities that allow gallery users to easily find other packages by the same owners.  a-->
     <owners>$Author</owners>
-    <!-- The description can be used in package manager UI. Note that thenuget.org gallery uses information you add in the portal. -->
-    <description>$Description.</description>
-    <!-- Project Url provides a link for the gallery -->
-    <!--readme reference-->
+    <description>
+    <![CDATA[
+    $Description.
+    ]]>
+    </description>
     <readme>readme.md</readme>
     <projectUrl>$ProjectUrl</projectUrl>
-    <!-- License information is displayed on the gallery -->
     <license type="expression">$License</license>
-    <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>$Tags</tags>
-    <!-- Icon is used in Visual Studio's package manager UI -->
     <icon>icon.png</icon>
-    <!-- If true, this value prompts the user to accept the license wheninstalling the package. -->   
     <requireLicenseAcceptance>$Acceptance</requireLicenseAcceptance>
-    <!-- Any details about this particular release -->
     <releaseNotes>$releasenotes</releaseNotes>
-    <!-- Copyright information -->
     <copyright>Copyright ©$((get-date | select-object year).year) $company / $Author</copyright>
-    <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
     </dependencies>
   </metadata>
-  <!-- Files included in the manifiest and relative path -->
   <files>
   </files>
 </package>
@@ -153,10 +142,10 @@ function New-NuspecPackageFile {
             
             # https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
             if($isLinux){
-                $RelativePath = "./$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('/'))"
+                $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('/'))"
             }
             if($isWindows){
-                $RelativePath = "./$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
+                $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
             }
             
             # check if files are empty
@@ -174,7 +163,7 @@ function New-NuspecPackageFile {
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)
                 }
-                if ($_.name -match "(readme|README).md") {
+                if ($_.name -match "(readme.md|README.md)") {
                     Write-QuickLog -Message "{cs:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")

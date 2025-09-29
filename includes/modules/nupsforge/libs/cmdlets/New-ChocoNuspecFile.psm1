@@ -113,45 +113,34 @@ function New-ChocoNuspecFile {
 <package>
   <metadata>
     <title>$ModuleName</title>
-    <!-- Identifier that must be unique within the Chocolatey hosting gallery -->
     <id>$ModuleName</id>
-    <!-- Package version number that is used when resolving dependencies -->
     <version>$ModuleVersion</version>
-    <!-- Authors contain text that appears directly on the Chocolatey package page-->
     <authors>$Author</authors>
-    <!-- Owners contain text that appears directly on the Chocolatey package page -->
     <owners>$Author</owners>
-    <!-- The description for the chocolatey package -->
-    <description>$Description</description>
-    <!-- The summary for the chocolatey package -->
+    <description>
+    <![CDATA[
+    $Description
+    ]]>
+    </description>
     <summary>$Summary</summary>
-    <!-- Project URL provides a link for the Chocolatey package page -->
     <projectUrl>$Projecturl</projectUrl>
-    <!-- Package icon url Chocolatey package page -->
     <iconUrl>$iconurl</iconUrl>
-    <!-- Project Source URL provides a link for the Chocolatey -->
     <projectSourceUrl>$projectSourceurl</projectSourceUrl>
-    <!-- Documentation URL provides a link for the software docs -->
     <docsUrl>$docsurl</docsUrl>
-    <!-- Mailing List URL provides a link for the software mailing list -->
     <mailingListUrl>$mailingListurl</mailingListUrl>
-    <!-- Bug Tracker URL provides a link for the software bug tracker -->
     <bugTrackerUrl>$bugTrackerurl</bugTrackerUrl>
-    <!-- License URL provides a link for the software license -->
     <licenseUrl>$Licenseurl</licenseUrl>
-    <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>$Tags</tags>
-    <!-- If true, this value prompts the user to accept the license wheninstalling the package. -->   
     <requireLicenseAcceptance>$Acceptance</requireLicenseAcceptance>
-    <!-- Any details about this particular release -->
-    <releaseNotes>$releasenotes</releaseNotes>
-    <!-- Copyright information -->
+    <releaseNotes>
+    <![CDATA[
+    $releasenotes
+    ]]>
+    </releaseNotes>
     <copyright>Copyright ©$((get-date | select-object year).year) $company</copyright>
-    <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
     </dependencies>
   </metadata>
-  <!-- Files included in the manifiest and relative path -->
   <files>
   </files>
 </package>
@@ -178,7 +167,7 @@ function New-ChocoNuspecFile {
         if ($_.PSIsContainer -eq $false) {
             
             #? https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
-            $RelativePath = ".$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
+            $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
 
             if ($_.length -eq 0) {
                 Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warning" -Submessage
