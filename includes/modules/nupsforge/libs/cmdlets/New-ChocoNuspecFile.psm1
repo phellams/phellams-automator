@@ -166,8 +166,13 @@ function New-ChocoNuspecFile {
     Get-Childitem -path $DirectoryProperty.FullName -Recurse | foreach-object {
         if ($_.PSIsContainer -eq $false) {
             
-            #? https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
-            $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
+            # https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5019
+            if($isLinux){
+                $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('/'))"
+            }
+            if($isWindows){
+                $RelativePath = "$($_.fullname.Replace($DirectoryProperty.FullName, '').TrimStart('\'))"
+            }
 
             if ($_.length -eq 0) {
                 Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warning" -Submessage
