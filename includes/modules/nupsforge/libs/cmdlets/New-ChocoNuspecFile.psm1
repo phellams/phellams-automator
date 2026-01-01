@@ -175,7 +175,7 @@ function New-ChocoNuspecFile {
             }
 
             if ($_.length -eq 0) {
-                Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warning" -Submessage
+                Write-QuickLog -Message "File @{pt:{path=$RelativePath}} is empty, skipping." -Name $global:LOGTASTIC_MOD_NAME -Type "warn" -Submessage
                 return
             }
             
