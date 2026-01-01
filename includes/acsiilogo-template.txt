@@ -39,6 +39,7 @@
       ┋     ├─▣ Csverify           ✜─ •> [csverify-version]
       ┋     ├─▣ ShellDock          ✜─ •> [shelldock-version]
       ┋     ├─▣ TadPol             ✜─ •> [tadpol-version]
+      ┋     ├─▣ PHWriter           ✜─ •> [phwriter-version]
       ┋     └─▣ GitaAutoVersion    ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐

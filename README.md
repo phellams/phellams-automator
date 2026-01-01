@@ -200,6 +200,7 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [x] Add coveralls
 - [x] add codecov
 - [x] add nuget via mono to access nuget v 6.x + in debian 12
+- [ ] use mono to attempt to run choco executable
 
 ## Contributing
 
