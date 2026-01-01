@@ -14,6 +14,7 @@ import-module -Name csverify
 import-module -name quicklog
 import-module -name psmpacker
 import-module -Name nupsforge
+import-module -name phwriter
 
 
 # # Define functions
@@ -80,7 +81,8 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[codecov-version\]", "$(csole -s "v$codecov_version" -c yellow)" `
               -replace "\[coveralls-version\]", "$(csole -s "v$coveralls_version" -c yellow)" `
               -replace "\[git-version\]", "$(csole -s "v$git_version" -c yellow)" `
-              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)"
+              -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)" `
+              -replace "\[phwriter-version\]", "$(csole -s "$(gmv('phwriter'))" -c yellow)" `
 
 # #output final logo
 $logo

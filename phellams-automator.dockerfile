@@ -89,6 +89,9 @@ COPY ./includes/modules/shelldock /root/.local/share/powershell/Modules/shelldoc
 COPY ./includes/modules/colorconsole /root/.local/share/powershell/Modules/colorconsole
 COPY ./includes/modules/gitautoversion /root/.local/share/powershell/Modules/gitautoversion
 
+# copy phwriter module
+COPY ./includes/modules/phwriter /root/.local/share/powershell/Modules/phwriter
+
 # copy csverfy checksum module
 COPY ./includes/modules/csverify /root/.local/share/powershell/Modules/csverify
 # copy psmpacker module builder
