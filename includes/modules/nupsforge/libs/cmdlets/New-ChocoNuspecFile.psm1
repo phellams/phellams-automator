@@ -55,42 +55,64 @@ function New-ChocoNuspecFile {
     param(
         [Parameter(Mandatory = $true)]
         [string]$ModuleName,
+
         [Parameter(Mandatory = $true)]
         [string]$ModuleVersion,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Title,
+
         [Parameter(Mandatory = $true)]
         [string]$path,
+
         [Parameter(Mandatory = $true)]
         [string]$Author,
+
         [parameter(Mandatory = $false)]
         [string[]]$Owners,
+
         [Parameter(Mandatory = $true)]
         [string]$Description,
+
         [Parameter(Mandatory = $true)]
         [string]$Projecturl,
+
         [Parameter(Mandatory = $false)]
         [string]$projectSourceUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$MailingListUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$bugTrackerUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$DocsUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$IconUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$LicenseUrl,
+
         [Parameter(Mandatory = $false)]
         [string]$Tags,
+
         [Parameter(Mandatory = $false)]
         [string]$Company,
+
         [Parameter(Mandatory = $false)]
         [array]$Dependencies,
+
         [Parameter(Mandatory = $false)]
         [string]$Releasenotes,
+
         [Parameter(Mandatory = $false)]
         [switch]$LicenseAcceptance,
+
         [Parameter(Mandatory = $false)]
         [string]$Summary,
+        
         [Parameter(Mandatory = $false)]
         [string]$PreRelease
     )
@@ -113,7 +135,7 @@ function New-ChocoNuspecFile {
 <package>
   <metadata>
     <title>$ModuleName</title>
-    <id>$ModuleName</id>
+    <id>$Title</id>
     <version>$ModuleVersion</version>
     <authors>$Author</authors>
     <owners>$Author</owners>
