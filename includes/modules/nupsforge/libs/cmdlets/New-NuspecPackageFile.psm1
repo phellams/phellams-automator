@@ -210,7 +210,7 @@ function New-NuspecPackageFile {
     # Add Xmlns schema to the root element
     # http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd
     # http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd
-    $nuspec.package.metadata.SetAttribute("xmlns", "http://schemas.microsoft.com/packaging/2010/06/nuspec.xsd")
+    $nuspec.package.metadata.SetAttribute("xmlns", "http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd")
     # If true, this value prompts the user to accept the license when installing the package. 
     #nuspec.package.metadata.requireLicenseAcceptance = $requireLicenseAcceptance
  
