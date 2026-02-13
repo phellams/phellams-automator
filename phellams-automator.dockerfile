@@ -1,5 +1,5 @@
 # Use Debian latest as the base image
-FROM debian:12.11-slim
+FROM debian:12.13-slim
 
 # Set environment variables for non-interactive installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,13 +14,6 @@ RUN apt update && \
     software-properties-common \
     ca-certificates \
     git
-
-RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/powershell_7.5.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
-    dpkg -i /tmp/powershell.deb && \
-    apt install -f -y  # Fix dependencies if needed
-
-# Install PowerShell 7.4.5
-#RUN apt install -y powershell
 
 # Install NuGet
 # NOTE: the default repo only has nuget 2.8.x as debian only has stable packages that are well tested which in turn could be quite old.
@@ -44,23 +37,50 @@ RUN apt update && apt install -y mono-complete wget && \
     echo '#!/bin/bash' > /usr/local/bin/nuget && \
     echo 'mono /usr/local/bin/nuget.exe "$@"' >> /usr/local/bin/nuget && \
     chmod +x /usr/local/bin/nuget
-    
+
+# .........................
+# DOTNET SDK INSTALLATION
+# -------------------------
 # Install .NET SDK v8.0.412
 # FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9
 RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz && \
     mkdir -p /root/.dotnet && \
     tar zxf /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz -C /root/.dotnet && \
     rm /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz
+# Install .NET SDK 10.0.103
+# FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10
+RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    rm packages-microsoft-prod.deb && \
+    apt update && \
+    apt install -y dotnet-sdk-10.0 && \
+    apt update -y && \
+    apt upgrade -y
 
 # Set environment variables globally for all shells
 ENV DOTNET_ROOT=/root/.dotnet
 ENV PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
 
-# Install PowerShell Modules from PSGallery
-RUN pwsh -command 'Find-Module -Name Pester -RequiredVersion 5.5.0 -Repository PSGallery | Install-Module -Force' && \
-    pwsh -command 'Find-Module -Name PSScriptAnalyzer -Repository PSGallery | Install-Module -Force' && \
-    pwsh -command 'Find-Module -Name powershell-yaml -Repository PSGallery | Install-Module -Force'
+# .........................
+# POWERSHELL INSTALLATION
+# -------------------------
+# Install PowerShell 7.4.5
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/powershell_7.5.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
+    dpkg -i /tmp/powershell.deb && \
+    apt install -f -y  # Fix dependencies if needed
 
+# .........................
+# RUBY INSTALLATION
+# -------------------------
+# Install Ruby Latest
+# https://www.ruby-lang.org/en/documentation/installation/#apt
+# Install Ruby Gems v4.0.6
+RUN apt install -y ruby rubygems && \
+    gem install bundler
+
+# .........................
+# CODECOV INSTALLATION
+# -------------------------
 # Install Codecov Uploader
 RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-default-keyring --keyring /root/trustedkeys.gpg --import && \
     wget 'https://uploader.codecov.io/latest/linux/codecov' && \
@@ -72,10 +92,18 @@ RUN shasum -a 256 -c codecov.SHA256SUM && \
     mv codecov /usr/local/bin/codecov && \
     codecov --version
 
+# .........................
+# COVERALLS INSTALLATION
+# -------------------------
 # Install Coverails
 RUN curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
     chmod +x /usr/local/bin/coveralls && \
     coveralls --version
+
+# Install PowerShell Modules from PSGallery
+RUN pwsh -command 'Find-Module -Name Pester -RequiredVersion 5.5.0 -Repository PSGallery | Install-Module -Force' && \
+    pwsh -command 'Find-Module -Name PSScriptAnalyzer -Repository PSGallery | Install-Module -Force' && \
+    pwsh -command 'Find-Module -Name powershell-yaml -Repository PSGallery | Install-Module -Force'
 
 # Verify installations
 RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
