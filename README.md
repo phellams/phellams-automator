@@ -38,7 +38,8 @@ Debian based docker image derived from *Debian-slim*, Use case:
 
 
 ***🟣 Binaries***
-- ✅ [**DotNet SDK v8.0.412**](https://dotnet.microsoft.com/download/dotnet-core/current)
+- ✅ [**DotNet SDK v8.0.412**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9)
+- ✅ [**DotNet SDK v10.0.103**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10)
 - ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
 - ✅ [**Git**](https://git-scm.com/)
 - ✅ [**Chocolatey**](https://chocolatey.org/)
@@ -49,6 +50,8 @@ Debian based docker image derived from *Debian-slim*, Use case:
 - ✅ [**Codecov**](https://codecov.io)
 - ✅ [**curl**](https://everything.curl.dev/)
 - ✅ [**wget**](https://www.gnu.org/software/wget/)
+- ✅ [**Ruby**](https://www.ruby-lang.org/en/documentation/installation/#apt)
+- ✅ [**RubyGems**](https://rubygems.org/pages/download)
 
 ***🟡 Common Binaries***
 - ✅ [**gpg**](https://www.gnupg.org/)
