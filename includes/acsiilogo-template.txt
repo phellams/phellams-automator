@@ -20,15 +20,18 @@
       ┋     └▣ Distro Release ─• [base-distro-release]
       ┋         └○ [kernel-version]
       ┋
-      ┋     ┋ BINARIES ┋
+      ┋     BINARIES
       ┋     ├─▣ pwsh               ✜─ •> [pwsh-version] 
       ┋     ├─▣ dotnet             ✜─ •> [dotnet-version]
-      ┋     └─▣ nuget              ✜─ •> [nuget-version]
-      ┋     └─▣ codecov            ✜─ •> [codecov-version]
-      ┋     └─▣ coveralls          ✜─ •> [coveralls-version]
-      ┋     ├─▣ git                ✜─ •> [git-version]     
+      ┋     ├─▣ nuget              ✜─ •> [nuget-version]
+      ┋     ├─▣ codecov            ✜─ •> [codecov-version]
+      ┋     ├─▣ coveralls          ✜─ •> [coveralls-version]
+      ┋     └─▣ git                ✜─ •> [git-version]
+      ┋     └─▣ Ruby               ✜─ •> [ruby-version]
+      ┋     └─▣ RubyGems           ✜─ •> [rubygems-version]
+
       ┋ 
-      ┋     ┋ MODULES  ┋
+      ┋     PSMODULES
       ┋     ├─▣ PSScriptAnalyzer   ✜─ •> [psscriptanalyzer-version]
       ┋     ├─▣ Pester             ✜─ •> [pester-version]
       ┋     ├─▣ PowerShell-Yaml    ✜─ •> [powerShell-yaml-version]

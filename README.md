@@ -38,7 +38,8 @@ Debian based docker image derived from *Debian-slim*, Use case:
 
 
 ***🟣 Binaries***
-- ✅ [**DotNet SDK v8.0.412**](https://dotnet.microsoft.com/download/dotnet-core/current)
+- ✅ [**DotNet SDK v8.0.412**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9)
+- ✅ [**DotNet SDK v10.0.103**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10)
 - ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
 - ✅ [**Git**](https://git-scm.com/)
 - ✅ [**Chocolatey**](https://chocolatey.org/)
@@ -49,6 +50,8 @@ Debian based docker image derived from *Debian-slim*, Use case:
 - ✅ [**Codecov**](https://codecov.io)
 - ✅ [**curl**](https://everything.curl.dev/)
 - ✅ [**wget**](https://www.gnu.org/software/wget/)
+- ✅ [**Ruby**](https://www.ruby-lang.org/en/documentation/installation/#apt)
+- ✅ [**RubyGems**](https://rubygems.org/pages/download)
 
 ***🟡 Common Binaries***
 - ✅ [**gpg**](https://www.gnupg.org/)
@@ -191,8 +194,9 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 
 🟡 **Task List**
 
-- [ ] Add Ruby support to allow building of jekyll websites
-  - [ ] Add RubyGems support - required dependencies
+- [x] Add Ruby support to allow building of jekyll websites
+  - [x] Add RubyGems support - required dependencies
+- [ ] Add Jekyll support
 - [ ] Add toml support with ptoml
 - [x] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported, use mono and compile choco for mono, use choco offical package, `docker.io/chocolatey/choco:latest`
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
@@ -201,6 +205,7 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [x] add codecov
 - [x] add nuget via mono to access nuget v 6.x + in debian 12
 - [ ] use mono to attempt to run choco executable
+  - [x] opted to use mono docker image to run choco builds and deploy does support all but for build and deploy choco packages to chocolatey
 
 ## Contributing
 
@@ -224,7 +229,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[arc-version]: https://img.shields.io/badge/Debian-12.9_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
+[arc-version]: https://img.shields.io/badge/Debian-12.13_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
 [arc-url]: https://hub.docker.com/r/sgkens/phellams-automator
 [docker-version]: https://img.shields.io/docker/v/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
 [docker-url]: https://hub.docker.com/r/sgkens/phellams-automator/tags

@@ -92,6 +92,18 @@ deploy-image-dockerhub:
       docker push "$DOCKERHUB_USER/phellams-automator:latest"
       docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
-      docker rmi "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
-      docker image prune -f
       echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
+
+image-cleanup:
+  stage: deploy
+  needs: [deploy-image-dockerhub]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  before_script:
+    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+  after_script:
+    - docker logout
+  tags:
+    - linux-shell
+  script:
+    - docker rmi "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"

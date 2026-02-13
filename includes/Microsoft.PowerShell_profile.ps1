@@ -59,6 +59,8 @@ $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
 [string]$codecov_version = (codecov --version)
 [string]$coveralls_version = (coveralls --version)
 [string]$git_version = (git --version).split(" ")[2]
+[string]$ruby_version = (ruby --version)
+[string]$rubygems_version = (gem --version)
 
 $pwsh_version = $PSVersionTable.PSVersion.ToString()
 
@@ -83,6 +85,8 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[git-version\]", "$(csole -s "v$git_version" -c yellow)" `
               -replace "\[nupsforge-version\]", "$(csole -s "$(gmv('nupsforge'))" -c yellow)" `
               -replace "\[phwriter-version\]", "$(csole -s "$(gmv('phwriter'))" -c yellow)" `
+              -replace "\[ruby-version\]", "$(csole -s "$ruby_version" -c yellow)" `
+              -replace "\[rubygems-version\]", "$(csole -s "$rubygems_version" -c yellow)" `
 
 # #output final logo
 $logo
