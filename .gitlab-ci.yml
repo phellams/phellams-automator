@@ -96,6 +96,7 @@ deploy-image-dockerhub:
 
 image-cleanup:
   stage: deploy
+  needs: [deploy-image-dockerhub]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   before_script:
