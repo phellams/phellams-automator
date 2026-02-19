@@ -4,9 +4,13 @@
 
 ## About The Project
 
-Debian based docker image derived from *Debian-slim*, Use case:
+Debian based docker image derived from *Debian-12-slim*, Use case:
  - Build: **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
  - Build: **Dotnet** binaries.
+  - Dotnet SDK v8.0.412
+    - libraries and Binaries(AOT)
+  - Dotnet SDK v10.0.103
+    - libraries and Binaries(AOT)
  - Build: **Nuget** packages:
    - Package: **Nuget** packages:
    - Gitlab `.nupkg` packages.
