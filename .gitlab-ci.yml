@@ -1,7 +1,12 @@
+default:
+  before_script:
+    - git fetch --all # for Get-GitAutoVersion to work properly, needs full commit history
+
 stages:
   - build
   - test
   - deploy # on main only
+
 
 # ----------STAGE: BUILD----------
 
