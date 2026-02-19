@@ -10,9 +10,9 @@ Function Test-Verification (){
     )
     try {
         $path = $(Get-ItemProperty $path).FullName
-        [console]::write("-─◉ testing verification file $($global:_csverify.prop.invoke("$path\tools\verification.txt"))`n")
+        [console]::write("-─◉ testing VERIFICATION file $($global:_csverify.prop.invoke("$path\tools\VERIFICATION.txt"))`n")
         $checksum = Read-CheckSum -FromString (New-CheckSum -Path $path)
-        $checksum_verify = Read-CheckSum -File "$path\tools\verification.txt"
+        $checksum_verify = Read-CheckSum -File "$path\tools\VERIFICATION.txt"
     }
     catch [System.Exception] {
         [console]::write("  └─◉ $(Get-ColorTune -Text "souce path not found" -color red) $Path $($_.Exception.Message)`n")
@@ -31,7 +31,7 @@ Function Test-Verification (){
                     Size = $item.Size
                 }
             }
-            else{
+            else{ 
                 $verification_results += [pscustomobject]@{
                     Status = "$(Get-ColorTune -Text "Failed" -color Red)"
                     hash = "$(Get-ColorTune -Text "$($item.hash)" -color Red)"
@@ -39,6 +39,13 @@ Function Test-Verification (){
                     Size = $item.Size   
                 }
             }
+        }else{
+                 $verification_results += [pscustomobject]@{
+                    Status = "$(Get-ColorTune -Text "Not Listed" -color Red)"
+                    hash = "$(Get-ColorTune -Text "$($item.hash)" -color Red)"
+                    Path = $item.Path
+                    Size = $item.Size   
+                }           
         }
     }
     [int]$failed = $verification_results.where({ $_.Status -match "Failed" }).count
@@ -46,7 +53,7 @@ Function Test-Verification (){
         foreach ($f in $verification_results.where({ $_.Status -match "Failed" })) {
             [console]::write(" $($global:_csverify.failedataWriter.invoke($f.Path))`n") 
         }
-        throw [system.exception]::new("─◉ verification failed ($(Get-ColorTune -Text "$failed failed" -color red) of $($CheckSum.count) files)")
+        throw [system.exception]::new("─◉ VERIFICATION failed ($(Get-ColorTune -Text "$failed failed" -color red) of $($CheckSum.count) files)")
     }else{
         [console]::write("  └─◉ $(csole -s 'verification successfull' -c green)`n") 
         [console]::write(" $($global:_csverify.kvString.invoke("ReadFromVerificationFile", $CheckSum.count))")
