@@ -1,7 +1,12 @@
+variables:
+  GIT_DEPTH: 0
+
 default:
   before_script:
-    - git fetch --all # for Get-GitAutoVersion to work properly, needs full commit history
-
+    - apt-get update && apt-get install -y git
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - git fetch --all
+    
 stages:
   - build
   - test
