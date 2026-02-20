@@ -69,6 +69,12 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/power
     dpkg -i /tmp/powershell.deb && \
     apt install -f -y  # Fix dependencies if needed
 
+# NOTE: for furture reference, this is the powershell version used for the build
+# https://github.com/PowerShell/PowerShell/issues/25865
+# on Debian 13
+# #> sudo apt install libicu76
+# #> sudo dpkg --ignore-depends=libicu74 -i powershell_7.5.2-1.deb_amd64.deb
+
 # .........................
 # RUBY INSTALLATION
 # -------------------------
