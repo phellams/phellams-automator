@@ -109,11 +109,11 @@ image-cleanup:
   needs: [deploy-image-dockerhub]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-  before_script:
-    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-  after_script:
-    - docker logout
+  # before_script:
+  #   - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+  # after_script:
+  #   - docker logout
   tags:
     - linux-shell
   script:
-    - docker rmi "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+    - bash -c ./scripts/docker_sha_cleanup.sh

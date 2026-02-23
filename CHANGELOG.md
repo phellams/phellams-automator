@@ -1,5 +1,11 @@
 ## Changelog
 
+# v2.7.3 
+- Add **RubyGems** support
+- Add DonNet SDK v10.0.103
+- Add **Jekyll** support
+  - Build **Gem** based jekyll websites.
+
 # v2.6.3
 
 - Updated **NuPsforge** to latest version v0.7.4
