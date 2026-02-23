@@ -8,7 +8,7 @@ HUB_PASSWORD="${DOCKERHUB_API_KEY}"
 REPO=$(echo "${CI_PROJECT_NAME}" | tr '[:upper:]' '[:lower:]')
 
 # Your SemVer Regex
-PROTECT_REGEX="^v?[0-9]+\.[0-9]+\.[0-9]+(?:-(?:alpha|beta|rc|preview|prerelease)(?:\.[0-9]+[a-z]*)?)?(?:\+[a-zA-Z0-9-.]+)?$"
+PROTECT_REGEX="^?[0-9]+\.[0-9]+\.[0-9]+(?:-(?:alpha|beta|rc|preview|prerelease)(?:\.[0-9]+[a-z]*)?)?(?:\+[a-zA-Z0-9-.]+)?$"
 
 echo "Starting cleanup for $HUB_USER/$REPO..."
 

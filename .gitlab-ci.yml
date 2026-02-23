@@ -3,7 +3,6 @@ variables:
 
 default:
   before_script:
-    - apt-get update && apt-get install -y git
     - git config --global --add safe.directory "$CI_PROJECT_DIR"
     - git fetch --all
     
@@ -116,4 +115,5 @@ image-cleanup:
   tags:
     - linux-shell
   script:
+    - chmod +x ./scripts/docker_sha_cleanup.sh
     - bash -c ./scripts/docker_sha_cleanup.sh
