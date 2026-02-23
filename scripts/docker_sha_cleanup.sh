@@ -9,7 +9,7 @@ REPO=$(echo "${CI_PROJECT_NAME}" | tr '[:upper:]' '[:lower:]')
 # --- UPDATED REGEX ---
 # 1. Made 'v' optional at the start
 # 2. Replaced \d with [0-9] for Bash compatibility
-PROTECT_REGEX="^v?[0-9]+\.[0-9]+\.[0-9]+(?:-(?:alpha|beta|rc|preview|prerelease)(?:\.[0-9]+[a-z]*)?)?(?:\+[a-zA-Z0-9-.]+)?$"
+PROTECT_REGEX="^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$"
 
 echo "Starting cleanup for $HUB_USER/$REPO..."
 
@@ -31,31 +31,30 @@ RAW_TAGS=$(curl -s -H "Authorization: JWT $TOKEN" \
 
 # 3. Filter and Delete
 for TAG in $RAW_TAGS; do
-    # Check against Regex
-    if [[ $TAG =~ $PROTECT_REGEX ]]; then
-        echo ">> KEEPING (Matches SemVer): $TAG"
+    # Ensure we trim any whitespace from the API response
+    TAG_CLEAN=$(echo "$TAG" | xargs)
+
+    if [[ "$TAG_CLEAN" =~ $PROTECT_REGEX ]]; then
+        echo ">> KEEPING (Matches SemVer): $TAG_CLEAN"
         continue
-    fi
-
-    # Explicit check for 'latest'
-    if [ "$TAG" == "latest" ]; then
-        echo ">> KEEPING (Latest): $TAG"
+    elif [[ "$TAG_CLEAN" == "latest" ]]; then
+        echo ">> KEEPING (Latest): $TAG_CLEAN"
         continue
-    fi
-
-    # If it reached here, delete it
-    echo "!! DELETING (No Match): $TAG"
-    
-    # HTTP DELETE request
-    STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
-      -H "Authorization: JWT $TOKEN" \
-      "https://hub.docker.com/v2/repositories/$HUB_USER/$REPO/tags/$TAG/")
-
-    if [ "$STATUS" == "204" ] || [ "$STATUS" == "200" ]; then
-        echo "Successfully deleted $TAG"
     else
-        echo "Failed to delete $TAG (HTTP $STATUS)"
+        echo "!! DELETING (No Match): $TAG_CLEAN"
+        # curl delete command here...
+        # HTTP DELETE request
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
+        -H "Authorization: JWT $TOKEN" \
+        "https://hub.docker.com/v2/repositories/$HUB_USER/$REPO/tags/$TAG/")
+
+        if [ "$STATUS" == "204" ] || [ "$STATUS" == "200" ]; then
+            echo "Successfully deleted $TAG"
+        else
+            echo "Failed to delete $TAG (HTTP $STATUS)"
+        fi
     fi
+
 done
 
 echo "Cleanup finished."
