@@ -7,18 +7,21 @@
 Debian based docker image derived from *Debian-12-slim*, Use case:
  - Build: **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
  - Build: **Dotnet** binaries.
-  - Dotnet SDK v8.0.412
-    - libraries and Binaries(AOT)
-  - Dotnet SDK v10.0.103
-    - libraries and Binaries(AOT)
+    - Dotnet SDK v8.0.412
+      - libraries and Binaries(AOT)
+    - Dotnet SDK v10.0.103
+      - libraries and Binaries(AOT)
  - Build: **Nuget** packages:
-   - Package: **Nuget** packages:
-   - Gitlab `.nupkg` packages.
-   - Chocolatey `.nupkg` packages.
-   - Proget nuget `.nupkg` packages.
-   - Proget chocolatey `.nupkg` packages.
+   - Packages: **Nuget** packages:
+      - Gitlab `.nupkg` packages.
+      - Chocolatey `.nupkg` packages.
+      - Proget nuget `.nupkg` packages.
+      - Proget chocolatey `.nupkg` packages.
  - Send: **codecov** results/reports upload.
  - Send: **coveralls** results/reports upload.
+ - Build: **Rubygems** gems.
+ - Build: **Jekyll** websites.
+   - Build **Gem** based jekyll websites.
 
 ## Features
 
@@ -47,8 +50,9 @@ Debian based docker image derived from *Debian-12-slim*, Use case:
 - ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
 - ✅ [**Git**](https://git-scm.com/)
 - ✅ [**Chocolatey**](https://chocolatey.org/)
-  - For Choco Packages `choco pack` and `choco push` use the offical choco docker image: https://github.com/chocolatey/choco-docker, you can build the .nupkg file with nupsforge and using choco docker image to to deploy.
-  - Choco is not supported by Linux. but can be run throw mono.
+  - For Choco Packages `choco pack` and `choco push` use the offical choco docker image: https://github.com/chocolatey/choco-docker, you can build the .nuspec file with nupsforge and using choco docker image to to pack and deploy.
+  - > Note! Choco is not supported by Linux. but can be run through mono
+  - > Note! choco can be complined to run on mono but requires some special configurations.
 - ✅ [**Nuget**](https://www.nuget.org/downloads)
   - Nuget 6.x is is executed through mono and can be call by the default nuget executable.
 - ✅ [**Codecov**](https://codecov.io)
@@ -64,43 +68,41 @@ Debian based docker image derived from *Debian-12-slim*, Use case:
 - ✅ [**ca-certificates**](https://packages.debian.org/bookworm/ca-certificates)
 
 ***🔵 Powershell Modules***
-- [**✅ Pester 5.5.0**](https://github.com/pester/Pester)
+- [**✅ Pester 5.5.0**](https://gitlab.com/pester/Pester)
   - Testing framework for PowerShell.
-- ✅ [**PsScriptAnalyzer 1.0**](https://github.com/PowerShell/Psscriptanalyzer)
+- ✅ [**PsScriptAnalyzer 1.0**](https://gitlab.com/PowerShell/Psscriptanalyzer)
   - PowerShell Script Analyzer.
-- ✅ [**PowerShell-Yaml 1.0**](https://github.com/cloudbase/powershell-yaml) 
+- ✅ [**PowerShell-Yaml 1.0**](https://gitlab.com/cloudbase/powershell-yaml) 
   - PowerShell YAML parser.
-- ✅ [**ColorConsole**](https://github.com/phellams/colorconsole)
+- ✅ [**ColorConsole**](https://gitlab.com/phellams/colorconsole)
   - Colorful console output using ANSI escape sequences default powershell console color pallete.
-- ✅ [**Tadpol**](https://github.com/phellams/tadpol)
+- ✅ [**Tadpol**](https://gitlab.com/phellams/tadpol)
   - Progressbars, loaders, and spinners generator.
-- ✅ [**ShellDock**](https://github.com/phellams/shelldock)
+- ✅ [**ShellDock**](https://gitlab.com/phellams/shelldock)
   - Simple Runspace Executor with progress indicator.
-- ✅ [**Quicklog**](https://github.com/phellams/quicklog)
+- ✅ [**Quicklog**](https://gitlab.com/phellams/quicklog)
   - Console logger with color support.
-- ✅ [**Nupsforge**](https://github.com/phellams/nupsforge)
+- ✅ [**Nupsforge**](https://gitlab.com/phellams/nupsforge)
   - Nuget Package Generator: supports: **psgallary**, **chocolatey**, **proget**(psgallary,chocolatey), **gitlab packages**, **github packages**.
-- ✅ [**Psmpacker**](https://github.com/phellams/psmpacker)
+- ✅ [**Psmpacker**](https://gitlab.com/phellams/psmpacker)
   - Build folder Generator.
-- ✅ [**CSVerify**](https://github.com/phellams/csverify)
+- ✅ [**CSVerify**](https://gitlab.com/phellams/csverify)
   - Code Verification via VERIFICATION.txt.
-- ✅ [**GitAutoVersion**](https://github.com/phellams/CommitFusion/blob/main/src/Get-GitAutoVersion.psm1)
+- ✅ [**GitAutoVersion**](https://gitlab.com/phellams/CommitFusion/blob/main/src/Get-GitAutoVersion.psm1)
   - Git Semantic Versioning generator.
+- ✅ [**Phwriter**](https://gitlab.com/phellams/phwriter)
+  - Generate Linux man pages for powershell cmdlets/functions.
 
 ***🔵 Powershell Profile***
 - ✅ ***powerShell.profile.ps1***
   - Custom powershell profile with default output displaying image information.
-  - Import modules and functions from `./includes/`.
+  - Import modules and functions from see the `./includes` folder.
 
 ## Build
 
 [![build][build-status]][build-url]
 
-🟣 Building the container locally.a
-
-The Gitlab docker build is is managed by the Phellams-Automator docker image, using the gitab workflow ci pipeline.
-
-![gitlab-logo][gitlab-badge]
+🟣 Building the container locally, clonse and run `docker build -t phellams-automator -f phellams-automator.dockerfile .` to build the container.
 
 ```bash
 git clone https://gitlab.com/phellams/phellams-automator.git
@@ -109,28 +111,16 @@ docker build -t phellams-automator -f phellams-automator.dockerfile .
 docker image inspect phellams-automator #| jq
 ```
 
-Using local bulid script
+or alternatively, use the local build script:
 
 ```powershell
-# or use `phellams-automator-local-builder.ps1` powershell script
+# Windows
+./phellams-automator-local-builder.ps1 -buildMode Base
+
+# linux
 sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
 ```
 
-![github-logo][github-badge]
-
-```bash
-git clone https://github.com/phellams/phellams-automator.git
-cd phellams-automator
-docker build -t phellams-automator -f phellams-automator.dockerfile .
-docker image inspect phellams-automator #| jq
-```
-
-Using local bulid script
-
-```powershell
-# or use `phellams-automator-local-builder.ps1` powershell script
-sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
-```
 > Local builds are tagged with `:localbuild`
 
 ## Usage
@@ -209,7 +199,7 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [x] add codecov
 - [x] add nuget via mono to access nuget v 6.x + in debian 12
 - [ ] use mono to attempt to run choco executable
-  - [x] opted to use mono docker image to run choco builds and deploy does support all but for build and deploy choco packages to chocolatey
+  - [x] opted to use mono docker image to run choco builds and deploy does support all but for build and deploy choco packages to chocolatey is sufficent.
 
 ## Contributing
 
