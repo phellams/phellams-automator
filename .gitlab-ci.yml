@@ -1,7 +1,17 @@
+variables:
+  GIT_DEPTH: 0
+
+default:
+  before_script:
+    - apt-get update && apt-get install -y git
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - git fetch --all
+    
 stages:
   - build
   - test
   - deploy # on main only
+
 
 # ----------STAGE: BUILD----------
 
