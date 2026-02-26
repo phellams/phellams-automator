@@ -87,6 +87,7 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[phwriter-version\]", "$(csole -s "$(gmv('phwriter'))" -c yellow)" `
               -replace "\[ruby-version\]", "$(csole -s "$ruby_version" -c yellow)" `
               -replace "\[rubygems-version\]", "$(csole -s "$rubygems_version" -c yellow)" `
+              -replace "\[automator-version\]", "$(csole -s "$((Get-GitAutoversion).Version)" -c yellow)" `
 
 # #output final logo
 $logo
