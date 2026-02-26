@@ -134,8 +134,8 @@ function New-ChocoNuspecFile {
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <title>$ModuleName</title>
-    <id>$Title</id>
+    <title>$Title</title>
+    <id>$modulename</id>
     <version>$ModuleVersion</version>
     <authors>$Author</authors>
     <owners>$Author</owners>
