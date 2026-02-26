@@ -4,105 +4,183 @@
 
 ## About The Project
 
-Debian based docker image derived from *Debian-12-slim*, Use case:
- - Build: **PowerShell** Modules in the form or `folder`, `.zip`, or `.nupkg`.
- - Build: **Dotnet** binaries.
-    - Dotnet SDK v8.0.412
-      - libraries and Binaries(AOT)
-    - Dotnet SDK v10.0.103
-      - libraries and Binaries(AOT)
- - Build: **Nuget** packages:
-   - Packages: **Nuget** packages:
-      - Gitlab `.nupkg` packages.
-      - Chocolatey `.nupkg` packages.
-      - Proget nuget `.nupkg` packages.
-      - Proget chocolatey `.nupkg` packages.
- - Send: **codecov** results/reports upload.
- - Send: **coveralls** results/reports upload.
- - Build: **Rubygems** gems.
- - Build: **Jekyll** websites.
-   - Build **Gem** based jekyll websites.
+Debian-based Docker image derived from *Debian-12-slim*.
+
+Use case:
+
+* Build: **PowerShell** modules in the form of `folder`, `.zip`, or `.nupkg`.
+* Build: **.NET** binaries.
+
+  * .NET SDK v8.0.412
+
+    * Libraries and binaries (AOT)
+  * .NET SDK v10.0.103
+
+    * Libraries and binaries (AOT)
+* Build: **NuGet** packages:
+
+  * GitLab `.nupkg` packages.
+  * Chocolatey `.nupkg` packages.
+  * ProGet NuGet `.nupkg` packages.
+  * ProGet Chocolatey `.nupkg` packages.
+* Send: **Codecov** results/reports.
+* Send: **Coveralls** results/reports.
+* Build: **RubyGems** gems.
+* Build: **Jekyll** websites.
+
+  * Build **Gem-based** Jekyll websites.
+
+This image is intended to be used with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) automation suite to build and deploy PowerShell modules, .NET binaries, NuGet packages, Chocolatey packages, RubyGems packages, and Jekyll websites.
+
+This image is not intended to be used as a standalone image. It is intended to be used with the Automator-Devops automation suite or other similar automation suites or scripts.
+
+---
 
 ## Features
 
- - Copy Build files: `Build-Module` see the **Psmpacker** [README](https://github.com/phellams/psmpacker/blob/main/README.md) for more information on how to use **Psmpacker**.
- - Build `DotNet` binaries: `dotnet build` see the [README](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build) for more information on how to use `dotnet build`.
- - Package **.nupkg** packages using `nuget pack` see:
-    - [creating-a-package](https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package) for more information on how to create a Nuget package.
-    - [using nuget pack](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-pack) for more information on how to use nuget pack.
- - Package **.nupkg** packages compatible with **proget**: `New-NuspecPackageFile` and `New-NupkgPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
- - Build **Chocolatey** packages using `New-ChocoNuspecfile` and `New-ChocoPackage` see the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use nupsforge.
- - Generate **Verification Checksums**: `New-VerificationFile` from [csverify](https://github.com/sgkens/csverify) see the [README](https://github.com/phellams/csverify/blob/main/README.md) for more information on how to use `csverify`.
- - Generate Semantic Version using `Get-GitAutoVersion` cmdlet. 
- - Publish code coverage results to [codecov](https://codecov.io)
- - Publish code coverage results to [coveralls](https://coveralls.io)
- - Run Powershell commands and scripts using default shell: `pwsh -c './phellams/myscript.ps1'`
+**Copy Build files:**
 
+> **NOTE!** PowerShell module specific
+
+* `Build-Module` from **Psmpacker**. See the [README](https://github.com/phellams/psmpacker/blob/main/README.md) for more information on how to use **Psmpacker**.
+
+**Build .NET binaries:**
+
+* `dotnet build`. See the [README](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-build) for more information on how to use `dotnet build`.
+
+**Package .nupkg packages:**
+
+* `nuget pack`. See:
+
+  * [creating-a-package](https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package) for more information on how to create a NuGet package.
+  * [using nuget pack](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-pack) for more information on how to use `nuget pack`.
+
+**Package .nupkg packages compatible with `psgallery`, `chocolatey`, `gitlab packages`, `github packages`:**
+
+* Chocolatey `.nupkg` packages: `New-ChocoNuspecFile` and `New-ChocoPackage`. See the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use Nupsforge.
+* ProGet NuGet `.nupkg` packages: `New-NuspecPackageFile` and `New-NupkgPackage`. See the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use Nupsforge.
+* ProGet Chocolatey `.nupkg` packages: `New-ChocoNuspecFile` and `New-ChocoPackage`. See the [README](https://github.com/phellams/nupsforge/blob/main/README.md) for more details on how to use Nupsforge.
+
+**Generate Verification Checksums:**
+
+* `New-VerificationFile` from [csverify](https://github.com/sgkens/csverify). See the [README](https://github.com/phellams/csverify/blob/main/README.md) for more information on how to use `csverify`.
+
+**Generate Semantic Version using `Get-GitAutoVersion` cmdlet:**
+
+* Git semantic versioning generator: `Get-GitAutoVersion` cmdlet.
+
+**Publish code coverage results to [codecov](https://codecov.io):**
+
+* Publish code coverage results to Codecov.
+
+**Publish code coverage results to [coveralls](https://coveralls.io):**
+
+* Publish code coverage results to Coveralls.
+
+**Run PowerShell commands and scripts using default shell:**
+
+* `pwsh -c './phellams/myscript.ps1'`
+
+**Build, pack, and deploy RubyGems:**
+
+* [WIP] Build, pack, and deploy RubyGems packages using `GemCommander`. See the [README](https://github.com/phellams/GemCommander/blob/main/README.md) for more details on how to use GemCommander.
+
+**Build, pack, and deploy Jekyll websites:**
+
+* [WIP] Build, pack, and deploy Jekyll websites using `JekyllCommander`. See the [README](https://github.com/phellams/JekyllCommander/blob/main/README.md) for more details on how to use JekyllCommander.
+
+---
 
 ## Image Manifest
 
 [![arc][arc-version]][arc-url] [![docker][docker-version]][docker-url] ![docker][docker-size] ![docker][docker-pulls]
 
+### ***🟣 Binaries***
 
-***🟣 Binaries***
-- ✅ [**DotNet SDK v8.0.412**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9)
-- ✅ [**DotNet SDK v10.0.103**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10)
-- ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
-- ✅ [**Git**](https://git-scm.com/)
-- ✅ [**Chocolatey**](https://chocolatey.org/)
-  - For Choco Packages `choco pack` and `choco push` use the offical choco docker image: https://github.com/chocolatey/choco-docker, you can build the .nuspec file with nupsforge and using choco docker image to to pack and deploy.
-  - > Note! Choco is not supported by Linux. but can be run through mono
-  - > Note! choco can be complined to run on mono but requires some special configurations.
-- ✅ [**Nuget**](https://www.nuget.org/downloads)
-  - Nuget 6.x is is executed through mono and can be call by the default nuget executable.
-- ✅ [**Codecov**](https://codecov.io)
-- ✅ [**curl**](https://everything.curl.dev/)
-- ✅ [**wget**](https://www.gnu.org/software/wget/)
-- ✅ [**Ruby**](https://www.ruby-lang.org/en/documentation/installation/#apt)
-- ✅ [**RubyGems**](https://rubygems.org/pages/download)
+* ✅ [**.NET SDK v8.0.412**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9)
+* ✅ [**.NET SDK v10.0.103**](learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10)
+* ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
+* ✅ [**Git**](https://git-scm.com/)
+* ✅ [**Chocolatey**](https://chocolatey.org/)
 
-***🟡 Common Binaries***
-- ✅ [**gpg**](https://www.gnupg.org/)
-- ✅ [**apt-transport-https**](https://packages.debian.org/bookworm/apt-transport-https)
-- ✅ [**software-properties-common**](https://packages.debian.org/bookworm/software-properties-common)
-- ✅ [**ca-certificates**](https://packages.debian.org/bookworm/ca-certificates)
+  * For Choco packages `choco pack` and `choco push`, use the official Choco Docker image: [https://github.com/chocolatey/choco-docker](https://github.com/chocolatey/choco-docker). You can build the `.nuspec` file with Nupsforge and then use the Choco Docker image to pack and deploy.
+  * > Note! Chocolatey is not officially supported on Linux, but it can be run through Mono.
+  * > Note! Chocolatey can be compiled to run on Mono but requires special configuration.
+* ✅ [**NuGet**](https://www.nuget.org/downloads)
 
-***🔵 Powershell Modules***
-- [**✅ Pester 5.5.0**](https://gitlab.com/pester/Pester)
-  - Testing framework for PowerShell.
-- ✅ [**PsScriptAnalyzer 1.0**](https://gitlab.com/PowerShell/Psscriptanalyzer)
-  - PowerShell Script Analyzer.
-- ✅ [**PowerShell-Yaml 1.0**](https://gitlab.com/cloudbase/powershell-yaml) 
-  - PowerShell YAML parser.
-- ✅ [**ColorConsole**](https://gitlab.com/phellams/colorconsole)
-  - Colorful console output using ANSI escape sequences default powershell console color pallete.
-- ✅ [**Tadpol**](https://gitlab.com/phellams/tadpol)
-  - Progressbars, loaders, and spinners generator.
-- ✅ [**ShellDock**](https://gitlab.com/phellams/shelldock)
-  - Simple Runspace Executor with progress indicator.
-- ✅ [**Quicklog**](https://gitlab.com/phellams/quicklog)
-  - Console logger with color support.
-- ✅ [**Nupsforge**](https://gitlab.com/phellams/nupsforge)
-  - Nuget Package Generator: supports: **psgallary**, **chocolatey**, **proget**(psgallary,chocolatey), **gitlab packages**, **github packages**.
-- ✅ [**Psmpacker**](https://gitlab.com/phellams/psmpacker)
-  - Build folder Generator.
-- ✅ [**CSVerify**](https://gitlab.com/phellams/csverify)
-  - Code Verification via VERIFICATION.txt.
-- ✅ [**GitAutoVersion**](https://gitlab.com/phellams/CommitFusion/blob/main/src/Get-GitAutoVersion.psm1)
-  - Git Semantic Versioning generator.
-- ✅ [**Phwriter**](https://gitlab.com/phellams/phwriter)
-  - Generate Linux man pages for powershell cmdlets/functions.
+  * NuGet 6.x is executed through Mono and can be called using the default `nuget` executable.
+* ✅ [**Codecov**](https://codecov.io)
+* ✅ [**curl**](https://everything.curl.dev/)
+* ✅ [**wget**](https://www.gnu.org/software/wget/)
+* ✅ [**Ruby**](https://www.ruby-lang.org/en/documentation/installation/#apt)
+* ✅ [**RubyGems**](https://rubygems.org/pages/download)
 
-***🔵 Powershell Profile***
-- ✅ ***powerShell.profile.ps1***
-  - Custom powershell profile with default output displaying image information.
-  - Import modules and functions from see the `./includes` folder.
+### ***🟡 Common Binaries***
+
+* ✅ [**gpg**](https://www.gnupg.org/)
+* ✅ [**apt-transport-https**](https://packages.debian.org/bookworm/apt-transport-https)
+* ✅ [**software-properties-common**](https://packages.debian.org/bookworm/software-properties-common)
+* ✅ [**ca-certificates**](https://packages.debian.org/bookworm/ca-certificates)
+
+### ***🔵 PowerShell Modules***
+
+* [**✅ Pester 5.5.0**](https://gitlab.com/pester/Pester)
+
+  * Testing framework for PowerShell.
+* ✅ [**PSScriptAnalyzer 1.0**](https://gitlab.com/PowerShell/Psscriptanalyzer)
+
+  * PowerShell script analyzer.
+* ✅ [**PowerShell-Yaml 1.0**](https://gitlab.com/cloudbase/powershell-yaml)
+
+  * PowerShell YAML parser.
+* ✅ [**ColorConsole**](https://gitlab.com/phellams/colorconsole)
+
+  * Colorful console output using ANSI escape sequences with the default PowerShell console color palette.
+* ✅ [**Tadpol**](https://gitlab.com/phellams/tadpol)
+
+  * Progress bars, loaders, and spinners generator.
+* ✅ [**ShellDock**](https://gitlab.com/phellams/shelldock)
+
+  * Simple runspace executor with progress indicator.
+* ✅ [**Quicklog**](https://gitlab.com/phellams/quicklog)
+
+  * Console logger with color support.
+* ✅ [**Nupsforge**](https://gitlab.com/phellams/nupsforge)
+
+  * NuGet package generator supporting: **psgallery**, **chocolatey**, **proget** (psgallery, chocolatey), **gitlab packages**, **github packages**.
+* ✅ [**Psmpacker**](https://gitlab.com/phellams/psmpacker)
+
+  * Build folder generator.
+* ✅ [**CSVerify**](https://gitlab.com/phellams/csverify)
+
+  * Code verification via `VERIFICATION.txt`.
+* ✅ [**GitAutoVersion**](https://gitlab.com/phellams/CommitFusion/blob/main/src/Get-GitAutoVersion.psm1)
+
+  * Git semantic versioning generator.
+* ✅ [**Phwriter**](https://gitlab.com/phellams/phwriter)
+
+  * Generate Linux man pages for PowerShell cmdlets/functions.
+* [***WIP***] [**GemCommander**](https://gitlab.com/phellams/GemCommander)
+
+  * Build and deploy RubyGems packages.
+* [***WIP***] [**JekyllCommander**](https://gitlab.com/phellams/JekyllCommander)
+
+  * Build and deploy Jekyll websites.
+
+### ***🔵 PowerShell Profile***
+
+* ✅ ***PowerShell.profile.ps1***
+
+  * Custom PowerShell profile displaying image information.
+  * Imports modules and functions from the `./includes` folder.
 
 ## Build
 
 [![build][build-status]][build-url]
 
-🟣 Building the container locally, clonse and run `docker build -t phellams-automator -f phellams-automator.dockerfile .` to build the container.
+### Building the image locally
+
+Clone and run `docker build -t phellams-automator -f phellams-automator.dockerfile .` to build the image.
 
 ```bash
 git clone https://gitlab.com/phellams/phellams-automator.git
@@ -125,14 +203,14 @@ sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
 
 ## Usage
 
-🟣 Output container information.
+### Output image information
 > Default shell is `pwsh` and will output the container information.
 
 ```bash
 docker run --rm phellams-automator
 ```
 
-🟢 Mount path examples for running commands inside the container.
+### Mount path examples
 
 ```bash
 # dynamic path
@@ -140,7 +218,6 @@ docker run -it -v .:/phellams-automator docker.io/sgkens/phellams-automator
 
 # absolute path
 docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
-
 ```
 Or, if you want to use the absolute path with WSL2:
 
@@ -155,7 +232,7 @@ docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
 ```
 
 
-🟣 Some examples running commands inside the container.
+### Examples running commands inside the container
 
 ```bash
 # nuget
@@ -174,7 +251,7 @@ docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator dotnet build
 docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator (Get-Gitautoversion).Version
 ```
 
-🟣 Interactive shell
+###  Interactive shell
 
 ```bash
 docker run --rm -it -v .:yourfolder docker.io/sgkens/phellams-automator:latest
@@ -186,12 +263,12 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 <!-- ROADMAP -->
 ## Roadmap
 
-🟡 **Task List**
+### 🟡 **Task List**
 
 - [x] Add Ruby support to allow building of jekyll websites
   - [x] Add RubyGems support - required dependencies
 - [ ] Add Jekyll support
-- [ ] Add toml support with ptoml
+- [ ] Add toml support with ptoml, and linux toml support
 - [x] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported, use mono and compile choco for mono, use choco offical package, `docker.io/chocolatey/choco:latest`
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
 - [x] update nupsforge to support gitlab packages
@@ -200,6 +277,7 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [x] add nuget via mono to access nuget v 6.x + in debian 12
 - [ ] use mono to attempt to run choco executable
   - [x] opted to use mono docker image to run choco builds and deploy does support all but for build and deploy choco packages to chocolatey is sufficent.
+- [ ] Start porting binaries to Debian bins 13 slim and test
 
 ## Contributing
 
