@@ -48,14 +48,8 @@ RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.4
     tar zxf /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz -C /root/.dotnet && \
     rm /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz
 # Install .NET SDK 10.0.103
-# FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet10
-RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb && \
-    apt update && \
-    apt install -y dotnet-sdk-10.0 && \
-    apt update -y && \
-    apt upgrade -y
+# Using the official install script to avoid GPG/repository issues
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.103 --install-dir /root/.dotnet
 
 # Set environment variables globally for all shells
 ENV DOTNET_ROOT=/root/.dotnet
