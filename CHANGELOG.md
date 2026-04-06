@@ -1,5 +1,12 @@
 ## Changelog
 
+# v2.8.0
+- ADD: **Go** support
+- ADD: **Rust** support
+- ADD: **Elixir** support
+- IMPROVE: Use `docker buildx` for local builds
+- FIX: ASCII logo typo and alignment
+
 # v2.7.3 
 - Add **RubyGems** support
 - Add DonNet SDK v10.0.103
