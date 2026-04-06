@@ -75,13 +75,13 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/power
 # Install Ruby Latest
 # https://www.ruby-lang.org/en/documentation/installation/#apt
 # Install Ruby Gems v4.0.6
-RUN apt install -y ruby rubygems && \
+RUN apt update && apt install -y ruby rubygems ruby-dev make gcc g++ && \
     gem install bundler jekyll
 
 # .........................
 # GO, RUST, ELIXIR INSTALLATION
 # -------------------------
-RUN apt install -y golang rustc elixir
+RUN apt update && apt install -y golang rustc elixir
 
 # .........................
 # CODECOV INSTALLATION
