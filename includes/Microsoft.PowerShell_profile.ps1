@@ -61,8 +61,9 @@ $logo = $logo -replace "INFO", "$(csole -s "INFO" -c yellow)" `
 [string]$git_version = (git --version).split(" ")[2]
 [string]$ruby_version = (ruby --version)
 [string]$rubygems_version = (gem --version)
-
-$pwsh_version = $PSVersionTable.PSVersion.ToString()
+[string]$go_version = (go version).split(" ")[2]
+[string]$rust_version = (rustc --version).split(" ")[1]
+[string]$elixir_version = (elixir --version | Select-String -Pattern "Elixir" | Select-Object -First 1).ToString().Split(" ")[1]
 
 # # - Update Versions
 $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yellow)" `
@@ -87,6 +88,9 @@ $logo = $logo -replace "\[pwsh-version\]", "$(csole -s "v$pwsh_version" -c yello
               -replace "\[phwriter-version\]", "$(csole -s "$(gmv('phwriter'))" -c yellow)" `
               -replace "\[ruby-version\]", "$(csole -s "$ruby_version" -c yellow)" `
               -replace "\[rubygems-version\]", "$(csole -s "$rubygems_version" -c yellow)" `
+              -replace "\[go-version\]", "$(csole -s "$go_version" -c yellow)" `
+              -replace "\[rust-version\]", "$(csole -s "v$rust_version" -c yellow)" `
+              -replace "\[elixir-version\]", "$(csole -s "v$elixir_version" -c yellow)" `
               -replace "\[automator-version\]", "$(csole -s "$((Get-GitAutoversion).Version)" -c yellow)" `
 
 # #output final logo

@@ -26,9 +26,13 @@
       ┋     ├─▣ nuget              ✜─ •> [nuget-version]
       ┋     ├─▣ codecov            ✜─ •> [codecov-version]
       ┋     ├─▣ coveralls          ✜─ •> [coveralls-version]
-      ┋     └─▣ git                ✜─ •> [git-version]
-      ┋     └─▣ Ruby               ✜─ •> [ruby-version]
-      ┋     └─▣ RubyGems           ✜─ •> [rubygems-version]
+      ┋     ├─▣ git                ✜─ •> [git-version]
+      ┋     ├─▣ Ruby               ✜─ •> [ruby-version]
+      ┋     ├─▣ RubyGems           ✜─ •> [rubygems-version]
+      ┋     ├─▣ Go                 ✜─ •> [go-version]
+      ┋     ├─▣ Rust               ✜─ •> [rust-version]
+      ┋     └─▣ Elixir             ✜─ •> [elixir-version]
+
 
       ┋ 
       ┋     PSMODULES
@@ -43,7 +47,7 @@
       ┋     ├─▣ ShellDock          ✜─ •> [shelldock-version]
       ┋     ├─▣ TadPol             ✜─ •> [tadpol-version]
       ┋     ├─▣ PHWriter           ✜─ •> [phwriter-version]
-      ┋     └─▣ GitaAutoVersion    ✜─ •> [gitautoversion-version]
+      ┋     └─▣ GitAutoVersion     ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐
   ▙ Shell ▟

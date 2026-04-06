@@ -27,6 +27,9 @@ Use case:
 * Send: **Coveralls** results/reports.
 * Build: **RubyGems** gems.
 * Build: **Jekyll** websites.
+* Build: **Go** binaries.
+* Build: **Rust** binaries.
+* Build: **Elixir** applications.
 
   * Build **Gem-based** Jekyll websites.
 
@@ -114,6 +117,9 @@ This image is not intended to be used as a standalone image. It is intended to b
 * ✅ [**wget**](https://www.gnu.org/software/wget/)
 * ✅ [**Ruby**](https://www.ruby-lang.org/en/documentation/installation/#apt)
 * ✅ [**RubyGems**](https://rubygems.org/pages/download)
+* ✅ [**Go**](https://go.dev/)
+* ✅ [**Rust**](https://www.rust-lang.org/)
+* ✅ [**Elixir**](https://elixir-lang.org/)
 
 ### ***🟡 Common Binaries***
 
@@ -180,12 +186,12 @@ This image is not intended to be used as a standalone image. It is intended to b
 
 ### Building the image locally
 
-Clone and run `docker build -t phellams-automator -f phellams-automator.dockerfile .` to build the image.
+Clone and run `docker buildx build -t phellams-automator -f phellams-automator.dockerfile .` to build the image.
 
 ```bash
 git clone https://gitlab.com/phellams/phellams-automator.git
 cd phellams-automator
-docker build -t phellams-automator -f phellams-automator.dockerfile .
+docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
 docker image inspect phellams-automator #| jq
 ```
 
@@ -267,7 +273,10 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 
 - [x] Add Ruby support to allow building of jekyll websites
   - [x] Add RubyGems support - required dependencies
-- [ ] Add Jekyll support
+- [x] Add Jekyll support
+- [x] Add Go support
+- [x] Add Rust support
+- [x] Add Elixir support
 - [ ] Add toml support with ptoml, and linux toml support
 - [x] Add chocolatey support **Chocolatey is not officially supported by linux*** however it doesnt explicitly say it is not supported, use mono and compile choco for mono, use choco offical package, `docker.io/chocolatey/choco:latest`
 - [ ] Fix outstanding Security Vulnerabilities reported by dockerhub vulnerability scanner. 
@@ -278,6 +287,9 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 - [ ] use mono to attempt to run choco executable
   - [x] opted to use mono docker image to run choco builds and deploy does support all but for build and deploy choco packages to chocolatey is sufficent.
 - [ ] Start porting binaries to Debian bins 13 slim and test
+- [ ] Implement high-performance CLI patterns for Go/Rust
+- [ ] Multi-platform Docker builds using buildx
+- [ ] Ensure Elixir OTP compliance for applications
 
 ## Contributing
 
