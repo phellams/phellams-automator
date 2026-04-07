@@ -10,15 +10,11 @@ Use case:
 
 * Build: **PowerShell** modules in the form of `folder`, `.zip`, or `.nupkg`.
 * Build: **.NET** binaries.
-
   * .NET SDK v8.0.412
-
     * Libraries and binaries (AOT)
   * .NET SDK v10.0.103
-
     * Libraries and binaries (AOT)
 * Build: **NuGet** packages:
-
   * GitLab `.nupkg` packages.
   * Chocolatey `.nupkg` packages.
   * ProGet NuGet `.nupkg` packages.
@@ -30,7 +26,6 @@ Use case:
 * Build: **Go** binaries.
 * Build: **Rust** binaries.
 * Build: **Elixir** applications.
-
   * Build **Gem-based** Jekyll websites.
 
 This image is intended to be used with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) automation suite to build and deploy PowerShell modules, .NET binaries, NuGet packages, Chocolatey packages, RubyGems packages, and Jekyll websites.
@@ -54,7 +49,6 @@ This image is not intended to be used as a standalone image. It is intended to b
 **Package .nupkg packages:**
 
 * `nuget pack`. See:
-
   * [creating-a-package](https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package) for more information on how to create a NuGet package.
   * [using nuget pack](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-pack) for more information on how to use `nuget pack`.
 
@@ -105,12 +99,10 @@ This image is not intended to be used as a standalone image. It is intended to b
 * ✅ [**PowerShell Core 7.5.2**](https://github.com/PowerShell/PowerShell)
 * ✅ [**Git**](https://git-scm.com/)
 * ✅ [**Chocolatey**](https://chocolatey.org/)
-
   * For Choco packages `choco pack` and `choco push`, use the official Choco Docker image: [https://github.com/chocolatey/choco-docker](https://github.com/chocolatey/choco-docker). You can build the `.nuspec` file with Nupsforge and then use the Choco Docker image to pack and deploy.
   * > Note! Chocolatey is not officially supported on Linux, but it can be run through Mono.
   * > Note! Chocolatey can be compiled to run on Mono but requires special configuration.
 * ✅ [**NuGet**](https://www.nuget.org/downloads)
-
   * NuGet 6.x is executed through Mono and can be called using the default `nuget` executable.
 * ✅ [**Codecov**](https://codecov.io)
 * ✅ [**curl**](https://everything.curl.dev/)
@@ -131,52 +123,37 @@ This image is not intended to be used as a standalone image. It is intended to b
 ### ***🔵 PowerShell Modules***
 
 * [**✅ Pester 5.5.0**](https://gitlab.com/pester/Pester)
-
   * Testing framework for PowerShell.
 * ✅ [**PSScriptAnalyzer 1.0**](https://gitlab.com/PowerShell/Psscriptanalyzer)
-
   * PowerShell script analyzer.
 * ✅ [**PowerShell-Yaml 1.0**](https://gitlab.com/cloudbase/powershell-yaml)
-
   * PowerShell YAML parser.
 * ✅ [**ColorConsole**](https://gitlab.com/phellams/colorconsole)
-
   * Colorful console output using ANSI escape sequences with the default PowerShell console color palette.
 * ✅ [**Tadpol**](https://gitlab.com/phellams/tadpol)
-
   * Progress bars, loaders, and spinners generator.
 * ✅ [**ShellDock**](https://gitlab.com/phellams/shelldock)
-
   * Simple runspace executor with progress indicator.
 * ✅ [**Quicklog**](https://gitlab.com/phellams/quicklog)
-
   * Console logger with color support.
 * ✅ [**Nupsforge**](https://gitlab.com/phellams/nupsforge)
-
   * NuGet package generator supporting: **psgallery**, **chocolatey**, **proget** (psgallery, chocolatey), **gitlab packages**, **github packages**.
 * ✅ [**Psmpacker**](https://gitlab.com/phellams/psmpacker)
-
   * Build folder generator.
 * ✅ [**CSVerify**](https://gitlab.com/phellams/csverify)
-
   * Code verification via `VERIFICATION.txt`.
 * ✅ [**GitAutoVersion**](https://gitlab.com/phellams/CommitFusion/blob/main/src/Get-GitAutoVersion.psm1)
-
   * Git semantic versioning generator.
 * ✅ [**Phwriter**](https://gitlab.com/phellams/phwriter)
-
   * Generate Linux man pages for PowerShell cmdlets/functions.
 * [***WIP***] [**GemCommander**](https://gitlab.com/phellams/GemCommander)
-
   * Build and deploy RubyGems packages.
 * [***WIP***] [**JekyllCommander**](https://gitlab.com/phellams/JekyllCommander)
-
   * Build and deploy Jekyll websites.
 
 ### ***🔵 PowerShell Profile***
 
 * ✅ ***PowerShell.profile.ps1***
-
   * Custom PowerShell profile displaying image information.
   * Imports modules and functions from the `./includes` folder.
 
@@ -225,6 +202,7 @@ docker run -it -v .:/phellams-automator docker.io/sgkens/phellams-automator
 # absolute path
 docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
 ```
+
 Or, if you want to use the absolute path with WSL2:
 
 ```bash
@@ -236,7 +214,6 @@ docker run -it -v $(wslpath -w $(pwd)):/phellams-automator docker.io/sgkens/phel
 # Linux
 docker run -it -v $(pwd):/phellams-automator docker.io/sgkens/phellams-automator
 ```
-
 
 ### Examples running commands inside the container
 
@@ -257,7 +234,7 @@ docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator dotnet build
 docker run --rm -v .:yourfolder docker.io/sgkens/phellams-automator (Get-Gitautoversion).Version
 ```
 
-###  Interactive shell
+### Interactive shell
 
 ```bash
 docker run --rm -it -v .:yourfolder docker.io/sgkens/phellams-automator:latest
@@ -311,7 +288,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Changelog
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 [arc-version]: https://img.shields.io/badge/Debian-12.13_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
 [arc-url]: https://hub.docker.com/r/sgkens/phellams-automator
@@ -324,4 +300,3 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [gitlab-badge]: https://img.shields.io/badge/gitlab-4B0082?style=for-the-badge&logo=gitlab&logoColor=orange
 [github-badge]: https://img.shields.io/badge/github-mirror-383838?style=for-the-badge&logo=github&logoColor=white
 [license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a
-
