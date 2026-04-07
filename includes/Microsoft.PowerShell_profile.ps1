@@ -3,7 +3,7 @@
 
 # Define Modules
 # By default in linux modules are installed in /usr/.local/share/powershell/Modules
-import-module -Name Pester -RequiredVersion 5.5.0
+import-module -Name Pester -RequiredVersion 5.7.1
 import-module -Name PSScriptAnalyzer
 import-module -Name powershell-yaml
 import-module -Name colorconsole

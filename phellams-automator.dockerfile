@@ -1,144 +1,81 @@
-# Use Debian latest as the base image
-FROM debian:12.13-slim
+# Use Debian 12 slim as the clean base image to avoid massive gitlab-runner overhead
+FROM debian:12-slim
 
 # Set environment variables for non-interactive installation
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive \
+    DOTNET_ROOT=/root/.dotnet \
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools"
 
-# Install dependencies
+# 1. Base Dependencies & Mono/NuGet
+# Combined to reduce layers and cleaned up thoroughly
 RUN apt update && \
-    apt install -y \
-    curl \
-    wget \
-    gnupg \
-    apt-transport-https \
-    software-properties-common \
-    ca-certificates \
-    git
+    apt install -y --no-install-recommends \
+    curl wget gnupg apt-transport-https software-properties-common ca-certificates git \
+    mono-complete lsb-release && \
+    # Install NuGet Latest
+    wget -q https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
+    echo '#!/bin/bash\nmono /usr/local/bin/nuget.exe "$@"' > /usr/local/bin/nuget && \
+    chmod +x /usr/local/bin/nuget && \
+    # Cleanup apt cache
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# Install NuGet
-# NOTE: the default repo only has nuget 2.8.x as debian only has stable packages that are well tested which in turn could be quite old.
-#// TODO: Install nuget directly using the official nuget install script or download the latest binary from nuget.org
-#// TODO: nuget exe is a windows binary, so we need mono to run this
-#// TODO: update nupsforge with sitch param to check if is Linux and run mono
-#RUN apt install -y nuget
-# RUN apt update && apt install -y ca-certificates gnupg wget && \
-#     gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-#     echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/debian stable-bookworm main" > /etc/apt/sources.list.d/mono-official-stable.list && \
-#     apt update && \
-#     apt install -y mono-complete && \
-#     rm -rf /var/lib/apt/lists/* && \
-#     wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
-#     echo '#!/bin/bash' > /usr/local/bin/nuget && \
-#     echo 'mono /usr/local/bin/nuget.exe "$@"' >> /usr/local/bin/nuget && \
-#     chmod +x /usr/local/bin/nuget
-RUN apt update && apt install -y mono-complete wget && \
-    rm -rf /var/lib/apt/lists/* && \
-    wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
-    echo '#!/bin/bash' > /usr/local/bin/nuget && \
-    echo 'mono /usr/local/bin/nuget.exe "$@"' >> /usr/local/bin/nuget && \
-    chmod +x /usr/local/bin/nuget
+# 2. .NET SDKs (Consolidated)
+RUN mkdir -p /root/.dotnet && \
+    # .NET 8
+    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
+    tar zxf /tmp/dotnet8.tar.gz -C /root/.dotnet && \
+    # .NET 10
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.103 --install-dir /root/.dotnet && \
+    # Cleanup .NET caches/temp
+    rm -rf /tmp/* /root/.dotnet/sdk/NuGetFallbackFolder /root/.dotnet/templates
 
-# .........................
-# DOTNET SDK INSTALLATION
-# -------------------------
-# Install .NET SDK v8.0.412
-# FROM: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet9
-RUN wget https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz && \
-    mkdir -p /root/.dotnet && \
-    tar zxf /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz -C /root/.dotnet && \
-    rm /tmp/dotnet-sdk-8.0.412-linux-x64.tar.gz
-# Install .NET SDK 10.0.103
-# Using the official install script to avoid GPG/repository issues
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.103 --install-dir /root/.dotnet
+# 3. PowerShell 7.5.3
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/powershell_7.5.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
+    apt update && apt install -y /tmp/powershell.deb && \
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# Set environment variables globally for all shells
-ENV DOTNET_ROOT=/root/.dotnet
-ENV PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+# 4. Ruby, Jekyll, Go, Rust, Elixir (Consolidated & Cleaned)
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    ruby rubygems ruby-dev make gcc g++ \
+    golang rustc elixir && \
+    # Jekyll without documentation
+    gem install bundler jekyll --no-document && \
+    # Cleanup
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /root/.gem /root/.bundle
 
-# .........................
-# POWERSHELL INSTALLATION
-# -------------------------
-# Install PowerShell 7.4.5
-RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.5.3/powershell_7.5.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
-    dpkg -i /tmp/powershell.deb && \
-    apt install -f -y  # Fix dependencies if needed
-
-# NOTE: for furture reference, this is the powershell version used for the build
-# https://github.com/PowerShell/PowerShell/issues/25865
-# on Debian 13
-# #> sudo apt install libicu76
-# #> sudo dpkg --ignore-depends=libicu74 -i powershell_7.5.2-1.deb_amd64.deb
-
-# .........................
-# RUBY & JEKYLL INSTALLATION
-# -------------------------
-# Install Ruby Latest
-# https://www.ruby-lang.org/en/documentation/installation/#apt
-# Install Ruby Gems v4.0.6
-RUN apt update && apt install -y ruby rubygems ruby-dev make gcc g++ && \
-    gem install bundler jekyll
-
-# .........................
-# GO, RUST, ELIXIR INSTALLATION
-# -------------------------
-RUN apt update && apt install -y golang rustc elixir
-
-# .........................
-# CODECOV INSTALLATION
-# -------------------------
-# Install Codecov Uploader
+# 5. DevOps Tools (Codecov & Coveralls)
 RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-default-keyring --keyring /root/trustedkeys.gpg --import && \
-    wget 'https://uploader.codecov.io/latest/linux/codecov' && \
-    wget 'https://uploader.codecov.io/latest/linux/codecov.SHA256SUM' && \
-    wget 'https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig' && \
-    gpg --no-default-keyring --keyring /root/trustedkeys.gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM    
-RUN shasum -a 256 -c codecov.SHA256SUM && \
-    chmod +x codecov && \
-    mv codecov /usr/local/bin/codecov && \
-    codecov --version
-
-# .........................
-# COVERALLS INSTALLATION
-# -------------------------
-# Install Coverails
-RUN curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
+    curl -Os https://uploader.codecov.io/latest/linux/codecov && \
+    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM && \
+    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig && \
+    gpg --no-default-keyring --keyring /root/trustedkeys.gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM && \
+    shasum -a 256 -c codecov.SHA256SUM && \
+    chmod +x codecov && mv codecov /usr/local/bin/codecov && \
+    # Coveralls
+    curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
     chmod +x /usr/local/bin/coveralls && \
-    coveralls --version
+    # Cleanup
+    rm -rf /tmp/* codecov.*
 
-# Install PowerShell Modules from PSGallery
-RUN pwsh -command 'Find-Module -Name Pester -RequiredVersion 5.5.0 -Repository PSGallery | Install-Module -Force' && \
-    pwsh -command 'Find-Module -Name PSScriptAnalyzer -Repository PSGallery | Install-Module -Force' && \
-    pwsh -command 'Find-Module -Name powershell-yaml -Repository PSGallery | Install-Module -Force'
+# 6. PowerShell Modules from PSGallery
+RUN pwsh -NoProfile -Command ' \
+    $ErrorActionPreference = "Stop"; \
+    $Modules = @("Pester", "PSScriptAnalyzer", "powershell-yaml"); \
+    foreach ($m in $Modules) { \
+        Write-Host "Installing $m..."; \
+        Install-Module -Name $m -Force -SkipPublisherCheck -AllowClobber -Scope AllUsers; \
+    }' && \
+    # Prune PSModule help/docs to save space
+    find /usr/local/share/powershell/Modules -type d -name "en-US" -exec rm -rf {} + 2>/dev/null || true
 
-# Verify installations
-RUN pwsh -Command '$PSVersionTable.PSVersion.ToString()' && \
-    pwsh -command 'nuget help | select -First 1' && \
-    pwsh -command 'dotnet --info'
-
-# copy dependencies for: psmpacker, nupsforge
-COPY ./includes/modules/quicklog /root/.local/share/powershell/Modules/quicklog
-COPY ./includes/modules/tadpol /root/.local/share/powershell/Modules/tadpol
-COPY ./includes/modules/shelldock /root/.local/share/powershell/Modules/shelldock
-COPY ./includes/modules/colorconsole /root/.local/share/powershell/Modules/colorconsole
-COPY ./includes/modules/gitautoversion /root/.local/share/powershell/Modules/gitautoversion
-
-# copy phwriter module
-COPY ./includes/modules/phwriter /root/.local/share/powershell/Modules/phwriter
-
-# copy csverfy checksum module
-COPY ./includes/modules/csverify /root/.local/share/powershell/Modules/csverify
-# copy psmpacker module builder
-COPY ./includes/modules/psmpacker /root/.local/share/powershell/Modules/psmpacker
-# copy nupsforge package builder
-COPY ./includes/modules/nupsforge /root/.local/share/powershell/Modules/nupsforge
-# Copy custom ascii artwork cmdlets
+# 7. Local Files & Customizations
+COPY ./includes/modules/ /root/.local/share/powershell/Modules/
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
-# copy template profile
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
 
-# Set PowerShell as the default shell
-CMD ["pwsh"]
+# Final sanity check and cache cleanup
+RUN pwsh -NoProfile -Command "Write-Host 'Verifying installations...'; dotnet --version; nuget help | select -First 1; rustc --version; go version; elixir --version" && \
+    rm -rf /root/.cache /root/.local/share/NuGet /tmp/*
 
-# Custom profile 
-#ENTRYPOINT ["pwsh", "-File", "/root/.config/powershell/Microsoft.PowerShell_profile.ps1"]
-#ENTRYPOINT ["pwsh"]
+CMD ["pwsh"]
