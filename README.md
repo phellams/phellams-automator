@@ -187,6 +187,7 @@ sudo pwsh -c ./phellams-automator-local-builder.ps1 -buildMode Base
 ## Usage
 
 ### Output image information
+
 > Default shell is `pwsh` and will output the container information.
 
 ```bash
@@ -244,6 +245,7 @@ docker run -it --rm -v $(pwd):/phellams -w /phellams sgkens/phellams-automator:l
 ```
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 ### 🟡 **Task List**
@@ -282,6 +284,7 @@ Feel free to contribute!  Fork the repo and submit a **merge request** with your
 5. [Open a Merge Request](https://gitlab.com/phellams/phellams-automator/-/merge_requests/new)
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information. 
@@ -289,6 +292,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Changelog
 
 <!-- MARKDOWN LINKS & IMAGES -->
+
 [arc-version]: https://img.shields.io/badge/Debian-12.13_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
 [arc-url]: https://hub.docker.com/r/sgkens/phellams-automator
 [docker-version]: https://img.shields.io/docker/v/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
