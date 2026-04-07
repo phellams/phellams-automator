@@ -1,5 +1,11 @@
 ## Changelog
 
+# v2.8.1
+- PERF: Reduced Docker image size by 37% (2GB saved)
+- IMPROVE: Optimized Docker layers and implemented aggressive cleanup
+- DOCS: Cleaned up README.md whitespace and formatting
+- FIX: Resolved Pester v5.7.1 import issues in profile
+
 # v2.8.0
 - ADD: **Go** support
 - ADD: **Rust** support
