@@ -6,37 +6,48 @@
 
 ## **About The Project**
 
-**Phellams-Automator** is a high-performance, multi-language build environment based on *Debian-12-slim*. It is specifically designed to work with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) suite.
-
-**💠 Use Cases:**
-
-* **PowerShell:** Build modules in `folder`, `.zip`, or `.nupkg` formats.
-* **.NET:** Build AOT-compatible binaries for SDK v8 and v10.
-* **NuGet/Choco:** Generate and package `.nupkg` for GitLab, Chocolatey, ProGet, etc.
-* **JS Runtime:** Native support for **Bun** (replacing Node.js) for high-speed JS/TS execution.
-* **DevOps:** Integrated **Codecov** and **Coveralls** reporting.
-* **Multi-Language:** Runtimes for **Ruby/Jekyll**, **Go**, **Rust**, and **Elixir**.
-
-<div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
+**Phellams-Automator** is a multi-language build environment based on *Debian-12-slim*. While engineered specifically for integration with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) suite, it functions as a standalone runner image optimized for multi-platform CI/CD pipelines.
 
 ---
 
-## **Features**
+## **Features & Capabilities**
 
-### 🟦 **PowerShell Automation**
-* **Build-Module** via **Psmpacker**.
-* **Semantic Versioning** via **GitAutoVersion**.
-* **Man-page Generation** via **Phwriter**.
-* **Verification Checksums** via **CSVerify**.
+### **Automation Toolchain**
 
-### 🟦 **Build Systems**
-* **.NET:** Native `dotnet build` and `dotnet pack` support.
-* **NuGet/Choco:** `nuget pack` and custom **Nupsforge** cmdlets for multi-repository compatibility.
-* **JavaScript:** High-performance execution via **Bun**.
+* **PowerShell Pipeline:** Automated module packaging into directory structures, `.zip` archives, or `.nupkg` artifacts via **Psmpacker**.
+* **Version Management:** Automated Semantic Versioning orchestration via **GitAutoVersion**.
+* **Documentation Engine:** Native man-page and help-file generation via **Phwriter**.
+* **Integrity Verification:** Automated checksum generation and verification via **CSVerify**.
 
-### 🟦 **CI/CD Integration**
-* Native support for **GitLab CI**.
-* Pre-configured **Codecov** and **Coveralls** uploaders.
+### **Multi-Language Build Systems**
+
+* **.NET:** Native execution support for `dotnet build` and `dotnet pack` targetting SDK v8 and v10 (including AOT compilation targets).
+* **Package Management:** Native `nuget pack` capabilities coupled with custom **Nupsforge** cmdlets for multi-repository distribution (GitLab, Chocolatey, ProGet).
+* **JavaScript / TypeScript:** Native execution handled via **Bun** for high-velocity runtime performance (replacing standard Node.js).
+* **Systems Languages:** Built-in toolchains for **Rust**, **Go**, and **Elixir**.
+* **Ruby / Jekyll:** Optimized runner configuration featuring integrated **Bundler** with CI hardening policies:
+* Overridden `BUNDLE_SILENCE_ROOT_WARNING: "1"`
+* Enforced deterministic dependency pathing via `BUNDLE_PATH: "vendor/bundle"`
+* Pre-baked system dependencies (`ruby-dev`, `build-essential`) to eliminate runtime compilation failures.
+
+
+
+### **CI/CD & DevOps Integration**
+
+* Native optimization for **GitLab CI** execution runners.
+* Pre-configured, zero-dependency coverage upload targets for **Codecov** and **Coveralls**.
+
+### **Feature Matrix & Roadmap**
+
+| Capability | Component / Runtime | Status |
+| --- | --- | --- |
+| **PowerShell Core** | Module packaging, testing, and distribution | 🟩 Production Ready |
+| **.NET Toolchain** | Compilation, packing, and AOT support | 🟩 Production Ready |
+| **JS/TS Runtime** | Bun execution engine | 🟩 Production Ready |
+| **Node.js Compatibility** | Bun-backed Node.js emulation interface | 🟨 Work In Progress |
+| **DevOps Pipelines** | Codecov & Coveralls reporting agents | 🟩 Production Ready |
+| **PHP8 Ecosystem** | Native runtime, PHPStan, PHPUnit, Composer | 🟥 Planned |
+| **Python Toolchain** | Environment runtimes | 🟥 Planned |
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
@@ -44,39 +55,27 @@
 
 ## **Image Manifest**
 
-### **Binaries**
+### **System Binaries**
 
-* [x] [**.NET SDK v8.0.412 & v10.0.103**](https://dot.net)
-* [x] [**PowerShell Core 7.5.3**](https://github.com/PowerShell/PowerShell)
-* [x] [**Bun**](https://bun.sh)
-* [x] [**NuGet 6.x (via Mono)**](https://www.nuget.org/)
-* [x] [**Go**](https://go.dev)
-* [x] [**Rust**](https://www.rust-lang.org)
-* [x] [**RusElixirt**](https://elixir-lang.org)
-* [x] [**Codecov**](https://codecov.io)
-* [x] [**Node.js**](https://nodejs.org)
-* [x] [**Jekyll**](https://jekyllrb.com)
-* [x] [**Ruby**](https://www.ruby-lang.org)
-  * [x] [**Bundler**](https://bundler.io)
-  * [ ] [**Bundler-Plugin**](https://bundler.io)
-  * [ ] [**Bundler-CI-HARDENING**](#)
-    - [ ] Set `BUNDLE_SILENCE_ROOT_WARNING: "1"`
-    - [ ] Set `BUNDLE_PATH: "vendor/bundle"`
-    - [ ] packages `ruby-dev build-essential`
-    > To fix CI bundler issues  `ruby-dev` package is required and the ENV's set:  `BUNDLE_SILENCE_ROOT_WARNING` and `BUNDLE_PATH` environment variables.
-* [ ] [**Ruby-Dev**](https://www.ruby-lang.org)
-* [ ] [**Python**](https://www.python.org)
-* [x] [**Coveralls**](https://coveralls.io)
-* [x] [**Codecov**](https://codecov.io)
+* 🟩 **[.NET SDK v8.0.412 & v10.0.103](https://dot.net)**
+* 🟩 **[PowerShell Core 7.5.3](https://github.com/PowerShell/PowerShell)**
+* 🟩 **[Bun Runtime](https://bun.sh)**
+* 🟩 **[NuGet 6.x](https://www.nuget.org/)** *(via Mono)*
+* 🟩 **[Go Compiler](https://go.dev)**
+* 🟩 **[Rust Toolchain](https://www.rust-lang.org)**
+* 🟩 **[Elixir Runtime](https://elixir-lang.org)**
+* 🟩 **[Ruby & Jekyll](https://www.ruby-lang.org)** *(with hardened Bundler toolset)*
+* 🟩 **[Codecov / Coveralls CLI](https://codecov.io)**
 
-### **PowerShell Modules**
+### **Pre-Baked PowerShell Modules**
 
-* 🟦 **Pester** & **PSScriptAnalyzer** (Testing & Linting)
-* 🟦 **PowerShell-Yaml**
-* 🟦 **ColorConsole** & **Quicklog** (UI & Logging)
-* 🟦 **Tadpol** (Progress Bars & Spinners)
-* 🟦 **ShellDock** (Runspace Executor)
-* 🟦 **Nupsforge**, **Psmpacker**, **CSVerify**, **GitAutoVersion** (Build Toolchain)
+* 🟦 **Pester** & **PSScriptAnalyzer** *(Testing & Static Analysis)*
+* 🟦 **PowerShell-Yaml** *(Data Serialization)*
+* 🟦 **ColorConsole** & **Quicklog** *(UI Layout & High-Performance Logging)*
+* 🟦 **Tadpol** *(Runspace Progress Bars & Spinners)*
+* 🟦 **ShellDock** *(Isolated Runspace Executor)*
+* 🟦 **Nupsforge**, **Psmpacker**, **CSVerify**, **GitAutoVersion** *(Core Build Stack)*
+
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
@@ -84,28 +83,28 @@
 
 ## **Build & Local Usage**
 
-### **Building Locally**
+### **Building the Image Locally**
 
-**💠 Using Docker CLI:**
+**Using Docker CLI:**
 
 ```bash
 docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
 ```
 
-**💠 Using Local Builder Script:**
+**Using local PowerShell Orchestrator:**
 
 ```powershell
 ./phellams-automator-local-builder.ps1 -buildMode Base
 ```
 
-### **Script Parameters**
+### **Automation Script Parameters**
 
-| Parameter | Description |
-| :--- | :--- |
-| **`-Automator`** | Builds using the Docker image. |
-| **`-Pester`** | Runs Pester tests before build. |
-| **`-Build`** | Packs the module into the `dist` folder. |
-| **`-Nuget`** | Generates NuGet packages. |
+| Parameter | Type | Description |
+| --- | --- | --- |
+| **`-Automator`** | Switch | Forces execution inside the local container context. |
+| **`-Pester`** | Switch | Executes the Pester test suite validation layer prior to building. |
+| **`-Build`** | Switch | Compiles and writes the completed package artifacts into the `dist/` directory. |
+| **`-Nuget`** | Switch | Generates compliance-ready NuGet package objects. |
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
@@ -116,12 +115,13 @@ docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
 ### **Current Phase: Beta**
 
 * 🔄 **Infrastructure Modernization**
-  * 🔹 Port to Debian 13 (Trixie) slim.
-  * 🔹 Implement Multi-platform builds (amd64/arm64).
-  * 🔹 Replace Node.js with Bun. (#7)
-* 🔄 **Technical Debt**
-  * 🔹 Resolve outstanding CVEs.
-  * 🔹 Standardize high-performance CLI patterns.
+* 🔹 Transition base layer to Debian 13 (Trixie) slim profile.
+* 🔹 Implement automated Multi-platform engine targets (`amd64`/`arm64`).
+* 🔹 Completely abstract Node.js reliance over to Bun.
+* 🔄 **Technical Debt Mitigation**
+* 🔹 Automate vulnerability scanning and resolve downstream image CVEs.
+* 🔹 Standardize TUI padding and performance behaviors across console tooling components.
+
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
