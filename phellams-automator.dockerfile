@@ -3,13 +3,14 @@ FROM debian:12-slim
 
 # Set environment variables for non-interactive installation
 # ..........................................................
-ENV DEBIAN_FRONTEND=noninteractive \
-    DOTNET_ROOT=/root/.dotnet \
-    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools" \
-    COMPOSER_HOME="/root/.composer"
-    BUNDLE_SILENCE_ROOT_WARNING="1"
-    BUNDLE_PATH="vendor/bundle"
-    BUNDLE_APP_CONFIG="/root/.bundle"
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DOTNET_ROOT=/root/.dotnet
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools"
+ENV BUNDLE_SILENCE_ROOT_WARNING="1"
+ENV BUNDLE_PATH="vendor/bundle"
+ENV BUNDLE_APP_CONFIG="/root/.bundle"
+ENV COMPOSER_HOME=/tmp/composer
+ENV PATH="${COMPOSER_HOME}/vendor/bin:${PATH}" 
 
 # 1. Base Dependencies & Mono/NuGet
 # Combined to reduce layers and cleaned up thoroughly
@@ -17,7 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt update && \
     apt install -y --no-install-recommends \
     curl wget gnupg apt-transport-https software-properties-common ca-certificates git \
-    mono-complete lsb-release tar perl && \
+    mono-complete lsb-release tar perl coreutils && \
     # Install NuGet Latest
     wget -q https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
     echo '#!/bin/bash\nmono /usr/local/bin/nuget.exe "$@"' > /usr/local/bin/nuget && \
@@ -53,10 +54,15 @@ RUN apt update && \
     # Cleanup
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /root/.gem /root/.bundle
 
-# 4.1 PHP8 + Composer + PHP-FPM + Xdebug + PHPUnit + PHPStan
+# 4.1 PHP 8.2 + Composer + PHP-FPM + Xdebug + PHPUnit
 # ..........................................................
+
 RUN apt update && \
     apt install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        unzip \
+        git \
         php8.2 \
         php8.2-cli \
         php8.2-fpm \
@@ -73,35 +79,49 @@ RUN apt update && \
         php8.2-gd \
         php8.2-opcache \
         php8.2-xdebug \
-        composer \
-        composer global require \
-        phpunit/phpunit \
-        phpstan/phpstan && \
-    ln -sf /root/.composer/vendor/bin/phpunit /usr/local/bin/phpunit && \
-    ln -sf /root/.composer/vendor/bin/phpstan /usr/local/bin/phpstan && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# 5. DevOps Tools: Codecov + Coveralls
-# ....................................
-RUN wget -qO- "https://keybase.io/codecovsecurity/pgp_keys.asc" \
-        | gpg --no-default-keyring \
-              --keyring /root/trustedkeys.gpg \
-              --import && \
-    curl -fL -o codecov https://uploader.codecov.io/latest/linux/codecov && \
-    curl -fL -o codecov.SHA256SUM https://uploader.codecov.io/latest/linux/codecov.SHA256SUM && \
-    curl -fL -o codecov.SHA256SUM.sig https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig && \
-    gpg --no-default-keyring \
-        --keyring /root/trustedkeys.gpg \
-        --verify codecov.SHA256SUM.sig codecov.SHA256SUM && \
-    shasum -a 256 -c codecov.SHA256SUM && \
-    chmod +x codecov && \
-    mv codecov /usr/local/bin/codecov && \
-    curl -fL https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
-    chmod +x /usr/local/bin/coveralls && \
-    rm -f codecov.SHA256SUM codecov.SHA256SUM.sig /root/trustedkeys.gpg && \
+        composer && \
+    composer global require --no-interaction --no-progress \
+        phpunit/phpunit:^11 && \
+    ln -sf "${COMPOSER_HOME}/vendor/bin/phpunit" /usr/local/bin/phpunit && \
+    php -v && \
+    composer --version && \
+    phpunit --version && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
+
+# Codecov
+# ....................................
+RUN set -eux; \
+    curl -fL -o /tmp/codecov.asc \
+        https://keybase.io/codecovsecops/pgp_keys.asc; \
+    gpg --no-default-keyring \
+        --keyring /tmp/codecov.gpg \
+        --import /tmp/codecov.asc; \
+    curl -fL -o codecov \
+        https://cli.codecov.io/latest/linux/codecov; \
+    curl -fL -o codecov.SHA256SUM \
+        https://cli.codecov.io/latest/linux/codecov.SHA256SUM; \
+    curl -fL -o codecov.SHA256SUM.sig \
+        https://cli.codecov.io/latest/linux/codecov.SHA256SUM.sig; \
+    gpg --no-default-keyring \
+        --keyring /tmp/codecov.gpg \
+        --verify codecov.SHA256SUM.sig codecov.SHA256SUM; \
+    sha256sum -c codecov.SHA256SUM; \
+    chmod +x codecov; \
+    mv codecov /usr/local/bin/codecov; \
+    codecov --help >/dev/null; \
+    rm -f \
+        /tmp/codecov.asc \
+        /tmp/codecov.gpg \
+        /tmp/codecov.gpg~ \
+        codecov.SHA256SUM \
+        codecov.SHA256SUM.sig
+
+# Coveralls
+# ....................................
+RUN curl -fL https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/coveralls && \
+    coveralls --version
 
 # 6. PowerShell Modules from PSGallery
 # ...................................
