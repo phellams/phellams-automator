@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## **v2.8.2**
+## **v2.9**
 - Update **powershell** to `v7.6.2`
 - Add **PHP8** + **Composer** + **PHP-FPM** + **Xdebug** + **PHPUnit** + **PHPStan**
 - Update DevOps Tools: **Codecov** + **Coveralls**
