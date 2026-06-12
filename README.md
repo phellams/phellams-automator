@@ -1,17 +1,5 @@
 <a id="top"></a>
 
-### `P[owerS]hella[uto]m[ations]` (Powershell Automations)
-
-Houses PowerShell Modules, ***Scripts***, ***Libraries***, ***Tools***, ***Dotnet Libraries***, ***Dotnet (AOT) cli apps***.
-
-#### ☑️ Finished Projects
-
-- ![phellams-logo][phellams-logo-link] [**Phellams-Automator**](https://gitlab.com/phellams/phellams-automator) - *Docker Container to build and publish modules to the PowerShell Gallery, choco, gitlab packages and publish release via gitlab*
-
-- ![commitfusion-logo][commitfusion-logo-link] [**CommitFusion**](https://gitlab.com/phellams/commitfusion) - *Conventional Commit Helper*
-
----
-
 # **Phellams-Automator**
 
 ![Static Badge][license-badge] [![arc][arc-version]][arc-url] [![docker][docker-version]][docker-url] ![docker][docker-size] ![docker][docker-pulls] [![build][build-status]][build-url]
@@ -22,12 +10,12 @@ Houses PowerShell Modules, ***Scripts***, ***Libraries***, ***Tools***, ***Dotne
 
 **💠 Use Cases:**
 
-* 🔹 **PowerShell:** Build modules in `folder`, `.zip`, or `.nupkg` formats.
-* 🔹 **.NET:** Build AOT-compatible binaries for SDK v8 and v10.
-* 🔹 **NuGet/Choco:** Generate and package `.nupkg` for GitLab, Chocolatey, ProGet, etc.
-* 🔹 **JS Runtime:** Native support for **Bun** (replacing Node.js) for high-speed JS/TS execution.
-* 🔹 **DevOps:** Integrated **Codecov** and **Coveralls** reporting.
-* 🔹 **Multi-Language:** Runtimes for **Ruby/Jekyll**, **Go**, **Rust**, and **Elixir**.
+* **PowerShell:** Build modules in `folder`, `.zip`, or `.nupkg` formats.
+* **.NET:** Build AOT-compatible binaries for SDK v8 and v10.
+* **NuGet/Choco:** Generate and package `.nupkg` for GitLab, Chocolatey, ProGet, etc.
+* **JS Runtime:** Native support for **Bun** (replacing Node.js) for high-speed JS/TS execution.
+* **DevOps:** Integrated **Codecov** and **Coveralls** reporting.
+* **Multi-Language:** Runtimes for **Ruby/Jekyll**, **Go**, **Rust**, and **Elixir**.
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
@@ -35,20 +23,20 @@ Houses PowerShell Modules, ***Scripts***, ***Libraries***, ***Tools***, ***Dotne
 
 ## **Features**
 
-### **PowerShell Automation**
-* 🟦 **Build-Module** via **Psmpacker**.
-* 🟦 **Semantic Versioning** via **GitAutoVersion**.
-* 🟦 **Man-page Generation** via **Phwriter**.
-* 🟦 **Verification Checksums** via **CSVerify**.
+### 🟦 **PowerShell Automation**
+* **Build-Module** via **Psmpacker**.
+* **Semantic Versioning** via **GitAutoVersion**.
+* **Man-page Generation** via **Phwriter**.
+* **Verification Checksums** via **CSVerify**.
 
-### **Build Systems**
-* 🔸 **.NET:** Native `dotnet build` and `dotnet pack` support.
-* 🔸 **NuGet/Choco:** `nuget pack` and custom **Nupsforge** cmdlets for multi-repository compatibility.
-* 🔸 **JavaScript:** High-performance execution via **Bun**.
+### 🟦 **Build Systems**
+* **.NET:** Native `dotnet build` and `dotnet pack` support.
+* **NuGet/Choco:** `nuget pack` and custom **Nupsforge** cmdlets for multi-repository compatibility.
+* **JavaScript:** High-performance execution via **Bun**.
 
-### **CI/CD Integration**
-* 💠 Native support for **GitLab CI**.
-* 💠 Pre-configured **Codecov** and **Coveralls** uploaders.
+### 🟦 **CI/CD Integration**
+* Native support for **GitLab CI**.
+* Pre-configured **Codecov** and **Coveralls** uploaders.
 
 <div align="right"><a href="#top"><code>☝</code> <b>Back to top</b></a></div>
 
@@ -58,13 +46,28 @@ Houses PowerShell Modules, ***Scripts***, ***Libraries***, ***Tools***, ***Dotne
 
 ### **Binaries**
 
-* 🔹 [**.NET SDK v8.0.412 & v10.0.103**](https://dot.net)
-* 🔹 [**PowerShell Core 7.5.3**](https://github.com/PowerShell/PowerShell)
-* 🔹 [**Bun (Primary JS Runtime)**](https://bun.sh)
-* 🔹 [**NuGet 6.x (via Mono)**](https://www.nuget.org/)
-* 🔹 [**Go**, **Rust**, **Elixir**]
-* 🔹 [**Ruby & Jekyll**]
-* 🔹 [**Codecov & Coveralls**]
+* [x] [**.NET SDK v8.0.412 & v10.0.103**](https://dot.net)
+* [x] [**PowerShell Core 7.5.3**](https://github.com/PowerShell/PowerShell)
+* [x] [**Bun**](https://bun.sh)
+* [x] [**NuGet 6.x (via Mono)**](https://www.nuget.org/)
+* [x] [**Go**](https://go.dev)
+* [x] [**Rust**](https://www.rust-lang.org)
+* [x] [**RusElixirt**](https://elixir-lang.org)
+* [x] [**Codecov**](https://codecov.io)
+* [x] [**Node.js**](https://nodejs.org)
+* [x] [**Jekyll**](https://jekyllrb.com)
+* [x] [**Ruby**](https://www.ruby-lang.org)
+  * [x] [**Bundler**](https://bundler.io)
+  * [ ] [**Bundler-Plugin**](https://bundler.io)
+  * [ ] [**Bundler-CI-HARDENING**](#)
+    - [ ] Set `BUNDLE_SILENCE_ROOT_WARNING: "1"`
+    - [ ] Set `BUNDLE_PATH: "vendor/bundle"`
+    - [ ] packages `ruby-dev build-essential`
+    > To fix CI bundler issues  `ruby-dev` package is required and the ENV's set:  `BUNDLE_SILENCE_ROOT_WARNING` and `BUNDLE_PATH` environment variables.
+* [ ] [**Ruby-Dev**](https://www.ruby-lang.org)
+* [ ] [**Python**](https://www.python.org)
+* [x] [**Coveralls**](https://coveralls.io)
+* [x] [**Codecov**](https://codecov.io)
 
 ### **PowerShell Modules**
 
@@ -142,12 +145,12 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 [phellams-logo-link]: https://raw.githubusercontent.com/phellams/phellams-general-resources/main/logos/phellams/dist/png/phellams-logo-16x16.png
 [commitfusion-logo-link]: https://raw.githubusercontent.com/phellams/phellams-general-resources/main/logos/commitfusion/dist/png/commitfusion-logo-16x16.png
-[arc-version]: https://img.shields.io/badge/Debian-12.13_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=for-the-badge
+[arc-version]: https://img.shields.io/badge/Debian-12.13_slim-cyan?logo=ubuntu&color=%232D2D34&labelcolor=red&style=flat
 [arc-url]: https://hub.docker.com/r/sgkens/phellams-automator
-[docker-version]: https://img.shields.io/docker/v/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
+[docker-version]: https://img.shields.io/docker/v/sgkens/phellams-automator?style=flat&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
 [docker-url]: https://hub.docker.com/r/sgkens/phellams-automator/tags
-[docker-size]: https://img.shields.io/docker/image-size/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
-[docker-pulls]: https://img.shields.io/docker/pulls/sgkens/phellams-automator?style=for-the-badge&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
-[build-status]: https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=for-the-badge&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
+[docker-size]: https://img.shields.io/docker/image-size/sgkens/phellams-automator?style=flat&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
+[docker-pulls]: https://img.shields.io/docker/pulls/sgkens/phellams-automator?style=flat&logo=docker&logoColor=%233478BD&logoSize=auto&labelColor=%232D2D34&color=%23446878
+[build-status]: https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=flat&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
 [build-url]: https://gitlab.com/phellams/phellams-automator/-/pipelines
-[license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=for-the-badge&labelColor=%232D2D34&color=%2317202a
+[license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=flat&labelColor=%232D2D34&color=%2317202a

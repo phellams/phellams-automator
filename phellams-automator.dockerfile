@@ -2,16 +2,22 @@
 FROM debian:12-slim
 
 # Set environment variables for non-interactive installation
+# ..........................................................
 ENV DEBIAN_FRONTEND=noninteractive \
     DOTNET_ROOT=/root/.dotnet \
-    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools"
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools" \
+    COMPOSER_HOME="/root/.composer"
+    BUNDLE_SILENCE_ROOT_WARNING="1"
+    BUNDLE_PATH="vendor/bundle"
+    BUNDLE_APP_CONFIG="/root/.bundle"
 
 # 1. Base Dependencies & Mono/NuGet
 # Combined to reduce layers and cleaned up thoroughly
+# ..........................................................
 RUN apt update && \
     apt install -y --no-install-recommends \
     curl wget gnupg apt-transport-https software-properties-common ca-certificates git \
-    mono-complete lsb-release && \
+    mono-complete lsb-release tar perl && \
     # Install NuGet Latest
     wget -q https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
     echo '#!/bin/bash\nmono /usr/local/bin/nuget.exe "$@"' > /usr/local/bin/nuget && \
@@ -20,6 +26,7 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # 2. .NET SDKs (Consolidated)
+# ...........................
 RUN mkdir -p /root/.dotnet && \
     # .NET 8
     wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
@@ -30,11 +37,13 @@ RUN mkdir -p /root/.dotnet && \
     rm -rf /tmp/* /root/.dotnet/sdk/NuGetFallbackFolder /root/.dotnet/templates
 
 # 3. PowerShell 7.5.3
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.1/powershell_7.6.1-1.deb_amd64.deb -O /tmp/powershell.deb && \
+# ....................
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.2/powershell_7.6.2-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # 4. Ruby, Jekyll, Go, Rust, Elixir (Consolidated & Cleaned)
+# ..........................................................
 RUN apt update && \
     apt install -y --no-install-recommends \
     ruby rubygems ruby-dev make gcc g++ \
@@ -44,21 +53,58 @@ RUN apt update && \
     # Cleanup
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /root/.gem /root/.bundle
 
-# 5. DevOps Tools (Codecov & Coveralls)
-RUN wget -qO- 'https://keybase.io/codecovsecurity/pgp_keys.asc' | gpg --no-default-keyring --keyring /root/trustedkeys.gpg --import && \
-    curl -Os https://uploader.codecov.io/latest/linux/codecov && \
-    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM && \
-    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig && \
-    gpg --no-default-keyring --keyring /root/trustedkeys.gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM && \
+# 4.1 PHP8 + Composer + PHP-FPM + Xdebug + PHPUnit + PHPStan
+# ..........................................................
+RUN apt update && \
+    apt install -y --no-install-recommends \
+        php8.2 \
+        php8.2-cli \
+        php8.2-fpm \
+        php8.2-common \
+        php8.2-curl \
+        php8.2-mbstring \
+        php8.2-xml \
+        php8.2-zip \
+        php8.2-intl \
+        php8.2-bcmath \
+        php8.2-sqlite3 \
+        php8.2-mysql \
+        php8.2-pgsql \
+        php8.2-gd \
+        php8.2-opcache \
+        php8.2-xdebug \
+        composer \
+        composer global require \
+        phpunit/phpunit \
+        phpstan/phpstan && \
+    ln -sf /root/.composer/vendor/bin/phpunit /usr/local/bin/phpunit && \
+    ln -sf /root/.composer/vendor/bin/phpstan /usr/local/bin/phpstan && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 5. DevOps Tools: Codecov + Coveralls
+# ....................................
+RUN wget -qO- "https://keybase.io/codecovsecurity/pgp_keys.asc" \
+        | gpg --no-default-keyring \
+              --keyring /root/trustedkeys.gpg \
+              --import && \
+    curl -fL -o codecov https://uploader.codecov.io/latest/linux/codecov && \
+    curl -fL -o codecov.SHA256SUM https://uploader.codecov.io/latest/linux/codecov.SHA256SUM && \
+    curl -fL -o codecov.SHA256SUM.sig https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig && \
+    gpg --no-default-keyring \
+        --keyring /root/trustedkeys.gpg \
+        --verify codecov.SHA256SUM.sig codecov.SHA256SUM && \
     shasum -a 256 -c codecov.SHA256SUM && \
-    chmod +x codecov && mv codecov /usr/local/bin/codecov && \
-    # Coveralls
-    curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
+    chmod +x codecov && \
+    mv codecov /usr/local/bin/codecov && \
+    curl -fL https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
     chmod +x /usr/local/bin/coveralls && \
-    # Cleanup
-    rm -rf /tmp/* codecov.*
+    rm -f codecov.SHA256SUM codecov.SHA256SUM.sig /root/trustedkeys.gpg && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
 
 # 6. PowerShell Modules from PSGallery
+# ...................................
 RUN pwsh -NoProfile -Command ' \
     $ErrorActionPreference = "Stop"; \
     $Modules = @("Pester", "PSScriptAnalyzer", "powershell-yaml"); \
@@ -70,11 +116,13 @@ RUN pwsh -NoProfile -Command ' \
     find /usr/local/share/powershell/Modules -type d -name "en-US" -exec rm -rf {} + 2>/dev/null || true
 
 # 7. Local Files & Customizations
+# .................................
 COPY ./includes/modules/ /root/.local/share/powershell/Modules/
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
 
 # Final sanity check and cache cleanup
+# ..................................
 RUN pwsh -NoProfile -Command "Write-Host 'Verifying installations...'; dotnet --version; nuget help | select -First 1; rustc --version; go version; elixir --version" && \
     rm -rf /root/.cache /root/.local/share/NuGet /tmp/*
 
