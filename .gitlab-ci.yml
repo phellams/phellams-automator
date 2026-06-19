@@ -10,6 +10,7 @@ stages:
   - build
   - test
   - deploy # on main only
+  - notify
 
 
 # ----------STAGE: BUILD----------
@@ -102,6 +103,13 @@ deploy-image-dockerhub:
       docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "flat" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-flat.svg"
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "for-the-badge" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-for-the-badge.svg"
+  artifacts:
+    paths:
+      - version-badge-flat.svg
+      - version-badge-for-the-badge.svg
+    expire_in: 1 week
 
 image-cleanup:
   stage: deploy
@@ -117,3 +125,29 @@ image-cleanup:
   script:
     - chmod +x ./scripts/docker_sha_cleanup.sh
     - bash -c ./scripts/docker_sha_cleanup.sh
+
+generate-runtime-badge:
+  stage: notify
+  image: mcr.microsoft.com/powershell:lts-alpine
+  rules:
+    - when: always
+  tags:
+    - docker
+  script:
+    - |
+      if ($env:CI_PIPELINE_CREATED_AT) {
+        $CreatedTime = [DateTime]::Parse($env:CI_PIPELINE_CREATED_AT)
+        $Duration = [DateTime]::UtcNow - $CreatedTime.ToUniversalTime()
+        $Minutes = [Math]::Floor($Duration.TotalMinutes)
+        $Seconds = $Duration.Seconds
+        $RuntimeStr = "${Minutes}m ${Seconds}s"
+      } else {
+        $RuntimeStr = "unknown"
+      }
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "flat" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-flat.svg"
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "for-the-badge" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-for-the-badge.svg"
+  artifacts:
+    paths:
+      - runtime-badge-flat.svg
+      - runtime-badge-for-the-badge.svg
+    expire_in: 1 week
