@@ -129,6 +129,9 @@ image-cleanup:
 generate-runtime-badge:
   stage: notify
   image: mcr.microsoft.com/powershell:lts-alpine
+  before_script:
+    - echo "Installing git"
+    - apk add --no-cache git
   rules:
     - when: always
   tags:
@@ -150,4 +153,4 @@ generate-runtime-badge:
     paths:
       - runtime-badge-flat.svg
       - runtime-badge-for-the-badge.svg
-    expire_in: 1 week
+    expire_in: never
