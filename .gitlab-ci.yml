@@ -94,7 +94,7 @@ deploy-image-dockerhub:
     - |
       git fetch --all 
       echo "GENERATE -> SEMVER version from git history"
-      semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion).Version") # Capture version
+      semver=$(pwsh -c "Import-Module ./includes/modules/conventionalcommitversion; (Get-ConventionalCommitVersion).Version") # Capture version
       echo "GENERATED -> SEMVER -> $semver"
       SEMVER_VERSION=$semver
       docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
@@ -128,7 +128,7 @@ image-cleanup:
 
 generate-runtime-badge:
   stage: notify
-  image: docker.io/sgkens/phellams-automator:{$AUTOMATOR_VERSION}
+  image: sgkens/phellams-automator:$AUTOMATOR_VERSION
   rules:
     - when: always
   tags:
