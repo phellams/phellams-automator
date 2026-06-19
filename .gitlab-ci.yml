@@ -128,10 +128,7 @@ image-cleanup:
 
 generate-runtime-badge:
   stage: notify
-  image: mcr.microsoft.com/powershell:lts-alpine
-  before_script:
-    - echo "Installing git"
-    - apk add --no-cache git
+  image: docker.io/sgkens/phellams-automator:{$AUTOMATOR_VERSION}
   rules:
     - when: always
   tags:
