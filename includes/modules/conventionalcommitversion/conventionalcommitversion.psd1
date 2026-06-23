@@ -6,20 +6,19 @@
     CompanyName       = 'phellams'
     Author            = 'Garvey K. Snow'
     Copyright           = 'MIT License'
-    NestedModules     = @('Get-GitAutoVersion.psm1')
-    FunctionsToExport = @('Get-GitAutoVersion')
-    AliasesToExport   = @('cfav')
+    FunctionsToExport = @('Get-ConventionalCommitVersion')
+    AliasesToExport   = @('gccv')
     CmdletsToExport   = @()
     VariablesToExport = @()
     PrivateData       = @{
         PSData = @{
             Prerelease      = 'preview1'
             Tags            = @('version', 'git')
-            ProjectUri      = 'https://github.com/phellams/gitautoversion'
-            IconUri         = 'https://raw.githubusercontent.com/phellams/gitautoversion/main/assets/gitautoversion.png'
-            LicenseUri      = 'https://github.com/phellams/gitautoversion/blob/main/LICENSE'
+            ProjectUri      = 'https://github.com/phellams/phellams-utils'
+            IconUri         = 'https://raw.githubusercontent.com/phellams/phellams-utils/main/assets/phellams-utils.png'
+            LicenseUri      = 'https://github.com/phellams/phellams-utils/blob/main/LICENSE'
             ReleaseNotes    = ""
-            ReleaseNotesUri = 'https://github.com/phellams/gitautoversion/blob/main/CHANGELOG.md'
+            ReleaseNotesUri = 'https://github.com/phellams/phellams-utils/blob/main/CHANGELOG.md'
         }
     }
 }

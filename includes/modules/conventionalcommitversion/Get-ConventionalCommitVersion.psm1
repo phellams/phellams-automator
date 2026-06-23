@@ -146,4 +146,4 @@ function Get-ConventionalCommitVersion {
     }
 }
 
-Export-ModuleMember -Function Get-ConventionalCommitVersion
+Export-ModuleMember -Function Get-ConventionalCommitVersion -Alias gccv
