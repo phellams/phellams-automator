@@ -126,6 +126,33 @@ image-cleanup:
     - chmod +x ./scripts/docker_sha_cleanup.sh
     - bash -c ./scripts/docker_sha_cleanup.sh
 
+# generate-runtime-badge:
+#   stage: notify
+#   image: sgkens/phellams-automator:$AUTOMATOR_VERSION
+#   rules:
+#     - when: always
+#   tags:
+#     - docker
+#   script:
+#     - pwsh --no-profile
+#     - |
+#       if ($env:CI_PIPELINE_CREATED_AT) {
+#         $CreatedTime = [DateTime]::Parse($env:CI_PIPELINE_CREATED_AT)
+#         $Duration = [DateTime]::UtcNow - $CreatedTime.ToUniversalTime()
+#         $Minutes = [Math]::Floor($Duration.TotalMinutes)
+#         $Seconds = $Duration.Seconds
+#         $RuntimeStr = "${Minutes}m ${Seconds}s"
+#       } else {
+#         $RuntimeStr = "unknown"
+#       }
+#       pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "flat" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-flat.svg"
+#       pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "for-the-badge" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-for-the-badge.svg"
+#   artifacts:
+#     paths:
+#       - runtime-badge-flat.svg
+#       - runtime-badge-for-the-badge.svg
+#     expire_in: never
+
 generate-runtime-badge:
   stage: notify
   image: sgkens/phellams-automator:$AUTOMATOR_VERSION
@@ -134,20 +161,11 @@ generate-runtime-badge:
   tags:
     - docker
   script:
-    - |
-      if ($env:CI_PIPELINE_CREATED_AT) {
-        $CreatedTime = [DateTime]::Parse($env:CI_PIPELINE_CREATED_AT)
-        $Duration = [DateTime]::UtcNow - $CreatedTime.ToUniversalTime()
-        $Minutes = [Math]::Floor($Duration.TotalMinutes)
-        $Seconds = $Duration.Seconds
-        $RuntimeStr = "${Minutes}m ${Seconds}s"
-      } else {
-        $RuntimeStr = "unknown"
-      }
-      pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "flat" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-flat.svg"
-      pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "for-the-badge" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-for-the-badge.svg"
+    - pwsh -File ./scripts/Calculate-Runtime.ps1
+    - pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RUNTIME_STR -Style "flat" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-flat.svg"
   artifacts:
     paths:
       - runtime-badge-flat.svg
       - runtime-badge-for-the-badge.svg
+      - runtime.env
     expire_in: never
