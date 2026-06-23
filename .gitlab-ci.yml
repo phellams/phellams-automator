@@ -21,7 +21,7 @@ build-image-commit_sha:
     - linux-shell
   # before_script:
   script:
-    - |
+    - | # docker buildx build -t phellams-automator:localbuild -f phellams-automator.dockerfile .
       echo "BUILD -> build-image-commit_sha"
       echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
       docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
