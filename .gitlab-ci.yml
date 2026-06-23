@@ -164,7 +164,7 @@ generate-runtime-badge:
     - |
       pwsh -Command "& {
         & ./scripts/Calculate-Runtime.ps1;
-        & ./scripts/Generate-Badge.ps1 -Label 'runtime' -Message $RUNTIME_STR -Style 'flat' -IncludeIcon -LabelColor '#555' -MessageColor '#007acc' -OutputPath 'runtime-badge-flat.svg';
+        & ./scripts/Generate-Badge.ps1 -Label 'runtime' -Message "RM--$RUNTIME_STR" -Style 'flat' -IncludeIcon -LabelColor '#555' -MessageColor '#007acc' -OutputPath 'runtime-badge-flat.svg';
       }"
   artifacts:
     paths:
