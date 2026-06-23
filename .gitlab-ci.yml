@@ -23,7 +23,7 @@ build-image-commit_sha:
     - |
       echo "BUILD -> build-image-commit_sha"
       echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-      docker build -t phellams-automator -f phellams-automator.dockerfile .
+      docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
       docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
       docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
   # artifacts:
