@@ -1,3 +1,4 @@
+# rendering the ascii logo in powershell profile.
 using module G:\devspace\projects\powershell\_repos\colorconsole\libs\cmdlets\New-ColorConsole.psm1 
 
 # Alter logo
