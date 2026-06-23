@@ -10,6 +10,7 @@ stages:
   - build
   - test
   - deploy # on main only
+  - notify
 
 
 # ----------STAGE: BUILD----------
@@ -23,7 +24,7 @@ build-image-commit_sha:
     - |
       echo "BUILD -> build-image-commit_sha"
       echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-      docker build -t phellams-automator -f phellams-automator.dockerfile .
+      docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
       docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
       docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
   # artifacts:
@@ -93,7 +94,7 @@ deploy-image-dockerhub:
     - |
       git fetch --all 
       echo "GENERATE -> SEMVER version from git history"
-      semver=$(pwsh -c "Import-Module ./includes/modules/gitautoversion; (Get-GitAutoVersion).Version") # Capture version
+      semver=$(pwsh -c "Import-Module ./includes/modules/conventionalcommitversion; (Get-ConventionalCommitVersion).Version") # Capture version
       echo "GENERATED -> SEMVER -> $semver"
       SEMVER_VERSION=$semver
       docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
@@ -102,6 +103,13 @@ deploy-image-dockerhub:
       docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
       echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "flat" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-flat.svg"
+      pwsh -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "for-the-badge" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-for-the-badge.svg"
+  artifacts:
+    paths:
+      - version-badge-flat.svg
+      - version-badge-for-the-badge.svg
+    expire_in: 1 week
 
 image-cleanup:
   stage: deploy
@@ -117,3 +125,50 @@ image-cleanup:
   script:
     - chmod +x ./scripts/docker_sha_cleanup.sh
     - bash -c ./scripts/docker_sha_cleanup.sh
+
+# generate-runtime-badge:
+#   stage: notify
+#   image: sgkens/phellams-automator:$AUTOMATOR_VERSION
+#   rules:
+#     - when: always
+#   tags:
+#     - docker
+#   script:
+#     - pwsh --no-profile
+#     - |
+#       if ($env:CI_PIPELINE_CREATED_AT) {
+#         $CreatedTime = [DateTime]::Parse($env:CI_PIPELINE_CREATED_AT)
+#         $Duration = [DateTime]::UtcNow - $CreatedTime.ToUniversalTime()
+#         $Minutes = [Math]::Floor($Duration.TotalMinutes)
+#         $Seconds = $Duration.Seconds
+#         $RuntimeStr = "${Minutes}m ${Seconds}s"
+#       } else {
+#         $RuntimeStr = "unknown"
+#       }
+#       pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "flat" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-flat.svg"
+#       pwsh -File ./scripts/Generate-Badge.ps1 -Label "runtime" -Message $RuntimeStr -Style "for-the-badge" -IncludeIcon -LabelColor "#555" -MessageColor "#007acc" -OutputPath "runtime-badge-for-the-badge.svg"
+#   artifacts:
+#     paths:
+#       - runtime-badge-flat.svg
+#       - runtime-badge-for-the-badge.svg
+#     expire_in: never
+
+generate-runtime-badge:
+  stage: notify
+  image: sgkens/phellams-automator:$AUTOMATOR_VERSION
+  rules:
+    - when: always
+  tags:
+    - docker
+  script:
+    - |
+      pwsh -Command "& {
+        & ./scripts/Calculate-Runtime.ps1;
+        & ./scripts/Generate-Badge.ps1 -Label 'runtime' -Message $RUNTIME_STR -Style 'flat' -IncludeIcon -LabelColor '#555' -MessageColor '#007acc' -OutputPath 'runtime-badge-flat.svg';
+      }"
+  artifacts:
+    paths:
+      - runtime-badge-flat.svg
+      - runtime-badge-for-the-badge.svg
+      - runtime.env
+    expire_in: never

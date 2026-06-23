@@ -3,7 +3,7 @@
         .    ..xxxxxx...   .   
           ≡-«( •)xx( •)»-≡                    _  _ 
               ..xxxx..                 /     // //  
-               x[--]x.            _   /_  _ // // __.  ______  _  
+               x[─-]x.            _   /_  _ // // __.  ______  _  
             ....xxxx....         /_)_/ /_</_</_</_(_/|_/ / / <_/_)_
           ...xxxxxxxxxx...      / [P]owers[HELL][A]uto[M]ation[S]
        .... .xxxxxxxxxx. ....  `
@@ -20,8 +20,8 @@
       ┋     └▣ Distro Release ─• [base-distro-release]
       ┋         └○ [kernel-version]
       ┋
-      ┋     BINARIES
-      ┋     ├─▣ pwsh               ✜─ •> [pwsh-version] 
+      ┋     / BINARIES \
+      ┋─────├─▣ pwsh               ✜─ •> [pwsh-version] 
       ┋     ├─▣ dotnet             ✜─ •> [dotnet-version]
       ┋     ├─▣ nuget              ✜─ •> [nuget-version]
       ┋     ├─▣ codecov            ✜─ •> [codecov-version]
@@ -31,12 +31,16 @@
       ┋     ├─▣ RubyGems           ✜─ •> [rubygems-version]
       ┋     ├─▣ Go                 ✜─ •> [go-version]
       ┋     ├─▣ Rust               ✜─ •> [rust-version]
-      ┋     └─▣ Elixir             ✜─ •> [elixir-version]
-
-
+      ┋     ├─▣ Elixir             ✜─ •> [elixir-version]
+      ┋     ├─▣ Bun                ✜─ •> [bun-version]
+      ┋     ├─▣ Node               ✜─ •> [node-version]
+      ┋     ├─▣ NPM                ✜─ •> [npm-version]
+      ┋     └─▣ php                ✜─ •> [php-version]
+      ┋
+      ┋  
       ┋ 
-      ┋     PSMODULES
-      ┋     ├─▣ PSScriptAnalyzer   ✜─ •> [psscriptanalyzer-version]
+      ┋     / PSMODULES \
+      ┋─────├─▣ PSScriptAnalyzer   ✜─ •> [psscriptanalyzer-version]
       ┋     ├─▣ Pester             ✜─ •> [pester-version]
       ┋     ├─▣ PowerShell-Yaml    ✜─ •> [powerShell-yaml-version]
       ┋     ├─▣ ColorConsole       ✜─ •> [colorconsole-version]
@@ -47,6 +51,7 @@
       ┋     ├─▣ ShellDock          ✜─ •> [shelldock-version]
       ┋     ├─▣ TadPol             ✜─ •> [tadpol-version]
       ┋     ├─▣ PHWriter           ✜─ •> [phwriter-version]
+      ┋     ├─▣ CCVersion          ✜─ •> [conventionalcommitversion-version]
       ┋     └─▣ GitAutoVersion     ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐

@@ -1,5 +1,5 @@
 # Use Debian 12 slim as the clean base image to avoid massive gitlab-runner overhead
-FROM debian:12-slim
+FROM debian:12.14-slim
 
 # Set environment variables for non-interactive installation
 # ..........................................................
@@ -11,6 +11,8 @@ ENV BUNDLE_PATH="vendor/bundle"
 ENV BUNDLE_APP_CONFIG="/root/.bundle"
 ENV COMPOSER_HOME=/tmp/composer
 ENV PATH="${COMPOSER_HOME}/vendor/bin:${PATH}" 
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 # 1. Base Dependencies & Mono/NuGet
 # Combined to reduce layers and cleaned up thoroughly
@@ -89,6 +91,23 @@ RUN apt update && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
+# NODE & NPM - Node.js & NPM(v24.16.0)
+# ....................................
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest && \
+    npm --version && \
+    node --version && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+
+# BUN.JS - Bun(v0.5.4)
+# ....................................
+RUN curl -fsSL https://bun.com/install | bash && \ 
+    bun --version && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+    
 # Codecov
 # ....................................
 RUN set -eux; \
