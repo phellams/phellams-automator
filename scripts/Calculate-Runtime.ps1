@@ -6,4 +6,5 @@ if ($env:CI_PIPELINE_CREATED_AT) {
 } else {
   $RuntimeStr = "unknown"
 }
+$ENV:RUNTIME_STR = $RuntimeStr
 "RUNTIME_STR=$RuntimeStr" | Out-File -FilePath runtime.env -Encoding utf8

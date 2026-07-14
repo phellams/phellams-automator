@@ -2,7 +2,7 @@
 
 # **Phellams-Automator**
 
-![Static Badge][license-badge] [![arc][arc-version]][arc-url] [![docker][docker-version]][docker-url] ![docker][docker-size] ![docker][docker-pulls] [![build][build-status]][build-url]
+![Static Badge][license-badge] [![arc][arc-version]][arc-url] [![docker][docker-version]][docker-url] ![docker][docker-size] ![docker][docker-pulls] [![build][build-status]][build-url] [![runtime][runtime-badge]][runtime-url]
 
 ## **About The Project**
 
@@ -154,3 +154,4 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 [build-status]: https://img.shields.io/gitlab/pipeline-status/phellams%2Fphellams-automator?style=flat&logo=Gitlab&logoColor=%233478BD&labelColor=%232D2D34
 [build-url]: https://gitlab.com/phellams/phellams-automator/-/pipelines
 [license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=flat&labelColor=%232D2D34&color=%2317202a
+[runtime-badge]: https://gitlab.com/api/v4/projects/phellams%2Fphellams-automator/jobs/artifacts/main/raw/runtime-badge-flat.svg?job=generate-runtime-badge

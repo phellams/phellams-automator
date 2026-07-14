@@ -20,7 +20,7 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 RUN apt update && \
     apt install -y --no-install-recommends \
     curl wget gnupg apt-transport-https software-properties-common ca-certificates git \
-    mono-complete lsb-release tar perl coreutils && \
+    mono-complete lsb-release tar perl coreutils yq jq && \
     # Install NuGet Latest
     wget -q https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
     echo '#!/bin/bash\nmono /usr/local/bin/nuget.exe "$@"' > /usr/local/bin/nuget && \
@@ -41,7 +41,7 @@ RUN mkdir -p /root/.dotnet && \
 
 # 3. PowerShell 7.5.3
 # ....................
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.2/powershell_7.6.2-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.3/powershell_7.6.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -141,6 +141,15 @@ RUN set -eux; \
 RUN curl -fL https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin && \
     chmod +x /usr/local/bin/coveralls && \
     coveralls --version
+
+# 5. GUI, Graphics & AppImage Dependencies (Photino, Inkscape, ImageMagick, AppImage build tools)
+# ..........................................................................................
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    libgtk-3-dev libwebkit2gtk-4.0-dev libnotify-dev \
+    inkscape imagemagick \
+    binutils desktop-file-utils fakeroot fuse libfuse2 patchelf squashfs-tools zsync libgdk-pixbuf2.0-dev && \
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # 6. PowerShell Modules from PSGallery
 # ...................................

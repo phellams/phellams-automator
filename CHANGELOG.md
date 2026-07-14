@@ -1,6 +1,26 @@
 # CHANGELOG
 
-## **v2.10**
+## **v2.11.0**
+
+**Notes**
+
+- Add **GUI, Graphics & AppImage build dependencies** to the Docker build:
+  - **Photino** runtime requirements (`libgtk-3-dev`, `libwebkit2gtk-4.0-dev`, `libnotify-dev`)
+  - **Inkscape** and **ImageMagick** (`magick`)
+  - **AppImage** creation dependencies (`binutils`, `desktop-file-utils`, `fakeroot`, `fuse`, `libfuse2`, `patchelf`, `squashfs-tools`, `zsync`, `libgdk-pixbuf2.0-dev`)
+- Add **jq** and **yq** to the base OS dependencies in the Docker image.
+- Refactor PowerShell Profile:
+  - Stack three boxes (`Info Box` next to mascot, `Binaries Box` with 3 columns, and `Modules Box` with 3 columns) to form a robust, modern TUI.
+  - Fix layout tearing by introducing length truncation and padding helpers (`Get-FixedLengthString`), securing aligned margins even for extremely long version strings (like kernel details) and module names.
+  - Apply high-fidelity color overrides: truecolor vertical gradients for the mascot and box borders, horizontal lightblue-to-orange gradients for names, and light-magenta `v` + italic-gray version highlights.
+  - Implement dynamic version normalized registry object parsing for all binary and module versions (matching `v0.0.0` / `v0.0` formats including pre-releases like `-rc1` or `.beta-rc1`).
+  - Added version checks for **jq**, **yq**, **inkscape**, **magick**, and **photino** (reading photino from local NuGet package cache).
+
+> Wednesday, 15 July 2026 2:40:00 AM
+
+---
+
+## **v2.10.1**
 
 **Notes**
 
