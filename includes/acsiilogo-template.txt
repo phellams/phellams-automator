@@ -15,45 +15,32 @@
       /     .:x.    .x:. -| ■ Phellam Automator v[automator-version]   
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
       ┋    -----    ----- | ■ Debian image                  
-      ┋     ┋ INFO     ┋
-      ┋     ├▣ Default Shell  ─• pwsh
-      ┋     └▣ Distro Release ─• [base-distro-release]
-      ┋         └○ [kernel-version]
+      ┋     / INFO \
+      ┋─────├▣ Shell    ─• pwsh            │ ├▣ Release  ─• [base-distro-release]
+      ┋     └▣ Kernel   ─• [kernel-version]
       ┋
       ┋     / BINARIES \
-      ┋─────├─▣ pwsh               ✜─ •> [pwsh-version] 
-      ┋     ├─▣ dotnet             ✜─ •> [dotnet-version]
-      ┋     ├─▣ nuget              ✜─ •> [nuget-version]
-      ┋     ├─▣ codecov            ✜─ •> [codecov-version]
-      ┋     ├─▣ coveralls          ✜─ •> [coveralls-version]
-      ┋     ├─▣ git                ✜─ •> [git-version]
-      ┋     ├─▣ Ruby               ✜─ •> [ruby-version]
-      ┋     ├─▣ RubyGems           ✜─ •> [rubygems-version]
-      ┋     ├─▣ Go                 ✜─ •> [go-version]
-      ┋     ├─▣ Rust               ✜─ •> [rust-version]
-      ┋     ├─▣ Elixir             ✜─ •> [elixir-version]
-      ┋     ├─▣ Bun                ✜─ •> [bun-version]
-      ┋     ├─▣ Node               ✜─ •> [node-version]
-      ┋     ├─▣ NPM                ✜─ •> [npm-version]
-      ┋     └─▣ php                ✜─ •> [php-version]
+      ┋─────├─▣ pwsh       ✜─ •> [pwsh-version]     │ ├─▣ dotnet     ✜─ •> [dotnet-version]
+      ┋     ├─▣ nuget          ✜─ •> [nuget-version]    │ ├─▣ codecov    ✜─ •> [codecov-version]
+      ┋     ├─▣ coveralls      ✜─ •> [coveralls-version] │ ├─▣ git        ✜─ •> [git-version]
+      ┋     ├─▣ Ruby           ✜─ •> [ruby-version]     │ ├─▣ RubyGems   ✜─ •> [rubygems-version]
+      ┋     ├─▣ Go             ✜─ •> [go-version]       │ ├─▣ Rust       ✜─ •> [rust-version]
+      ┋     ├─▣ Elixir         ✜─ •> [elixir-version]   │ ├─▣ Bun        ✜─ •> [bun-version]
+      ┋     ├─▣ Node           ✜─ •> [node-version]     │ ├─▣ NPM        ✜─ •> [npm-version]
+       ┋     ├─▣ php            ✜─ •> [php-version]      │ ├─▣ composer   ✜─ •> [composer-version]
+       ┋     ├─▣ jq             ✜─ •> [jq-version]       │ ├─▣ yq         ✜─ •> [yq-version]
+       ┋     ├─▣ inkscape       ✜─ •> [inkscape-version] │ ├─▣ magick     ✜─ •> [magick-version]
+       ┋     └─▣ photino        ✜─ •> [photino-version]
       ┋
-      ┋  
-      ┋ 
       ┋     / PSMODULES \
-      ┋─────├─▣ PSScriptAnalyzer   ✜─ •> [psscriptanalyzer-version]
-      ┋     ├─▣ Pester             ✜─ •> [pester-version]
-      ┋     ├─▣ PowerShell-Yaml    ✜─ •> [powerShell-yaml-version]
-      ┋     ├─▣ ColorConsole       ✜─ •> [colorconsole-version]
-      ┋     ├─▣ Quicklog           ✜─ •> [quicklog-version]
-      ┋     ├─▣ Nupsforge          ✜─ •> [nupsforge-version]
-      ┋     ├─▣ Psmpacker          ✜─ •> [psmpacker-version]
-      ┋     ├─▣ Csverify           ✜─ •> [csverify-version]
-      ┋     ├─▣ ShellDock          ✜─ •> [shelldock-version]
-      ┋     ├─▣ TadPol             ✜─ •> [tadpol-version]
-      ┋     ├─▣ PHWriter           ✜─ •> [phwriter-version]
-      ┋     ├─▣ CCVersion          ✜─ •> [conventionalcommitversion-version]
-      ┋     └─▣ GitAutoVersion     ✜─ •> [gitautoversion-version]
+      ┋─────├─▣ PSScriptAnalyzer ✜─ •> [psscriptanalyzer-version]      │ ├─▣ Pester        ✜─ •> [pester-version]
+      ┋     ├─▣ PowerShell-Yaml      ✜─ •> [powerShell-yaml-version]      │ ├─▣ ColorConsole  ✜─ •> [colorconsole-version]
+      ┋     ├─▣ Quicklog             ✜─ •> [quicklog-version]      │ ├─▣ Nupsforge     ✜─ •> [nupsforge-version]
+      ┋     ├─▣ Psmpacker            ✜─ •> [psmpacker-version]      │ ├─▣ Csverify      ✜─ •> [csverify-version]
+      ┋     ├─▣ ShellDock            ✜─ •> [shelldock-version]      │ ├─▣ TadPol        ✜─ •> [tadpol-version]
+      ┋     ├─▣ PHWriter             ✜─ •> [phwriter-version]      │ └─▣ CCVersion     ✜─ •> [conventionalcommitversion-version]
+      ┋     └─▣ GitAutoVersion       ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐
   ▙ Shell ▟
-─── ─ ••• ─ ─ ─────────────────────
+ ─── ─ ••• ─ ─ ─────────────────────

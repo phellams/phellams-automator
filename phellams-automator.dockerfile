@@ -20,7 +20,7 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 RUN apt update && \
     apt install -y --no-install-recommends \
     curl wget gnupg apt-transport-https software-properties-common ca-certificates git \
-    mono-complete lsb-release tar perl coreutils && \
+    mono-complete lsb-release tar perl coreutils yq jq && \
     # Install NuGet Latest
     wget -q https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe && \
     echo '#!/bin/bash\nmono /usr/local/bin/nuget.exe "$@"' > /usr/local/bin/nuget && \
@@ -41,7 +41,7 @@ RUN mkdir -p /root/.dotnet && \
 
 # 3. PowerShell 7.5.3
 # ....................
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.2/powershell_7.6.2-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.3/powershell_7.6.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -142,6 +142,15 @@ RUN curl -fL https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local
     chmod +x /usr/local/bin/coveralls && \
     coveralls --version
 
+# 5. GUI, Graphics & AppImage Dependencies (Photino, Inkscape, ImageMagick, AppImage build tools)
+# ..........................................................................................
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    libgtk-3-dev libwebkit2gtk-4.0-dev libnotify-dev \
+    inkscape imagemagick \
+    binutils desktop-file-utils fakeroot fuse libfuse2 patchelf squashfs-tools zsync libgdk-pixbuf2.0-dev && \
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
 # 6. PowerShell Modules from PSGallery
 # ...................................
 RUN pwsh -NoProfile -Command ' \
@@ -159,6 +168,13 @@ RUN pwsh -NoProfile -Command ' \
 COPY ./includes/modules/ /root/.local/share/powershell/Modules/
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
+COPY ./VERSION /root/.config/powershell/VERSION
+
+# 8. Pre-cache NuGet packages (e.g. Photino.NET)
+RUN mkdir /tmp/dummy && cd /tmp/dummy && \
+    echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include="Photino.NET" Version="*" /></ItemGroup></Project>' > dummy.csproj && \
+    dotnet restore && \
+    cd / && rm -rf /tmp/dummy
 
 # Final sanity check and cache cleanup
 # ..................................
