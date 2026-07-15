@@ -27,9 +27,10 @@
       ┋     ├─▣ Go             ✜─ •> [go-version]       │ ├─▣ Rust       ✜─ •> [rust-version]
       ┋     ├─▣ Elixir         ✜─ •> [elixir-version]   │ ├─▣ Bun        ✜─ •> [bun-version]
       ┋     ├─▣ Node           ✜─ •> [node-version]     │ ├─▣ NPM        ✜─ •> [npm-version]
-      ┋     ├─▣ php            ✜─ •> [php-version]      │ ├─▣ jq         ✜─ •> [jq-version]
-      ┋     ├─▣ yq             ✜─ •> [yq-version]       │ ├─▣ inkscape   ✜─ •> [inkscape-version]
-      ┋     └─▣ magick         ✜─ •> [magick-version]   │ └─▣ photino    ✜─ •> [photino-version]
+       ┋     ├─▣ php            ✜─ •> [php-version]      │ ├─▣ composer   ✜─ •> [composer-version]
+       ┋     ├─▣ jq             ✜─ •> [jq-version]       │ ├─▣ yq         ✜─ •> [yq-version]
+       ┋     ├─▣ inkscape       ✜─ •> [inkscape-version] │ ├─▣ magick     ✜─ •> [magick-version]
+       ┋     └─▣ photino        ✜─ •> [photino-version]
       ┋
       ┋     / PSMODULES \
       ┋─────├─▣ PSScriptAnalyzer ✜─ •> [psscriptanalyzer-version]      │ ├─▣ Pester        ✜─ •> [pester-version]

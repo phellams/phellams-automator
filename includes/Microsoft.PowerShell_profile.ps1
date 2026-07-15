@@ -1,6 +1,15 @@
 # Define Modules
 # By default in linux modules are installed in /usr/.local/share/powershell/Modules
-import-module -Name Pester -RequiredVersion 5.8
+
+# Set Powershell Gallary and phellams gallary as trusted
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+
+# Install Pester
+Get-Command 'Invoke-Pester' ? (install-module Pester -RequiredVersion 5.8.0 -Confirm:$false)
+Get-Command 'Invoke-ScriptAnalyzer' ? (install-module PSScriptAnalyzer -Confirm:$false)
+Get-Command 'ConvertFrom-Yaml' ? (install-module powershell-yaml -Confirm:$false)
+
+import-module -Name Pester -RequiredVersion 5.8.0
 import-module -Name PSScriptAnalyzer
 import-module -Name powershell-yaml
 import-module -Name colorconsole
@@ -68,7 +77,17 @@ $resolvedVersions["kernel"] = try {
     }
     $k
 } catch { "Unknown" }
-$resolvedVersions["automator"] = try { Get-NormalizedVersion (Get-CoventionalCommitVersion 2>$null).Version } catch { "Unknown" }
+
+# Read version from VERSION file, with fallback to Get-ConventionalCommitVersion
+$versionPath = Join-Path $home ".config/powershell/VERSION"
+if (-not (Test-Path $versionPath -ErrorAction SilentlyContinue)) {
+    $versionPath = Join-Path $PSScriptRoot "VERSION"
+}
+$resolvedVersions["automator"] = if (Test-Path $versionPath) {
+    try { Get-NormalizedVersion ((Get-Content -Path $versionPath -Raw 2>$null).Trim()) } catch { "Unknown" }
+} else {
+    try { Get-NormalizedVersion (Get-ConventionalCommitVersion 2>$null).Version } catch { "Unknown" }
+}
 
 # List of Version Specs to resolve
 $versionSpecs = @(
@@ -88,11 +107,20 @@ $versionSpecs = @(
     @{ Key = "npm";                Type = "Binary"; Command = { npm --version 2>$null } }
     @{ Key = "bun";                Type = "Binary"; Command = { bun --version 2>$null } }
     @{ Key = "php";                Type = "Binary"; Command = { php -v 2>$null | select -First 1 | ForEach-Object { $_.split(" ")[1] } } }
+    @{ Key = "composer";           Type = "Binary"; Command = { composer --version 2>$null } }
     @{ Key = "jq";                 Type = "Binary"; Command = { jq --version 2>$null } }
     @{ Key = "yq";                 Type = "Binary"; Command = { yq --version 2>$null | ForEach-Object { $_.Split(' ')[-1] } } }
     @{ Key = "inkscape";           Type = "Binary"; Command = { inkscape --version 2>$null | ForEach-Object { $_.split(" ")[1] } } }
-    @{ Key = "magick";             Type = "Binary"; Command = { magick --version 2>$null | select-string -pattern "Version:" | ForEach-Object { $_.split(" ")[2] } } }
-    @{ Key = "photino";            Type = "Binary"; Command = { Get-ChildItem -Path (Join-Path $home ".nuget/packages/photino.net") 2>$null | Select-Object -First 1 | ForEach-Object { $_.Name } } }
+    @{ Key = "magick";             Type = "Binary"; Command = {
+        $cmd = if (Get-Command convert -ErrorAction SilentlyContinue) { "convert" } else { "magick" }
+        & $cmd --version 2>$null | select-string -pattern "Version:" | ForEach-Object { $_.Line.split(" ")[2] }
+    } }
+    @{ Key = "photino";            Type = "Binary"; Command = {
+        $pkgDir = Get-ChildItem -Path (Join-Path $home ".nuget/packages") 2>$null | Where-Object { $_.Name -ieq "photino.net" }
+        if ($pkgDir) {
+            Get-ChildItem -Path $pkgDir.FullName 2>$null | Select-Object -First 1 | ForEach-Object { $_.Name }
+        }
+    } }
     
     # Modules
     @{ Key = "colorconsole";       Type = "Module"; Name = "colorconsole" }
@@ -128,8 +156,7 @@ foreach ($spec in $versionSpecs) {
     }
     $resolvedVersions[$spec.Key] = $val
 }
-$resolvedVersions["magick"] = ""
-$resolvedVersions["photino"] = ""
+# Removed magick override to allow actual version to display
 
 # Load Template
 $templatePath = Join-Path $home ".config/powershell/acsiilogo-template.txt"
@@ -138,8 +165,9 @@ if (-not (Test-Path $templatePath -ErrorAction SilentlyContinue)) {
     $templatePath = Join-Path $PSScriptRoot "acsiilogo-template.txt"
 }
 
-# Read mascot template (only the first 14 lines)
-$mascotLines = try { [System.IO.File]::ReadAllLines($templatePath) | Select-Object -First 14 } catch { @() }
+# Read template lines
+$templateLines = try { [System.IO.File]::ReadAllLines($templatePath) } catch { @() }
+$mascotLines = $templateLines | Select-Object -First 14
 if ($mascotLines.Count -lt 14) {
     # Fallback to keep it running if file is missing/incomplete
     $mascotLines = @(" ") * 14
@@ -237,8 +265,8 @@ for ($i = 9; $i -lt 14; $i++) {
     $plainLines.Add("$mascotPart$boxPart")
 }
 
-# Line 14: Spacer
-$plainLines.Add(" ".PadRight(80))
+# Line 14: Spacer with vertical line connection
+$plainLines.Add("      ┋")
 
 # Build Box 2: Binaries Box (3 columns, 7 rows of content)
 $binariesList = @(
@@ -257,6 +285,7 @@ $binariesList = @(
     @("Node", $resolvedVersions["node"]),
     @("NPM", $resolvedVersions["npm"]),
     @("php", $resolvedVersions["php"]),
+    @("composer", $resolvedVersions["composer"]),
     @("jq", $resolvedVersions["jq"]),
     @("yq", $resolvedVersions["yq"]),
     @("inkscape", $resolvedVersions["inkscape"]),
@@ -276,7 +305,7 @@ $bin_total_w = $bin_w1_name + $bin_w1_ver + $bin_w2_name + $bin_w2_ver + $bin_w3
 $binTopDashes = New-Object System.String ('─', ($bin_total_w - 13))
 $binBottomDashes = New-Object System.String ('─', ($bin_total_w - 2))
 
-$plainLines.Add("╭─ Binaries $binTopDashes╮")
+$plainLines.Add("      ┋─────╭─ Binaries $binTopDashes╮")
 for ($r = 0; $r -lt 7; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
@@ -286,12 +315,12 @@ for ($r = 0; $r -lt 7; $r++) {
     $c2 = if ($idx2 -lt $binariesList.Count) { $binariesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $binariesList.Count) { $binariesList[$idx3] } else { $null }
     
-    $plainLines.Add((Get-FormattedRow $c1 $c2 $c3 $bin_w1_name $bin_w1_ver $bin_w2_name $bin_w2_ver $bin_w3_name $bin_w3_ver))
+    $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $bin_w1_name $bin_w1_ver $bin_w2_name $bin_w2_ver $bin_w3_name $bin_w3_ver))
 }
-$plainLines.Add("╰$binBottomDashes╯")
+$plainLines.Add("      ┋     ╰$binBottomDashes╯")
 
 # Line 24: Spacer
-$plainLines.Add(" ".PadRight(80))
+$plainLines.Add("      ┋")
 
 # Build Box 3: Modules Box (3 columns, 5 rows of content)
 $modulesList = @(
@@ -322,7 +351,7 @@ $mod_total_w = $mod_w1_name + $mod_w1_ver + $mod_w2_name + $mod_w2_ver + $mod_w3
 $modTopDashes = New-Object System.String ('─', ($mod_total_w - 12))
 $modBottomDashes = New-Object System.String ('─', ($mod_total_w - 2))
 
-$plainLines.Add("╭─ Modules $modTopDashes╮")
+$plainLines.Add("      ┋─────╭─ Modules $modTopDashes╮")
 for ($r = 0; $r -lt 5; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
@@ -332,9 +361,21 @@ for ($r = 0; $r -lt 5; $r++) {
     $c2 = if ($idx2 -lt $modulesList.Count) { $modulesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $modulesList.Count) { $modulesList[$idx3] } else { $null }
     
-    $plainLines.Add((Get-FormattedRow $c1 $c2 $c3 $mod_w1_name $mod_w1_ver $mod_w2_name $mod_w2_ver $mod_w3_name $mod_w3_ver))
+    $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $mod_w1_name $mod_w1_ver $mod_w2_name $mod_w2_ver $mod_w3_name $mod_w3_ver))
 }
-$plainLines.Add("╰$modBottomDashes╯")
+$plainLines.Add("      ┋     ╰$modBottomDashes╯")
+
+# Spacer and Footer lines
+$plainLines.Add("      ┋")
+if ($templateLines.Count -ge 45) {
+    for ($i = 42; $i -lt 45; $i++) {
+        $plainLines.Add($templateLines[$i])
+    }
+} else {
+    $plainLines.Add("  ┌───┴───┐")
+    $plainLines.Add("  ▙ Shell ▟")
+    $plainLines.Add(" ─── ─ ••• ─ ─ ─────────────────────")
+}
 
 # Run Tokenizer on the plain text lines to get the vertical border gradient
 $tokens = ConvertTo-AsciiTokens -Lines $plainLines.ToArray() -Connectivity 8
@@ -360,6 +401,11 @@ function Get-NameColorChar([int]$idx, [int]$length) {
 for ($y = 0; $y -lt $tokens.Height; $y++) {
     $sb = [System.Text.StringBuilder]::new()
     $line = $tokens.Lines[$y]
+    
+    $hasColoredVInfo = $false
+    $hasColoredV1 = $false
+    $hasColoredV2 = $false
+    $hasColoredV3 = $false
     
     for ($x = 0; $x -lt $tokens.Width; $x++) {
         $c = $line[$x]
@@ -389,7 +435,8 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                     if ($c -eq ' ') {
                         [void]$sb.Append($c)
                         continue
-                    } elseif ($c -eq 'v') {
+                    } elseif ($c -eq 'v' -and -not $hasColoredVInfo) {
+                        $hasColoredVInfo = $true
                         [void]$sb.Append("$esc[95mv$esc[0m")
                         continue
                     } else {
@@ -400,7 +447,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
             }
         }
         # 2. Content rows of Binaries and Modules (Lines 15 onwards)
-        elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -notmatch '^[╭╰]') {
+        elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -like "*│*") {
             $isBinRow = ($y -ge 16 -and $y -le 22)
             
             $w1_n = if ($isBinRow) { $bin_w1_name } else { $mod_w1_name }
@@ -414,22 +461,25 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
             $del2 = $del1 + $w2_n + $w2_v + 3
             $del3 = $del2 + $w3_n + $w3_v + 3
             
+            $xo = $x - 12
+            
             # Delimiters
-            if ($x -eq 0 -or $x -eq $del1 -or $x -eq $del2 -or $x -eq $del3) {
+            if ($xo -eq 0 -or $xo -eq $del1 -or $xo -eq $del2 -or $xo -eq $del3) {
                 # Keep border gradient
             }
             # Column 1 Name
-            elseif ($x -ge 2 -and $x -le (2 + $w1_n - 1)) {
+            elseif ($xo -ge 2 -and $xo -le (2 + $w1_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - 2) -length $w1_n
+                $overrideColor = Get-NameColorChar -idx ($xo - 2) -length $w1_n
             }
             # Column 1 Version
-            elseif ($x -ge (2 + $w1_n) -and $x -le (2 + $w1_n + $w1_v - 1)) {
+            elseif ($xo -ge (2 + $w1_n) -and $xo -le (2 + $w1_n + $w1_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
                     continue
-                } elseif ($c -eq 'v') {
+                } elseif ($c -eq 'v' -and -not $hasColoredV1) {
+                    $hasColoredV1 = $true
                     [void]$sb.Append("$esc[95mv$esc[0m")
                     continue
                 } else {
@@ -438,17 +488,18 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 2 Name
-            elseif ($x -ge ($del1 + 2) -and $x -le ($del1 + 2 + $w2_n - 1)) {
+            elseif ($xo -ge ($del1 + 2) -and $xo -le ($del1 + 2 + $w2_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - ($del1 + 2)) -length $w2_n
+                $overrideColor = Get-NameColorChar -idx ($xo - ($del1 + 2)) -length $w2_n
             }
             # Column 2 Version
-            elseif ($x -ge ($del1 + 2 + $w2_n) -and $x -le ($del1 + 2 + $w2_n + $w2_v - 1)) {
+            elseif ($xo -ge ($del1 + 2 + $w2_n) -and $xo -le ($del1 + 2 + $w2_n + $w2_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
                     continue
-                } elseif ($c -eq 'v') {
+                } elseif ($c -eq 'v' -and -not $hasColoredV2) {
+                    $hasColoredV2 = $true
                     [void]$sb.Append("$esc[95mv$esc[0m")
                     continue
                 } else {
@@ -457,17 +508,18 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 3 Name
-            elseif ($x -ge ($del2 + 2) -and $x -le ($del2 + 2 + $w3_n - 1)) {
+            elseif ($xo -ge ($del2 + 2) -and $xo -le ($del2 + 2 + $w3_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - ($del2 + 2)) -length $w3_n
+                $overrideColor = Get-NameColorChar -idx ($xo - ($del2 + 2)) -length $w3_n
             }
             # Column 3 Version
-            elseif ($x -ge ($del2 + 2 + $w3_n) -and $x -le ($del2 + 2 + $w3_n + $w3_v - 1)) {
+            elseif ($xo -ge ($del2 + 2 + $w3_n) -and $xo -le ($del2 + 2 + $w3_n + $w3_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
                     continue
-                } elseif ($c -eq 'v') {
+                } elseif ($c -eq 'v' -and -not $hasColoredV3) {
+                    $hasColoredV3 = $true
                     [void]$sb.Append("$esc[95mv$esc[0m")
                     continue
                 } else {

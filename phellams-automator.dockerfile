@@ -168,6 +168,13 @@ RUN pwsh -NoProfile -Command ' \
 COPY ./includes/modules/ /root/.local/share/powershell/Modules/
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
+COPY ./VERSION /root/.config/powershell/VERSION
+
+# 8. Pre-cache NuGet packages (e.g. Photino.NET)
+RUN mkdir /tmp/dummy && cd /tmp/dummy && \
+    echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include="Photino.NET" Version="*" /></ItemGroup></Project>' > dummy.csproj && \
+    dotnet restore && \
+    cd / && rm -rf /tmp/dummy
 
 # Final sanity check and cache cleanup
 # ..................................
