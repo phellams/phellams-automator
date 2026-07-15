@@ -1,6 +1,6 @@
 # Define Modules
 # By default in linux modules are installed in /usr/.local/share/powershell/Modules
-import-module -Name Pester -RequiredVersion 5.7.1
+import-module -Name Pester -RequiredVersion 5.8
 import-module -Name PSScriptAnalyzer
 import-module -Name powershell-yaml
 import-module -Name colorconsole
@@ -61,7 +61,13 @@ $resolvedVersions = [ordered]@{}
 
 # Special / OS Infos
 $resolvedVersions["base-distro-release"] = try { (lsb_release --all 2>$null | select-string -pattern "Description" | Out-String).Trim() -replace "Description:\s*", "" } catch { "Unknown" }
-$resolvedVersions["kernel"] = try { (uname -rov 2>$null | Out-String).Trim() } catch { "Unknown" }
+$resolvedVersions["kernel"] = try {
+    $k = (uname -rov 2>$null | Out-String).Trim()
+    if ($k -like "* *") {
+        $k = $k.Split(" ")[0]
+    }
+    $k
+} catch { "Unknown" }
 $resolvedVersions["automator"] = try { Get-NormalizedVersion (Get-CoventionalCommitVersion 2>$null).Version } catch { "Unknown" }
 
 # List of Version Specs to resolve
@@ -122,6 +128,8 @@ foreach ($spec in $versionSpecs) {
     }
     $resolvedVersions[$spec.Key] = $val
 }
+$resolvedVersions["magick"] = ""
+$resolvedVersions["photino"] = ""
 
 # Load Template
 $templatePath = Join-Path $home ".config/powershell/acsiilogo-template.txt"
@@ -145,12 +153,82 @@ for ($i = 0; $i -lt 9; $i++) {
 }
 
 # Build lines 9 to 13: Mascot + Spacer + Info Box (Box 1)
+function Get-BoxWidths($list, $minW1_name = 14, $minW1_ver = 10, $minW2_name = 13, $minW2_ver = 10, $minW3_name = 13, $minW3_ver = 10) {
+    $w1_name = $minW1_name
+    $w1_ver  = $minW1_ver
+    $w2_name = $minW2_name
+    $w2_ver  = $minW2_ver
+    $w3_name = $minW3_name
+    $w3_ver  = $minW3_ver
+    
+    for ($i = 0; $i -lt $list.Count; $i++) {
+        $item = $list[$i]
+        if (-not $item) { continue }
+        $name = $item[0]
+        $ver  = $item[1]
+        
+        $col = $i % 3
+        if ($col -eq 0) {
+            if ($name.Length -gt $w1_name) { $w1_name = $name.Length }
+            if ($ver.Length -gt $w1_ver) { $w1_ver = $ver.Length }
+        } elseif ($col -eq 1) {
+            if ($name.Length -gt $w2_name) { $w2_name = $name.Length }
+            if ($ver.Length -gt $w2_ver) { $w2_ver = $ver.Length }
+        } else {
+            if ($name.Length -gt $w3_name) { $w3_name = $name.Length }
+            if ($ver.Length -gt $w3_ver) { $w3_ver = $ver.Length }
+        }
+    }
+    
+    return [ordered]@{
+        w1_name = $w1_name
+        w1_ver  = $w1_ver
+        w2_name = $w2_name
+        w2_ver  = $w2_ver
+        w3_name = $w3_name
+        w3_ver  = $w3_ver
+    }
+}
+
+function Get-FormattedRow([string[]]$c1, [string[]]$c2, [string[]]$c3, $w1_name, $w1_ver, $w2_name, $w2_ver, $w3_name, $w3_ver) {
+    $c1Name = if ($c1) { $c1[0] } else { "" }
+    $c1Ver  = if ($c1) { $c1[1] } else { "" }
+    $c2Name = if ($c2) { $c2[0] } else { "" }
+    $c2Ver  = if ($c2) { $c2[1] } else { "" }
+    $c3Name = if ($c3) { $c3[0] } else { "" }
+    $c3Ver  = if ($c3) { $c3[1] } else { "" }
+    
+    $c1NamePadded = $c1Name.PadRight($w1_name)
+    $c1VerPadded  = $c1Ver.PadLeft($w1_ver)
+    $c2NamePadded = $c2Name.PadRight($w2_name)
+    $c2VerPadded  = $c2Ver.PadLeft($w2_ver)
+    $c3NamePadded = $c3Name.PadRight($w3_name)
+    $c3VerPadded  = $c3Ver.PadLeft($w3_ver)
+    
+    return "│ $c1NamePadded$c1VerPadded │ $c2NamePadded$c2VerPadded │ $c3NamePadded$c3VerPadded │"
+}
+
+$infoW = 26
+$infoValues = @(
+    $resolvedVersions["automator"],
+    $resolvedVersions["base-distro-release"],
+    $resolvedVersions["kernel"]
+)
+foreach ($val in $infoValues) {
+    if ($val -and $val.Length -gt $infoW) {
+        $infoW = $val.Length
+    }
+}
+
+$infoTopDashes = New-Object System.String ('─', ($infoW + 7))
+$infoBottomDashes = New-Object System.String ('─', ($infoW + 14))
+
 $infoBox = @(
-    "╭─ Info ─────────────────────────────────╮"
-    "│ Automator : $($resolvedVersions["automator"].PadRight(26)) │"
-    "│ Distro    : $($resolvedVersions["base-distro-release"].PadRight(26)) │"
-    "│ Kernel    : $($resolvedVersions["kernel"].PadRight(26)) │"
-    "╰────────────────────────────────────────╯"
+    "╭─ Info $infoTopDashes╮"
+    "│ Automator : $($resolvedVersions["automator"].PadRight($infoW)) │"
+    "│ Distro    : $($resolvedVersions["base-distro-release"].PadRight($infoW)) │"
+    "│ Kernel    : $($resolvedVersions["kernel"].PadRight($infoW)) │"
+    "╰$infoBottomDashes╯"
 )
 
 for ($i = 9; $i -lt 14; $i++) {
@@ -186,25 +264,19 @@ $binariesList = @(
     @("photino", $resolvedVersions["photino"])
 )
 
-function Get-PlainRow([string[]]$c1, [string[]]$c2, [string[]]$c3) {
-    $c1Name = if ($c1) { $c1[0] } else { "" }
-    $c1Ver  = if ($c1) { $c1[1] } else { "" }
-    $c2Name = if ($c2) { $c2[0] } else { "" }
-    $c2Ver  = if ($c2) { $c2[1] } else { "" }
-    $c3Name = if ($c3) { $c3[0] } else { "" }
-    $c3Ver  = if ($c3) { $c3[1] } else { "" }
-    
-    $c1NamePadded = $c1Name.PadRight(14)
-    $c1VerPadded  = $c1Ver.PadLeft(10)
-    $c2NamePadded = $c2Name.PadRight(13)
-    $c2VerPadded  = $c2Ver.PadLeft(10)
-    $c3NamePadded = $c3Name.PadRight(13)
-    $c3VerPadded  = $c3Ver.PadLeft(10)
-    
-    return "│ $c1NamePadded$c1VerPadded │ $c2NamePadded$c2VerPadded │ $c3NamePadded$c3VerPadded │"
-}
+$binWidths = Get-BoxWidths $binariesList
+$bin_w1_name = $binWidths.w1_name
+$bin_w1_ver  = $binWidths.w1_ver
+$bin_w2_name = $binWidths.w2_name
+$bin_w2_ver  = $binWidths.w2_ver
+$bin_w3_name = $binWidths.w3_name
+$bin_w3_ver  = $binWidths.w3_ver
 
-$plainLines.Add("╭─ Binaries ─────────────────────────────────────────────────────────────────────────╮")
+$bin_total_w = $bin_w1_name + $bin_w1_ver + $bin_w2_name + $bin_w2_ver + $bin_w3_name + $bin_w3_ver + 10
+$binTopDashes = New-Object System.String ('─', ($bin_total_w - 13))
+$binBottomDashes = New-Object System.String ('─', ($bin_total_w - 2))
+
+$plainLines.Add("╭─ Binaries $binTopDashes╮")
 for ($r = 0; $r -lt 7; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
@@ -214,9 +286,9 @@ for ($r = 0; $r -lt 7; $r++) {
     $c2 = if ($idx2 -lt $binariesList.Count) { $binariesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $binariesList.Count) { $binariesList[$idx3] } else { $null }
     
-    $plainLines.Add((Get-PlainRow $c1 $c2 $c3))
+    $plainLines.Add((Get-FormattedRow $c1 $c2 $c3 $bin_w1_name $bin_w1_ver $bin_w2_name $bin_w2_ver $bin_w3_name $bin_w3_ver))
 }
-$plainLines.Add("╰────────────────────────────────────────────────────────────────────────────────────╯")
+$plainLines.Add("╰$binBottomDashes╯")
 
 # Line 24: Spacer
 $plainLines.Add(" ".PadRight(80))
@@ -238,7 +310,19 @@ $modulesList = @(
     @("GitAutoVersion", $resolvedVersions["gitautoversion"])
 )
 
-$plainLines.Add("╭─ Modules ──────────────────────────────────────────────────────────────────────────╮")
+$modWidths = Get-BoxWidths $modulesList
+$mod_w1_name = $modWidths.w1_name
+$mod_w1_ver  = $modWidths.w1_ver
+$mod_w2_name = $modWidths.w2_name
+$mod_w2_ver  = $modWidths.w2_ver
+$mod_w3_name = $modWidths.w3_name
+$mod_w3_ver  = $modWidths.w3_ver
+
+$mod_total_w = $mod_w1_name + $mod_w1_ver + $mod_w2_name + $mod_w2_ver + $mod_w3_name + $mod_w3_ver + 10
+$modTopDashes = New-Object System.String ('─', ($mod_total_w - 12))
+$modBottomDashes = New-Object System.String ('─', ($mod_total_w - 2))
+
+$plainLines.Add("╭─ Modules $modTopDashes╮")
 for ($r = 0; $r -lt 5; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
@@ -248,9 +332,9 @@ for ($r = 0; $r -lt 5; $r++) {
     $c2 = if ($idx2 -lt $modulesList.Count) { $modulesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $modulesList.Count) { $modulesList[$idx3] } else { $null }
     
-    $plainLines.Add((Get-PlainRow $c1 $c2 $c3))
+    $plainLines.Add((Get-FormattedRow $c1 $c2 $c3 $mod_w1_name $mod_w1_ver $mod_w2_name $mod_w2_ver $mod_w3_name $mod_w3_ver))
 }
-$plainLines.Add("╰────────────────────────────────────────────────────────────────────────────────────╯")
+$plainLines.Add("╰$modBottomDashes╯")
 
 # Run Tokenizer on the plain text lines to get the vertical border gradient
 $tokens = ConvertTo-AsciiTokens -Lines $plainLines.ToArray() -Connectivity 8
@@ -291,7 +375,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 # Keep border gradient
             } else {
                 # Border vertical lines
-                if ($x -eq 36 -or $x -eq 77) {
+                if ($x -eq 36 -or $x -eq (36 + $infoW + 15)) {
                     # Keep border gradient
                 }
                 # Name area (index 38 to 49)
@@ -299,8 +383,8 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                     $isOverridden = $true
                     $overrideColor = Get-NameColorChar -idx ($x - 38) -length 12
                 }
-                # Version area (index 50 to 75)
-                elseif ($x -ge 50 -and $x -le 75) {
+                # Version area (index 50 to 50 + $infoW - 1)
+                elseif ($x -ge 50 -and $x -le (50 + $infoW - 1)) {
                     $isOverridden = $true
                     if ($c -eq ' ') {
                         [void]$sb.Append($c)
@@ -317,17 +401,30 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
         }
         # 2. Content rows of Binaries and Modules (Lines 15 onwards)
         elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -notmatch '^[╭╰]') {
+            $isBinRow = ($y -ge 16 -and $y -le 22)
+            
+            $w1_n = if ($isBinRow) { $bin_w1_name } else { $mod_w1_name }
+            $w1_v = if ($isBinRow) { $bin_w1_ver } else { $mod_w1_ver }
+            $w2_n = if ($isBinRow) { $bin_w2_name } else { $mod_w2_name }
+            $w2_v = if ($isBinRow) { $bin_w2_ver } else { $mod_w2_ver }
+            $w3_n = if ($isBinRow) { $bin_w3_name } else { $mod_w3_name }
+            $w3_v = if ($isBinRow) { $bin_w3_ver } else { $mod_w3_ver }
+            
+            $del1 = 2 + $w1_n + $w1_v + 1
+            $del2 = $del1 + $w2_n + $w2_v + 3
+            $del3 = $del2 + $w3_n + $w3_v + 3
+            
             # Delimiters
-            if ($x -eq 0 -or $x -eq 27 -or $x -eq 53 -or $x -eq 79) {
+            if ($x -eq 0 -or $x -eq $del1 -or $x -eq $del2 -or $x -eq $del3) {
                 # Keep border gradient
             }
             # Column 1 Name
-            elseif ($x -ge 2 -and $x -le 15) {
+            elseif ($x -ge 2 -and $x -le (2 + $w1_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - 2) -length 14
+                $overrideColor = Get-NameColorChar -idx ($x - 2) -length $w1_n
             }
             # Column 1 Version
-            elseif ($x -ge 16 -and $x -le 25) {
+            elseif ($x -ge (2 + $w1_n) -and $x -le (2 + $w1_n + $w1_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
@@ -341,12 +438,12 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 2 Name
-            elseif ($x -ge 29 -and $x -le 41) {
+            elseif ($x -ge ($del1 + 2) -and $x -le ($del1 + 2 + $w2_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - 29) -length 13
+                $overrideColor = Get-NameColorChar -idx ($x - ($del1 + 2)) -length $w2_n
             }
             # Column 2 Version
-            elseif ($x -ge 42 -and $x -le 51) {
+            elseif ($x -ge ($del1 + 2 + $w2_n) -and $x -le ($del1 + 2 + $w2_n + $w2_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
@@ -360,12 +457,12 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 3 Name
-            elseif ($x -ge 55 -and $x -le 67) {
+            elseif ($x -ge ($del2 + 2) -and $x -le ($del2 + 2 + $w3_n - 1)) {
                 $isOverridden = $true
-                $overrideColor = Get-NameColorChar -idx ($x - 55) -length 13
+                $overrideColor = Get-NameColorChar -idx ($x - ($del2 + 2)) -length $w3_n
             }
             # Column 3 Version
-            elseif ($x -ge 68 -and $x -le 77) {
+            elseif ($x -ge ($del2 + 2 + $w3_n) -and $x -le ($del2 + 2 + $w3_n + $w3_v - 1)) {
                 $isOverridden = $true
                 if ($c -eq ' ') {
                     [void]$sb.Append($c)
