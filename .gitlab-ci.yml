@@ -162,6 +162,7 @@ generate-runtime-badge:
     - docker
   script:
     - |
+        chmod +x ./scripts/Calculate-Runtime.ps1
         $runtime = & ./scripts/Calculate-Runtime.ps1
 
         ./scripts/Generate-Badge.ps1 `
