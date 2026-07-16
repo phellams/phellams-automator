@@ -163,12 +163,10 @@ generate-runtime-badge:
   script:
     - |
       pwsh -Command "& {
-        & ./scripts/Calculate-Runtime.ps1; # outputs to runtime.env & ENV:RUNTIME_STR
-        & ./scripts/Generate-Badge.ps1 -Label 'runtime' -Message "$ENV:RUNTIME_STR" -Style 'flat' -IncludeIcon -LabelColor '#555' -MessageColor '#007acc' -OutputPath 'runtime-badge-flat.svg';
+        & ./scripts/Generate-Badge.ps1 -Label 'runtime' -Message "$( & ./scripts/Generate-Badge.ps1)" -Style 'flat' -IncludeIcon -LabelColor '#555' -MessageColor '#007acc' -OutputPath 'runtime-badge-flat.svg';
       }"
   artifacts:
     paths:
       - runtime-badge-flat.svg
       - runtime-badge-for-the-badge.svg
-      - runtime.env
     expire_in: never
