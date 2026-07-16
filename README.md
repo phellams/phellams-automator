@@ -1,6 +1,6 @@
 <div align="center">
 
-![phellams-mascot][phellams-mascot]
+<img width="128" src="https://gitlab.com/phellams/phellams-general-resources/-/raw/main/logos/phellams/phellams-mascot.svg">
 
 # **Phellams-Automator**
 
@@ -143,4 +143,3 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 [build-url]: https://gitlab.com/phellams/phellams-automator/-/pipelines
 [license-badge]: https://img.shields.io/badge/License-MIT-Blue?style=flat&labelColor=%232D2D34&color=%2317202a
 [runtime-badge]: https://gitlab.com/api/v4/projects/phellams%2Fphellams-automator/jobs/artifacts/main/raw/runtime-badge-flat.svg?job=generate-runtime-badge
-[phellams-mascot]: https://gitlab.com/phellams/phellams-general-resources/-/raw/main/logos/phellams/phellams-mascot.svg?ref_type=heads
