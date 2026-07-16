@@ -180,7 +180,7 @@
      fill="#8a877e"
      id="text12"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696">REC</text><text
+     style="stroke-width:0.92696">SNAP</text><text
      x="101.96563"
      y="697.0741"
      font-family="'IBM Plex Mono', 'Courier New', monospace"
@@ -189,7 +189,7 @@
      fill="#5a574f"
      id="text13"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696">00:00:00</text><text
+     style="stroke-width:0.92696">--:--:--/text><text
      x="556.17615"
      y="697.0741"
      text-anchor="middle"
@@ -199,7 +199,7 @@
      fill="#5a574f"
      id="text14"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696">1184x675</text><text
+     style="stroke-width:0.92696">Screenshot</text><text
      x="1084.5436"
      y="697.0741"
      text-anchor="end"
@@ -209,7 +209,7 @@
      fill="#5a574f"
      id="text15"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696">24fps</text><image
+     style="stroke-width:0.92696"></text><image
      width="1013.0352"
      height="673.99524"
      preserveAspectRatio="none"
