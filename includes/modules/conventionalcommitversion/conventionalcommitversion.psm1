@@ -93,7 +93,7 @@ function Get-ConventionalCommitVersion {
             $logArgs = @('log', '--no-color', '-z', '--pretty=format:%s%n%b')
             if ($range) { $logArgs += $range }
 
-            $raw = & git @logArgs
+            $raw = & git @logArgs | Out-String
             if ($LASTEXITCODE -ne 0) {
                 throw "git log failed (exit code $LASTEXITCODE)"
             }
