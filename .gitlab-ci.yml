@@ -161,15 +161,29 @@ generate-runtime-badge:
   tags:
     - docker
   script:
-    - >
-      pwsh -File ./scripts/Generate-Badge.ps1
-      -Label "runtime"
-      -Message "$(pwsh -File ./scripts/Generate-Badge.ps1)"
-      -Style "flat"
-      -IncludeIcon
-      -LabelColor "#555"
-      -MessageColor "#007acc"
-      -OutputPath "runtime-badge-flat.svg"
+    - chmod +x ./scripts/Calculate-Runtime.ps1 ./scripts/Generate-Badge.ps1
+    - |
+      pwsh -NoProfile -Command '
+        $runtime = & ./scripts/Calculate-Runtime.ps1
+
+        ./scripts/Generate-Badge.ps1 `
+          -Label "runtime" `
+          -Message $runtime `
+          -Style "flat" `
+          -IncludeIcon `
+          -LabelColor "#555" `
+          -MessageColor "#007acc" `
+          -OutputPath "runtime-badge-flat.svg"
+
+        ./scripts/Generate-Badge.ps1 `
+          -Label "runtime" `
+          -Message $runtime `
+          -Style "for-the-badge" `
+          -IncludeIcon `
+          -LabelColor "#555" `
+          -MessageColor "#007acc" `
+          -OutputPath "runtime-badge-for-the-badge.svg"
+      '
   artifacts:
     paths:
       - runtime-badge-flat.svg

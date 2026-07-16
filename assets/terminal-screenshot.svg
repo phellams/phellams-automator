@@ -171,7 +171,7 @@
      id="circle11"
      rx="3.437021"
      ry="4"
-     style="stroke-width:0.92696" /><text
+     style="stroke-width:0.92696" />-<text
      x="38.932331"
      y="697.0741"
      font-family="'IBM Plex Mono', 'Courier New', monospace"
@@ -189,7 +189,7 @@
      fill="#5a574f"
      id="text13"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696">--:--:--/text><text
+     style="stroke-width:0.92696">----</text><text
      x="556.17615"
      y="697.0741"
      text-anchor="middle"
@@ -209,7 +209,7 @@
      fill="#5a574f"
      id="text15"
      transform="scale(0.92696025,1.0787949)"
-     style="stroke-width:0.92696"></text><image
+     style="stroke-width:0.92696">-</text><image
      width="1013.0352"
      height="673.99524"
      preserveAspectRatio="none"
