@@ -163,7 +163,7 @@ generate-runtime-badge:
   script:
     - |
         chmod +x ./scripts/Calculate-Runtime.ps1
-        $runtime = & ./scripts/Calculate-Runtime.ps1
+        $runtime = & pwsh -noprofile -file ./scripts/Calculate-Runtime.ps1
 
         ./scripts/Generate-Badge.ps1 `
           -Label "runtime" `
