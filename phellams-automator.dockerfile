@@ -41,7 +41,7 @@ RUN mkdir -p /root/.dotnet && \
 
 # 3. PowerShell 7.5.3
 # ....................
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.3/powershell_7.6.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.4/powershell_7.6.4-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 

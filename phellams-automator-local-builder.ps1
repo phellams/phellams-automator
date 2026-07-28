@@ -8,12 +8,12 @@ param (
 # ------------------------
 import-module -name .\includes\modules\gitautoversion\Get-GitAutoVersion.psm1
 
-
 $semver = (Get-GitAutoVersion).Version
 
+
 # replace version in ascii art
-(Get-Content -Path .\includes\acsiilogo-template.txt) | 
-    ForEach-Object { $_ -replace "\[version\]", $semver } | 
+(Get-Content -Path .\includes\acsiilogo-template.txt) |
+    ForEach-Object { $_ -replace "\[version\]", $semver } |
         Set-Content -Path .\includes\acsiilogo-template.txt
 
 
@@ -50,11 +50,11 @@ Switch ($buildMode) {
         # $ENV:DOCKERHUB_API_KEY | docker login -u $ENV:DOCKERHUB_USER --password-stdin
         # docker tag phellams-psm-builder $ENV:DOCKERHUB_USER/phellams-psm-builder:latest
         # docker push $ENV:DOCKERHUB_USER/phellams-psm-builder:latest
-        # docker logout  
+        # docker logout
         # $ENV:DOCKERHUB_API_KEY | docker login -u sgkens --password-stdin
         # docker tag phellams-psm-builder sgkens/phellams-psm-builder:latest
         # docker push sgkens/phellams-psm-builder:latest
-        # docker logout 
+        # docker logout
     }
     default {
         [console]::write("Please choose a valid build mode: choco or Base`n")
