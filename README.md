@@ -8,7 +8,7 @@
 
 ## **About The Project**
 
-**Phellams-Automator** is a multi-language build environment based on *Debian-12-slim*. While engineered specifically for integration with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) suite, it functions as a standalone runner image optimized for multi-platform CI/CD pipelines. 
+**Phellams-Automator** is a multi-language build environment based on _Debian 12 slim_. It integrates with the [Automator-Devops](https://gitlab.com/phellams/Automator-Devops) suite and can also be used as a standalone CI/CD runner image.
 
 <img with="1018" src="./assets/terminal-screenshot.svg">
 
@@ -20,42 +20,39 @@
 
 ### **Automation Toolchain**
 
-* **PowerShell Pipeline:** Automated module packaging into directory structures, `.zip` archives, or `.nupkg` artifacts via **Psmpacker**.
-* **Version Management:** Automated Semantic Versioning orchestration via **GitAutoVersion**.
-* **Documentation Engine:** Native man-page and help-file generation via **Phwriter**.
-* **Integrity Verification:** Automated checksum generation and verification via **CSVerify**.
+- **PowerShell Pipeline:** Automated module packaging into directory structures, `.zip` archives, or `.nupkg` artifacts via **Psmpacker**.
+- **Version Management:** Automated Semantic Versioning orchestration via **GitAutoVersion**.
+- **Documentation Engine:** Native man-page and help-file generation via **Phwriter**.
+- **Integrity Verification:** Automated checksum generation and verification via **CSVerify**.
 
 ### **Multi-Language Build Systems**
 
-* **.NET:** Native execution support for `dotnet build` and `dotnet pack` targetting SDK v8 and v10 (including AOT compilation targets).
-* **Package Management:** Native `nuget pack` capabilities coupled with custom **Nupsforge** cmdlets for multi-repository distribution (GitLab, Chocolatey, ProGet).
-* **JavaScript / TypeScript:** Native execution handled via **Bun** for high-velocity runtime performance (replacing standard Node.js).
-* **Systems Languages:** Built-in toolchains for **Rust**, **Go**, and **Elixir**.
-* **Ruby / Jekyll:** Optimized runner configuration featuring integrated **Bundler** with CI hardening policies:
-* Overridden `BUNDLE_SILENCE_ROOT_WARNING: "1"`
-* Enforced deterministic dependency pathing via `BUNDLE_PATH: "vendor/bundle"`
-* Pre-baked system dependencies (`ruby-dev`, `build-essential`) to eliminate runtime compilation failures.
-
-
+- **.NET:** Native execution support for `dotnet build` and `dotnet pack` targetting SDK v8 and v10 (including AOT compilation targets).
+- **Package Management:** Native `nuget pack` capabilities coupled with custom **Nupsforge** cmdlets for multi-repository distribution (GitLab, Chocolatey, ProGet).
+- **JavaScript / TypeScript:** Native execution handled via **Bun** for high-velocity runtime performance (replacing standard Node.js).
+- **Systems Languages:** Built-in toolchains for **Rust**, **Go**, and **Elixir**.
+- **Ruby / Jekyll:** Optimized runner configuration featuring integrated **Bundler** with CI hardening policies:
+- Overridden `BUNDLE_SILENCE_ROOT_WARNING: "1"`
+- Enforced deterministic dependency pathing via `BUNDLE_PATH: "vendor/bundle"`
+- Pre-baked system dependencies (`ruby-dev`, `build-essential`) to eliminate runtime compilation failures.
 
 ### **CI/CD & DevOps Integration**
 
-* Native optimization for **GitLab CI** execution runners.
-* Pre-configured, zero-dependency coverage upload targets for **Codecov** and **Coveralls**.
+- Native optimization for **GitLab CI** execution runners.
+- Pre-configured, zero-dependency coverage upload targets for **Codecov** and **Coveralls**.
 
 ### **Feature Matrix & Roadmap**
 
-| Capability | Component / Runtime | Status |
-| --- | --- | --- |
-| **PowerShell Core** | Module packaging, testing, and distribution | ✔️ |
-| **.NET Toolchain** | Compilation, packing, and AOT support | ✔️ |
-| **JS/TS Runtime** | Bun execution engine | ✔️ |
-| **Node.js Compatibility** | Bun-backed Node.js emulation interface | ✔️ |
-| **Node.js Compatibility** | Node Js and NPM | ✔️ |
-| **Inkscape & ImageMagick** | Media conversion & high-fidelity export | ✔️ |
-| **DevOps Pipelines** | Codecov & Coveralls reporting agents | ✔️ |
-| **PHP8 Ecosystem** | Native runtime, PHPStan, PHPUnit, Composer | ✔️ |
-| **Python Toolchain** | Environment runtimes | ✔️ |
+| Capability                 | Component / Runtime                         | Status |
+| -------------------------- | ------------------------------------------- | ------ |
+| **PowerShell Core**        | Module packaging, testing, and distribution | Available |
+| **.NET Toolchain**         | Compilation, packing, and AOT support       | Available |
+| **Bun Runtime**            | JavaScript and TypeScript execution         | Available |
+| **Node.js Runtime**        | Node.js and npm                              | Available |
+| **Inkscape & ImageMagick** | Media conversion and export                 | Available |
+| **DevOps Pipelines**       | Codecov and Coveralls clients               | Available |
+| **PHP 8 Ecosystem**        | PHP, Composer, and Xdebug                    | Available |
+| **Python Runtime**         | Python 3 runtime                             | Available |
 
 ---
 
@@ -63,63 +60,244 @@
 
 ### **System Binaries**
 
-* 🟩 **[.NET SDK v8.0.412 & v10.0.103](https://dot.net)**
-* 🟩 **[PowerShell Core 7.5.3](https://github.com/PowerShell/PowerShell)**
-* 🟩 **[Bun Runtime](https://bun.sh)**
-* 🟩 **[Node & NPM Runtime](https://nodejs.org)**
-* 🟩 **[NuGet 6.x](https://www.nuget.org/)** *(via Mono)*
-* 🟩 **[Go Compiler](https://go.dev)**
-* 🟩 **[Rust Toolchain](https://www.rust-lang.org)**
-* 🟩 **[Elixir Runtime](https://elixir-lang.org)**
-* 🟩 **[Ruby & Jekyll](https://www.ruby-lang.org)** *(with hardened Bundler toolset)*
-* 🟩 **[PHP & Composer](https://www.php.net/)** *(Native PHP8 runtime & package manager)*
-* 🟩 **[ImageMagick & Inkscape](https://imagemagick.org)** *(Media conversion & high-fidelity graphics)*
-* 🟩 **[jq & yq](https://jqlang.github.io/jq/)** *(JSON & YAML processors)*
-* 🟩 **[Photino.NET](https://www.tryphotino.io)** *(Pre-cached .NET lightweight GUI desktop runtime)*
-* 🟩 **[Codecov / Coveralls CLI](https://codecov.io)**
+- **[.NET SDK v8.0.412 and v10.0.301](https://dot.net)**
+- **[PowerShell Core 7.6.4](https://github.com/PowerShell/PowerShell)**
+- **[Bun Runtime](https://bun.sh)**
+- **[Node & NPM Runtime](https://nodejs.org)**
+- **[NuGet 6.x](https://www.nuget.org/)** _(via Mono)_
+- **[Go Compiler](https://go.dev)**
+- **[Rust Toolchain](https://www.rust-lang.org)**
+- **[Elixir Runtime](https://elixir-lang.org)**
+- **[Ruby & Jekyll](https://www.ruby-lang.org)** _(with hardened Bundler toolset)_
+- **[PHP & Composer](https://www.php.net/)** _(Native PHP8 runtime & package manager)_
+- **[ImageMagick & Inkscape](https://imagemagick.org)** _(Media conversion & high-fidelity graphics)_
+- **[jq & yq](https://jqlang.github.io/jq/)** _(JSON & YAML processors)_
+- **[Photino.NET](https://www.tryphotino.io)** _(Pre-cached .NET lightweight GUI desktop runtime)_
+- **[Codecov / Coveralls CLI](https://codecov.io)**
 
 ### **Pre-Baked PowerShell Modules**
 
-* 🟦 **Pester** & **PSScriptAnalyzer** *(Testing & Static Analysis)*
-* 🟦 **PowerShell-Yaml** *(Data Serialization)*
-* 🟦 **ColorConsole** & **Quicklog** *(UI Layout & High-Performance Logging)*
-* 🟦 **Tadpol** *(Runspace Progress Bars & Spinners)*
-* 🟦 **ShellDock** *(Isolated Runspace Executor)*
-* 🟦 **Nupsforge**, **Psmpacker**, **CSVerify**, **GitAutoVersion** *(Core Build Stack)*
+- **Pester** & **PSScriptAnalyzer** _(Testing & Static Analysis)_
+- **PowerShell-Yaml** _(Data Serialization)_
+- **ColorConsole** & **Quicklog** _(UI Layout & High-Performance Logging)_
+- **Tadpol** _(Runspace Progress Bars & Spinners)_
+- **ShellDock** _(Isolated Runspace Executor)_
+- **Nupsforge**, **Psmpacker**, **CSVerify**, **GitAutoVersion** _(Core Build Stack)_
 
 ---
 
-## **Build & Local Usage**
+## **Build and Local Usage**
 
 ### **Building the Image Locally**
 
-**Using Docker CLI:**
+Build the image from the repository root:
 
 ```bash
-docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
+# Repository root (Bash, Zsh, or WSL)
+docker buildx build --load \
+  --tag phellams-automator:localbuild \
+  --file phellams-automator.dockerfile \
+  .
 ```
 
-**Using local PowerShell Orchestrator:**
+The `--load` option makes the result available to `docker run` when the selected
+Buildx driver does not load images automatically.
+
+Alternatively, use the local PowerShell builder:
 
 ```powershell
-./phellams-automator-local-builder.ps1 -buildMode Base
+# Repository root (PowerShell 7)
+./phellams-automator-local-builder.ps1 -BuildMode Base
+```
+
+### **Image Information**
+
+The image starts PowerShell when no command is supplied:
+
+```bash
+# Bash, Zsh, or WSL
+docker run --rm docker.io/sgkens/phellams-automator:latest
+```
+
+Print the installed runtime and module information:
+
+```bash
+# Bash, Zsh, or WSL
+docker run --rm docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command \
+  'Get-Module -ListAvailable | Sort-Object Name, Version | Format-Table Name, Version'
+```
+
+### **Mounting the Current Project**
+
+Use `/workspace` as the container path and set it as the working directory:
+
+```bash
+# Bash, Zsh, or WSL
+docker run --rm --interactive --tty \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest
+```
+
+```powershell
+# Windows, macOS, or Linux PowerShell
+docker run --rm --interactive --tty `
+  --volume "${PWD}:/workspace" `
+  --workdir /workspace `
+  docker.io/sgkens/phellams-automator:latest
+```
+
+Docker Desktop must have WSL integration enabled when these commands are run
+from a WSL distribution.
+
+### **Running a Project Script**
+
+```bash
+# Bash, Zsh, or WSL
+docker run --rm \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -File ./myscript.ps1
+```
+
+### **PowerShell Test and Build Commands**
+
+PowerShell cmdlets must be passed to `pwsh -Command`; they are not standalone
+Linux executables.
+
+```bash
+# Run all Pester tests below ./tests
+docker run --rm \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command 'Invoke-Pester -Path ./tests'
+
+# Analyze all PowerShell files in the project
+docker run --rm \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command 'Invoke-ScriptAnalyzer -Path . -Recurse'
+
+# Return the GitAutoVersion version
+docker run --rm \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command '(Get-GitAutoVersion).Version'
+
+# Return a version calculated from Conventional Commits
+docker run --rm \
+  --volume "$(pwd):/workspace" \
+  --workdir /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command 'Get-ConventionalCommitVersion'
+```
+
+The bundled custom modules export the following commands:
+
+| Module | Exported commands |
+| ------ | ----------------- |
+| `ColorConsole` | `New-ColorConsole`, `Write-Color` |
+| `ConventionalCommitVersion` | `Get-ConventionalCommitVersion` |
+| `CSVerify` | `New-CheckSum`, `New-VerificationFile`, `Read-CheckSum`, `Test-Verification` |
+| `GitAutoVersion` | `Get-GitAutoVersion` |
+| `Nupsforge` | `New-ChocoNuspecFile`, `New-ChocoPackage`, `New-NupkgIcon`, `New-NupkgPackage`, `New-NuspecPackageFile` |
+| `PHWriter` | `New-PHWriter`, `Write-PHAsciiLogo` |
+| `Psmpacker` | `Build-Module` |
+| `Quicklog` | `Get-QuicklogTypes`, `New-Quicklog`, `Write-Quicklog`, `Write-QuicklogProgress` |
+| `ShellDock` | `New-ShellDock` |
+| `Tadpol` | `Clear-Prelines`, `Get-TPThemes`, `New-TPObject`, `Write-TPProgress` |
+
+Inspect a command's syntax and examples before using it:
+
+```bash
+# Replace Build-Module with any exported command listed above
+docker run --rm docker.io/sgkens/phellams-automator:latest \
+  pwsh -NoProfile -Command 'Get-Help Build-Module -Full'
+```
+
+### **Native Toolchain Commands**
+
+All examples mount the current project at `/workspace`.
+
+```bash
+# .NET
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest dotnet build
+
+# NuGet
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest nuget pack ./package.nuspec
+
+# Bun
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest bun test
+
+# Node.js and npm
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest npm test
+
+# Go
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest go test ./...
+
+# Rust
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest rustc --version
+
+# Elixir
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest elixir --version
+
+# Ruby and Jekyll
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest bundle exec jekyll build
+
+# PHP and Composer
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest composer install
+
+# Inkscape
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  inkscape ./image.svg --export-filename=./image.png
+
+# ImageMagick
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest \
+  convert ./image.png -resize 50% ./image-small.png
+
+# jq and yq
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest jq . ./data.json
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest yq . ./data.yaml
+
+# Codecov and Coveralls
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest codecov --help
+docker run --rm -v "$(pwd):/workspace" -w /workspace \
+  docker.io/sgkens/phellams-automator:latest coveralls --help
 ```
 
 ### **Automation Script Parameters**
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| **`-Automator`** | Switch | Forces execution inside the local container context. |
-| **`-Pester`** | Switch | Executes the Pester test suite validation layer prior to building. |
-| **`-Build`** | Switch | Compiles and writes the completed package artifacts into the `dist/` directory. |
-| **`-Nuget`** | Switch | Generates compliance-ready NuGet package objects. |
-| **`-ChocoPackage`** | Switch | Generates compliance-ready Choco package objects. |
-| **`-ChocoWindowsPackage`** | Switch | Generates compliance-ready Choco package objects, packed on windows |
+`phellams-automator-local-builder.ps1` accepts one mandatory parameter:
+
+| Parameter | Type | Accepted values | Description |
+| --------- | ---- | --------------- | ----------- |
+| `-BuildMode` | String | `Base`, `choco` | Selects the Dockerfile and local image tag used by the builder. |
+
 ---
 
 ## **Contributing & License**
 
 ### **Contributing**
+
 1. Fork the Project.
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
 3. Commit your Changes (`git commit -m 'feat: Add AmazingFeature'`).
@@ -127,6 +305,7 @@ docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
 5. Open a **Merge Request**.
 
 ### **License**
+
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ---
