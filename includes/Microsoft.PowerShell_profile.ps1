@@ -93,7 +93,18 @@ $resolvedVersions["automator"] = if (Test-Path $versionPath) {
 $versionSpecs = @(
     # Binaries
     @{ Key = "pwsh";               Type = "Binary"; Command = { $PSVersionTable.PSVersion.ToString() } }
-    @{ Key = "dotnet";             Type = "Binary"; Command = { dotnet --version 2>$null } }
+    @{ Key = "dotnet8";            Type = "Binary"; Command = {
+        dotnet --list-sdks 2>$null |
+            Where-Object { $_ -match '^8\.' } |
+            Select-Object -Last 1 |
+            ForEach-Object { $_.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0] }
+    } }
+    @{ Key = "dotnet10";           Type = "Binary"; Command = {
+        dotnet --list-sdks 2>$null |
+            Where-Object { $_ -match '^10\.' } |
+            Select-Object -Last 1 |
+            ForEach-Object { $_.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0] }
+    } }
     @{ Key = "nuget";              Type = "Binary"; Command = { nuget help 2>$null | select-string -pattern "NuGet Version:" | Out-String | ForEach-Object { $_ -replace "NuGet Version:", "" } } }
     @{ Key = "codecov";            Type = "Binary"; Command = { codecov --version 2>$null } }
     @{ Key = "coveralls";          Type = "Binary"; Command = { coveralls --version 2>$null } }
@@ -268,10 +279,11 @@ for ($i = 9; $i -lt 14; $i++) {
 # Line 14: Spacer with vertical line connection
 $plainLines.Add("      ┋")
 
-# Build Box 2: Binaries Box (3 columns, 7 rows of content)
+# Build Box 2: Binaries Box
 $binariesList = @(
     @("pwsh", $resolvedVersions["pwsh"]),
-    @("dotnet", $resolvedVersions["dotnet"]),
+    @("dotnet 8", $resolvedVersions["dotnet8"]),
+    @("dotnet 10", $resolvedVersions["dotnet10"]),
     @("nuget", $resolvedVersions["nuget"]),
     @("codecov", $resolvedVersions["codecov"]),
     @("coveralls", $resolvedVersions["coveralls"]),
@@ -306,7 +318,8 @@ $binTopDashes = New-Object System.String ('─', ($bin_total_w - 13))
 $binBottomDashes = New-Object System.String ('─', ($bin_total_w - 2))
 
 $plainLines.Add("      ┋─────╭─ Binaries $binTopDashes╮")
-for ($r = 0; $r -lt 7; $r++) {
+$binaryRowCount = [Math]::Ceiling($binariesList.Count / 3)
+for ($r = 0; $r -lt $binaryRowCount; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
     $idx3 = $idx1 + 2
