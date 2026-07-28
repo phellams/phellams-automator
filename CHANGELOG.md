@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## **v2.14.0** _Wednesday, 29 July 2026_
+
+**Notes:**
+
+- Bumped **Dotnet** to `v10.0.301`
+- Bumped **Powershell** to `v7.6.4`
+
 ## v2.11.7
 
 - (ci) completed runtime badge generation
@@ -15,7 +22,7 @@ Notes
 
 - (ci) Corrected runtime generation script
 
-## v2.11.1
+## **v2.11.1**
 
 Notes
 
