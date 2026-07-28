@@ -10,7 +10,7 @@ ENV BUNDLE_SILENCE_ROOT_WARNING="1"
 ENV BUNDLE_PATH="vendor/bundle"
 ENV BUNDLE_APP_CONFIG="/root/.bundle"
 ENV COMPOSER_HOME=/tmp/composer
-ENV PATH="${COMPOSER_HOME}/vendor/bin:${PATH}" 
+ENV PATH="${COMPOSER_HOME}/vendor/bin:${PATH}"
 ENV BUN_INSTALL="/root/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
 
@@ -35,13 +35,13 @@ RUN mkdir -p /root/.dotnet && \
     wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
     tar zxf /tmp/dotnet8.tar.gz -C /root/.dotnet && \
     # .NET 10
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.103 --install-dir /root/.dotnet && \
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.301 --install-dir /root/.dotnet && \
     # Cleanup .NET caches/temp
     rm -rf /tmp/* /root/.dotnet/sdk/NuGetFallbackFolder /root/.dotnet/templates
 
 # 3. PowerShell 7.5.3
 # ....................
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.3/powershell_7.6.3-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.4/powershell_7.6.4-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -103,11 +103,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
 
 # BUN.JS - Bun(v0.5.4)
 # ....................................
-RUN curl -fsSL https://bun.com/install | bash && \ 
+RUN curl -fsSL https://bun.com/install | bash && \
     bun --version && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
-    
+
 # Codecov
 # ....................................
 RUN set -eux; \

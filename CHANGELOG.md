@@ -1,20 +1,52 @@
 # CHANGELOG
 
+## **v2.14.0** _Wednesday, 29 July 2026_
+
+**Notes:**
+
+- Bumped **Dotnet** to `v10.0.301`
+- Bumped **Powershell** to `v7.6.4`
+
+## v2.11.7
+
+- (ci) completed runtime badge generation
+- pushed 2.11.7 to docker container repositoryq
+
+## v2.11.3
+
+- (ci) made additional ajustments to the badge runtime generation script
+
+## v2.11.2
+
+Notes
+
+- (ci) Corrected runtime generation script
+
+## **v2.11.1**
+
+Notes
+
+- (ci) Fixed Runtime badge Generation
+
+Notes
+
+- (c1) Fixed gitlog output - capture gitlog output as a gingle string
+
 ## **v2.11.0**
 
 **Notes**
 
 - Add **GUI, Graphics & AppImage build dependencies** to the Docker build:
-  - **Photino** runtime requirements (`libgtk-3-dev`, `libwebkit2gtk-4.0-dev`, `libnotify-dev`)
-  - **Inkscape** and **ImageMagick** (`magick`)
-  - **AppImage** creation dependencies (`binutils`, `desktop-file-utils`, `fakeroot`, `fuse`, `libfuse2`, `patchelf`, `squashfs-tools`, `zsync`, `libgdk-pixbuf2.0-dev`)
+    - **Photino** runtime requirements (`libgtk-3-dev`, `libwebkit2gtk-4.0-dev`, `libnotify-dev`)
+    - **Inkscape** and **ImageMagick** (`magick`)
+    - **AppImage** creation dependencies (`binutils`, `desktop-file-utils`, `fakeroot`, `fuse`, `libfuse2`, `patchelf`, `squashfs-tools`, `zsync`, `libgdk-pixbuf2.0-dev`)
 - Add **jq** and **yq** to the base OS dependencies in the Docker image.
 - Refactor PowerShell Profile:
-  - Stack three boxes (`Info Box` next to mascot, `Binaries Box` with 3 columns, and `Modules Box` with 3 columns) to form a robust, modern TUI.
-  - Fix layout tearing by introducing length truncation and padding helpers (`Get-FixedLengthString`), securing aligned margins even for extremely long version strings (like kernel details) and module names.
-  - Apply high-fidelity color overrides: truecolor vertical gradients for the mascot and box borders, horizontal lightblue-to-orange gradients for names, and light-magenta `v` + italic-gray version highlights.
-  - Implement dynamic version normalized registry object parsing for all binary and module versions (matching `v0.0.0` / `v0.0` formats including pre-releases like `-rc1` or `.beta-rc1`).
-  - Added version checks for **jq**, **yq**, **inkscape**, **magick**, and **photino** (reading photino from local NuGet package cache).
+    - Stack three boxes (`Info Box` next to mascot, `Binaries Box` with 3 columns, and `Modules Box` with 3 columns) to form a robust, modern TUI.
+    - Fix layout tearing by introducing length truncation and padding helpers (`Get-FixedLengthString`), securing aligned margins even for extremely long version strings (like kernel details) and module names.
+    - Apply high-fidelity color overrides: truecolor vertical gradients for the mascot and box borders, horizontal lightblue-to-orange gradients for names, and light-magenta `v` + italic-gray version highlights.
+    - Implement dynamic version normalized registry object parsing for all binary and module versions (matching `v0.0.0` / `v0.0` formats including pre-releases like `-rc1` or `.beta-rc1`).
+    - Added version checks for **jq**, **yq**, **inkscape**, **magick**, and **photino** (reading photino from local NuGet package cache).
 
 > Wednesday, 15 July 2026 2:40:00 AM
 
@@ -26,11 +58,11 @@
 
 - Add `Get-GitAutoveriosn` replacement `Get-CoventionalCommitVersion`
 - Add **Node.js** and **NPM** `24+` to the image
-- Add **BUN.JS** `0.5.4` to the image                                 
+- Add **BUN.JS** `0.5.4` to the image
 - Update Phellams Header to output new logo
 - Bumped **12-slim** to **12.14-slim**
 - Updated ascii logo meta with new binarry versions.
-- Ajusted parsing logic for some binary version retrevers 
+- Ajusted parsing logic for some binary version retrevers
 - Added `Generate-Badge` to generate build times for CI jobs `scripts/generate-badge.ps1`
 
 > Friday, 19 June 2026 9:51:49 PM
@@ -79,7 +111,7 @@
 - Add **RubyGems** support
 - Add DonNet SDK v10.0.103
 - Add **Jekyll** support
-  - Build **Gem** based jekyll websites.
+    - Build **Gem** based jekyll websites.
 
 ---
 
@@ -120,7 +152,7 @@
 
 ## **v2.5**
 
-**Notes** 
+**Notes**
 
 - Updated **NuPsforge** to latest version
 - Updated **Powershell** to v7.5.3
