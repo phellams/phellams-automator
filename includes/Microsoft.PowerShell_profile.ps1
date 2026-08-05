@@ -5,13 +5,13 @@
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 
 # Install Pester
-Get-Command 'Invoke-Pester' ? (install-module Pester -RequiredVersion 5.8.0 -Confirm:$false)
-Get-Command 'Invoke-ScriptAnalyzer' ? (install-module PSScriptAnalyzer -Confirm:$false)
-Get-Command 'ConvertFrom-Yaml' ? (install-module powershell-yaml -Confirm:$false)
+# Get-Command 'Invoke-Pester' ? (install-module Pester -RequiredVersion 5.8.0 -Confirm:$false)
+# Get-Command 'Invoke-ScriptAnalyzer' ? (install-module PSScriptAnalyzer -Confirm:$false)
+# Get-Command 'ConvertFrom-Yaml' ? (install-module powershell-yaml -Confirm:$false)
 
 import-module -Name Pester -RequiredVersion 5.8.0
-import-module -Name PSScriptAnalyzer
-import-module -Name powershell-yaml
+import-module -Name PSScriptAnalyzer -RequiredVersion 1.25.0
+import-module -Name powershell-yaml -RequiredVersion 0.4.12
 import-module -Name colorconsole
 import-module -name tadpol
 import-module -name shelldock
@@ -40,7 +40,7 @@ if (-not (Test-Path $tokenizerPath -ErrorAction SilentlyContinue)) {
 function gmv($name) {
     $moduleInfo = Get-Module -Name $name
     if ($null -eq $moduleInfo) { return "Unknown" }
-    
+
     [string]$version_prerelease = ""
     if ($moduleInfo.PrivateData.PSData.Prerelease) {
         $version_prerelease = "-$($moduleInfo.PrivateData.PSData.Prerelease)"
@@ -53,7 +53,7 @@ function gmv($name) {
 function Get-NormalizedVersion([string]$rawVersion) {
     if ([string]::IsNullOrEmpty($rawVersion)) { return "Unknown" }
     $clean = $rawVersion.Trim()
-    
+
     # Matches vX.Y.Z or vX.Y with pre-releases/RCs (such as -rc1, .rc, .beta-rc1, .bata-rc1 etc.)
     if ($clean -match '(?i)(?:go|v)?(\d+\.\d+(?:\.\d+)*(?:[-.][a-zA-Z0-9]+)*)') {
         $v = $Matches[1]
@@ -132,7 +132,7 @@ $versionSpecs = @(
             Get-ChildItem -Path $pkgDir.FullName 2>$null | Select-Object -First 1 | ForEach-Object { $_.Name }
         }
     } }
-    
+
     # Modules
     @{ Key = "colorconsole";       Type = "Module"; Name = "colorconsole" }
     @{ Key = "gitautoversion";     Type = "Module"; Name = "gitautoversion" }
@@ -199,13 +199,13 @@ function Get-BoxWidths($list, $minW1_name = 14, $minW1_ver = 10, $minW2_name = 1
     $w2_ver  = $minW2_ver
     $w3_name = $minW3_name
     $w3_ver  = $minW3_ver
-    
+
     for ($i = 0; $i -lt $list.Count; $i++) {
         $item = $list[$i]
         if (-not $item) { continue }
         $name = $item[0]
         $ver  = $item[1]
-        
+
         $col = $i % 3
         if ($col -eq 0) {
             if ($name.Length -gt $w1_name) { $w1_name = $name.Length }
@@ -218,7 +218,7 @@ function Get-BoxWidths($list, $minW1_name = 14, $minW1_ver = 10, $minW2_name = 1
             if ($ver.Length -gt $w3_ver) { $w3_ver = $ver.Length }
         }
     }
-    
+
     return [ordered]@{
         w1_name = $w1_name
         w1_ver  = $w1_ver
@@ -236,14 +236,14 @@ function Get-FormattedRow([string[]]$c1, [string[]]$c2, [string[]]$c3, $w1_name,
     $c2Ver  = if ($c2) { $c2[1] } else { "" }
     $c3Name = if ($c3) { $c3[0] } else { "" }
     $c3Ver  = if ($c3) { $c3[1] } else { "" }
-    
+
     $c1NamePadded = $c1Name.PadRight($w1_name)
     $c1VerPadded  = $c1Ver.PadLeft($w1_ver)
     $c2NamePadded = $c2Name.PadRight($w2_name)
     $c2VerPadded  = $c2Ver.PadLeft($w2_ver)
     $c3NamePadded = $c3Name.PadRight($w3_name)
     $c3VerPadded  = $c3Ver.PadLeft($w3_ver)
-    
+
     return "│ $c1NamePadded$c1VerPadded │ $c2NamePadded$c2VerPadded │ $c3NamePadded$c3VerPadded │"
 }
 
@@ -323,11 +323,11 @@ for ($r = 0; $r -lt $binaryRowCount; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
     $idx3 = $idx1 + 2
-    
+
     $c1 = if ($idx1 -lt $binariesList.Count) { $binariesList[$idx1] } else { $null }
     $c2 = if ($idx2 -lt $binariesList.Count) { $binariesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $binariesList.Count) { $binariesList[$idx3] } else { $null }
-    
+
     $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $bin_w1_name $bin_w1_ver $bin_w2_name $bin_w2_ver $bin_w3_name $bin_w3_ver))
 }
 $plainLines.Add("      ┋     ╰$binBottomDashes╯")
@@ -369,11 +369,11 @@ for ($r = 0; $r -lt 5; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
     $idx3 = $idx1 + 2
-    
+
     $c1 = if ($idx1 -lt $modulesList.Count) { $modulesList[$idx1] } else { $null }
     $c2 = if ($idx2 -lt $modulesList.Count) { $modulesList[$idx2] } else { $null }
     $c3 = if ($idx3 -lt $modulesList.Count) { $modulesList[$idx3] } else { $null }
-    
+
     $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $mod_w1_name $mod_w1_ver $mod_w2_name $mod_w2_ver $mod_w3_name $mod_w3_ver))
 }
 $plainLines.Add("      ┋     ╰$modBottomDashes╯")
@@ -414,19 +414,19 @@ function Get-NameColorChar([int]$idx, [int]$length) {
 for ($y = 0; $y -lt $tokens.Height; $y++) {
     $sb = [System.Text.StringBuilder]::new()
     $line = $tokens.Lines[$y]
-    
+
     $hasColoredVInfo = $false
     $hasColoredV1 = $false
     $hasColoredV2 = $false
     $hasColoredV3 = $false
-    
+
     for ($x = 0; $x -lt $tokens.Width; $x++) {
         $c = $line[$x]
-        
+
         # Override logic
         $isOverridden = $false
         $overrideColor = ""
-        
+
         # 1. Info Box area next to Mascot (Lines 9 to 13, $x >= 36)
         if ($y -ge 9 -and $y -le 13 -and $x -ge 36) {
             # Skip border rows
@@ -462,20 +462,20 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
         # 2. Content rows of Binaries and Modules (Lines 15 onwards)
         elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -like "*│*") {
             $isBinRow = ($y -ge 16 -and $y -le 22)
-            
+
             $w1_n = if ($isBinRow) { $bin_w1_name } else { $mod_w1_name }
             $w1_v = if ($isBinRow) { $bin_w1_ver } else { $mod_w1_ver }
             $w2_n = if ($isBinRow) { $bin_w2_name } else { $mod_w2_name }
             $w2_v = if ($isBinRow) { $bin_w2_ver } else { $mod_w2_ver }
             $w3_n = if ($isBinRow) { $bin_w3_name } else { $mod_w3_name }
             $w3_v = if ($isBinRow) { $bin_w3_ver } else { $mod_w3_ver }
-            
+
             $del1 = 2 + $w1_n + $w1_v + 1
             $del2 = $del1 + $w2_n + $w2_v + 3
             $del3 = $del2 + $w3_n + $w3_v + 3
-            
+
             $xo = $x - 12
-            
+
             # Delimiters
             if ($xo -eq 0 -or $xo -eq $del1 -or $xo -eq $del2 -or $xo -eq $del3) {
                 # Keep border gradient
@@ -541,7 +541,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
         }
-        
+
         if ($isOverridden) {
             if ($overrideColor) {
                 [void]$sb.Append("$esc[38;2;$($overrideColor)m$c$esc[0m")
