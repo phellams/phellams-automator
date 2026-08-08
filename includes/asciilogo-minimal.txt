@@ -1,0 +1,2 @@
+[ PHELLAMS AUTOMATOR [automator-version] ]
+[ pwsh [pwsh-version] | details: Get-About ]

@@ -8,6 +8,8 @@
 - Updated the PowerShell profile to import the pinned module versions instead of installing them at runtime.
 - Updated **CSVerify** to `v0.3.9` and retained the previous module implementation under `csverify_depre`.
 - Added an xterm-256 gradient fallback for GitLab CI job logs while retaining TrueColor output in local terminals.
+- Replaced the full startup report with a two-line banner containing the Automator and PowerShell versions.
+- Moved the detailed environment report to the opt-in `Get-About` command and its `About` alias, and included the required script and banner assets in the container image.
 
 ## **v2.15.0** _Wednesday, 29 July 2026_
 

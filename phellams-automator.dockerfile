@@ -167,6 +167,8 @@ RUN pwsh -NoProfile -Command ' \
 # .................................
 COPY ./includes/modules/ /root/.local/share/powershell/Modules/
 COPY ./includes/acsiilogo-template.txt /root/.config/powershell/acsiilogo-template.txt
+COPY ./includes/asciilogo-minimal.txt /root/.config/powershell/asciilogo-minimal.txt
+COPY ./scripts/Get-About.ps1 /root/.config/powershell/scripts/
 COPY ./includes/Microsoft.PowerShell_profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
 COPY ./VERSION /root/.config/powershell/VERSION
 
