@@ -395,12 +395,18 @@ $tokens = ConvertTo-AsciiTokens -Lines $plainLines.ToArray() -Connectivity 8
 
 # Generate Color Map for the vertical gradient (Cyan ➔ Magenta)
 $esc = [char]27
+$gradientColorMode = if ([string]::IsNullOrEmpty($env:GITLAB_CI)) {
+    'TrueColor'
+} else {
+    'Indexed256'
+}
 $colorMap = New-Object 'string[,]' $tokens.Height, $tokens.Width
 for ($y = 0; $y -lt $tokens.Height; $y++) {
     $t = if ($tokens.Height -gt 1) { $y / ($tokens.Height - 1) } else { 0 }
     $rowColor = Get-GradientColor -T $t -Start @(0, 180, 255) -End @(255, 60, 180)
+    $rowForegroundSgr = Get-AnsiForegroundSgr -Rgb $rowColor -ColorMode $gradientColorMode
     for ($x = 0; $x -lt $tokens.Width; $x++) {
-        $colorMap[$y, $x] = $rowColor
+        $colorMap[$y, $x] = $rowForegroundSgr
     }
 }
 
@@ -544,10 +550,11 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
 
         if ($isOverridden) {
             if ($overrideColor) {
-                [void]$sb.Append("$esc[38;2;$($overrideColor)m$c$esc[0m")
+                $overrideForegroundSgr = Get-AnsiForegroundSgr -Rgb $overrideColor -ColorMode $gradientColorMode
+                [void]$sb.Append(('{0}[{1}m{2}{0}[0m' -f $esc, $overrideForegroundSgr, $c))
             }
         } elseif ($colorMap[$y, $x] -and $c -ne ' ') {
-            [void]$sb.Append("$esc[38;2;$($colorMap[$y,$x])m$c$esc[0m")
+            [void]$sb.Append(('{0}[{1}m{2}{0}[0m' -f $esc, $colorMap[$y, $x], $c))
         } else {
             [void]$sb.Append($c)
         }

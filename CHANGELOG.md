@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## **v2.16.0**
+
+**Notes:**
+
+- Vendored pinned versions of **PSScriptAnalyzer** `v1.25.0`, **Pester** `v5.8.0`, and **powershell-yaml** `v0.4.12` with the image.
+- Updated the PowerShell profile to import the pinned module versions instead of installing them at runtime.
+- Updated **CSVerify** to `v0.3.9` and retained the previous module implementation under `csverify_depre`.
+- Added an xterm-256 gradient fallback for GitLab CI job logs while retaining TrueColor output in local terminals.
+
+## **v2.15.0** _Wednesday, 29 July 2026_
+
+**Notes:**
+
+- Added separate version detection and profile output for the installed **.NET 8** and **.NET 10** SDKs.
+- Updated the profile's binaries table to calculate its row count from the available entries.
+- Updated the README image manifest, container usage examples, and bundled command reference.
+
 ## **v2.14.0** _Wednesday, 29 July 2026_
 
 **Notes:**

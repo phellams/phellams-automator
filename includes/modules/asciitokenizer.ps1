@@ -57,7 +57,7 @@ function ConvertTo-AsciiTokens {
 
     $width  = ($Lines | Measure-Object -Property Length -Maximum).Maximum
     if (-not $width) { $width = 0 }
-    $padded = $Lines | ForEach-Object { $_.PadRight($width) }
+    $padded = @($Lines | ForEach-Object { $_.PadRight($width) })
     $height = $padded.Count
 
     $grid = New-Object 'char[][]' $height
@@ -133,6 +133,96 @@ function Get-GradientColor {
     "$r;$g;$b"
 }
 
+function ConvertTo-Xterm256Color {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateRange(0, 255)]
+        [int]$Red,
+
+        [Parameter(Mandatory)]
+        [ValidateRange(0, 255)]
+        [int]$Green,
+
+        [Parameter(Mandatory)]
+        [ValidateRange(0, 255)]
+        [int]$Blue
+    )
+
+    $levels = @(0, 95, 135, 175, 215, 255)
+    $components = @($Red, $Green, $Blue)
+    $indexes = [int[]]::new(3)
+
+    for ($component = 0; $component -lt $components.Count; $component++) {
+        $minimumDistance = [int]::MaxValue
+        for ($level = 0; $level -lt $levels.Count; $level++) {
+            $distance = [Math]::Abs($components[$component] - $levels[$level])
+            if ($distance -lt $minimumDistance) {
+                $minimumDistance = $distance
+                $indexes[$component] = $level
+            }
+        }
+    }
+
+    $cubeRed = $levels[$indexes[0]]
+    $cubeGreen = $levels[$indexes[1]]
+    $cubeBlue = $levels[$indexes[2]]
+    $cubeDistance =
+        [Math]::Pow($Red - $cubeRed, 2) +
+        [Math]::Pow($Green - $cubeGreen, 2) +
+        [Math]::Pow($Blue - $cubeBlue, 2)
+    $cubeIndex = 16 + (36 * $indexes[0]) + (6 * $indexes[1]) + $indexes[2]
+
+    # Compare the 6x6x6 color cube with the xterm grayscale ramp.
+    $average = ($Red + $Green + $Blue) / 3
+    $grayIndex = [Math]::Round(($average - 8) / 10, [MidpointRounding]::AwayFromZero)
+    $grayIndex = [Math]::Max(0, [Math]::Min(23, $grayIndex))
+    $grayValue = 8 + (10 * $grayIndex)
+    $grayDistance =
+        [Math]::Pow($Red - $grayValue, 2) +
+        [Math]::Pow($Green - $grayValue, 2) +
+        [Math]::Pow($Blue - $grayValue, 2)
+
+    if ($grayDistance -lt $cubeDistance) {
+        return 232 + $grayIndex
+    }
+
+    return $cubeIndex
+}
+
+function Get-AnsiForegroundSgr {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidatePattern('^\d{1,3};\d{1,3};\d{1,3}$')]
+        [string]$Rgb,
+
+        [ValidateSet('Auto', 'TrueColor', 'Indexed256')]
+        [string]$ColorMode = 'Auto'
+    )
+
+    if ($ColorMode -eq 'Auto') {
+        $ColorMode = if ([string]::IsNullOrEmpty($env:GITLAB_CI)) {
+            'TrueColor'
+        } else {
+            'Indexed256'
+        }
+    }
+
+    if ($ColorMode -eq 'TrueColor') {
+        return "38;2;$Rgb"
+    }
+
+    $rgbComponents = $Rgb.Split(';')
+    $colorParameters = @{
+        Red = [int]$rgbComponents[0]
+        Green = [int]$rgbComponents[1]
+        Blue = [int]$rgbComponents[2]
+    }
+    $colorIndex = ConvertTo-Xterm256Color @colorParameters
+    return "38;5;$colorIndex"
+}
+
 function Write-GradientAscii {
     [CmdletBinding()]
     param(
@@ -140,10 +230,19 @@ function Write-GradientAscii {
         [int[]]$StartColor = @(0, 150, 255),
         [int[]]$EndColor   = @(255, 0, 150),
         [ValidateSet('Horizontal', 'Vertical', 'PerToken')]
-        [string]$Mode = 'Horizontal'
+        [string]$Mode = 'Horizontal',
+        [ValidateSet('Auto', 'TrueColor', 'Indexed256')]
+        [string]$ColorMode = 'Auto'
     )
 
     $esc = [char]27
+    $resolvedColorMode = if ($ColorMode -eq 'Auto' -and -not [string]::IsNullOrEmpty($env:GITLAB_CI)) {
+        'Indexed256'
+    } elseif ($ColorMode -eq 'Auto') {
+        'TrueColor'
+    } else {
+        $ColorMode
+    }
     $colorMap = New-Object 'string[,]' $TokenObject.Height, $TokenObject.Width
 
     switch ($Mode) {
@@ -182,7 +281,8 @@ function Write-GradientAscii {
         for ($x = 0; $x -lt $TokenObject.Width; $x++) {
             $c = $TokenObject.Lines[$y][$x]
             if ($colorMap[$y, $x]) {
-                [void]$sb.Append("$esc[38;2;$($colorMap[$y,$x])m$c$esc[0m")
+                $foregroundSgr = Get-AnsiForegroundSgr -Rgb $colorMap[$y, $x] -ColorMode $resolvedColorMode
+                [void]$sb.Append(('{0}[{1}m{2}{0}[0m' -f $esc, $foregroundSgr, $c))
             } else {
                 [void]$sb.Append($c)
             }
