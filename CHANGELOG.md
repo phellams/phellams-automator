@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## unpublised
+
+**Changed**
+
+- Updated dotnet version from `v10.0.301` to `v10.0.400`
+- Updated dotnet version from `v8.0.412` to `v8.0.424`
+- updated powershell from `v7.6.4` to `v7.6.5`
+
+**Added**
+
+- Hugo binary
+
 ## **v2.16.0**
 
 **Notes:**

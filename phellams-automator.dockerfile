@@ -14,7 +14,7 @@ ENV PATH="${COMPOSER_HOME}/vendor/bin:${PATH}"
 ENV BUN_INSTALL="/root/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
 
-# 1. Base Dependencies & Mono/NuGet
+# Base Dependencies & Mono/NuGet
 # Combined to reduce layers and cleaned up thoroughly
 # ..........................................................
 RUN apt update && \
@@ -28,35 +28,36 @@ RUN apt update && \
     # Cleanup apt cache
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# 2. .NET SDKs (Consolidated)
+# .NET SDKs (Consolidated)
 # ...........................
 RUN mkdir -p /root/.dotnet && \
     # .NET 8
-    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.412-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
+    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.424-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
     tar zxf /tmp/dotnet8.tar.gz -C /root/.dotnet && \
     # .NET 10
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.301 --install-dir /root/.dotnet && \
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.400 --install-dir /root/.dotnet && \
     # Cleanup .NET caches/temp
     rm -rf /tmp/* /root/.dotnet/sdk/NuGetFallbackFolder /root/.dotnet/templates
 
-# 3. PowerShell 7.5.3
+# PowerShell
 # ....................
-RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.4/powershell_7.6.4-1.deb_amd64.deb -O /tmp/powershell.deb && \
+RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/powershell_7.6.5-1.deb_amd64.deb -O /tmp/powershell.deb && \
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# 4. Ruby, Jekyll, Go, Rust, Elixir (Consolidated & Cleaned)
+# hugo, Ruby, Jekyll, Go, Rust, Elixir (Consolidated & Cleaned)
 # ..........................................................
 RUN apt update && \
     apt install -y --no-install-recommends \
     ruby rubygems ruby-dev make gcc g++ \
+    apt install hugo \
     golang rustc elixir && \
     # Jekyll without documentation
     gem install bundler jekyll --no-document && \
     # Cleanup
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /root/.gem /root/.bundle
 
-# 4.1 PHP 8.2 + Composer + PHP-FPM + Xdebug + PHPUnit
+# PHP 8.2 + Composer + PHP-FPM + Xdebug + PHPUnit
 # ..........................................................
 
 RUN apt update && \

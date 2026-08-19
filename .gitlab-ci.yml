@@ -5,7 +5,7 @@ default:
   before_script:
     - git config --global --add safe.directory "$CI_PROJECT_DIR"
     - git fetch --all
-    
+
 stages:
   - build
   - test
@@ -14,7 +14,7 @@ stages:
 
 
 # ----------STAGE: BUILD----------
-
+----
 build-image-commit_sha:
   stage: build
   tags:
@@ -83,7 +83,7 @@ deploy-image-dockerhub:
     #   artifacts: false
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-  before_script: 
+  before_script:
     - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
   after_script:
     - docker logout
@@ -92,7 +92,7 @@ deploy-image-dockerhub:
   script:
   # git fetch --all required to pull down full commit history for semver generation
     - |
-      git fetch --all 
+      git fetch --all
       echo "GENERATE -> SEMVER version from git history"
       semver=$(pwsh -noprofile -c "Import-Module ./includes/modules/conventionalcommitversion/conventionalcommitversion.psd1; (Get-ConventionalCommitVersion).Version") # Capture version
       echo "GENERATED -> SEMVER -> $semver"
