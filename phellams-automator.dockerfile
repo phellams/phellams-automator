@@ -32,7 +32,7 @@ RUN apt update && \
 # ...........................
 RUN mkdir -p /root/.dotnet && \
     # .NET 8
-    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.424-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
+    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.424/dotnet-sdk-8.0.424-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
     tar zxf /tmp/dotnet8.tar.gz -C /root/.dotnet && \
     # .NET 10
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.400 --install-dir /root/.dotnet && \
@@ -45,17 +45,27 @@ RUN wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/po
     apt update && apt install -y /tmp/powershell.deb && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# hugo, Ruby, Jekyll, Go, Rust, Elixir (Consolidated & Cleaned)
+# Ruby, Jekyll, Go, Rust, Elixir, Erlang (Consolidated & Cleaned)
 # ..........................................................
 RUN apt update && \
     apt install -y --no-install-recommends \
     ruby rubygems ruby-dev make gcc g++ \
-    apt install hugo \
-    golang rustc elixir && \
+    golang rustc elixir erlang && \
     # Jekyll without documentation
     gem install bundler jekyll --no-document && \
     # Cleanup
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /root/.gem /root/.bundle
+
+# Hugo, Dart Sass, and Dart
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    hugo \
+    apt-transport-https && \
+    curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/dart.gpg && \
+    echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' > /etc/apt/sources.list.d/dart_stable.list && \
+    apt update && \
+    apt install -y --no-install-recommends dart && \
+    apt clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # PHP 8.2 + Composer + PHP-FPM + Xdebug + PHPUnit
 # ..........................................................
@@ -96,9 +106,11 @@ RUN apt update && \
 # ....................................
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@latest && \
+    npm install -g npm@latest pnpm yarn sass && \
     npm --version && \
     node --version && \
+    pnpm --version && \
+    yarn --version && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -181,7 +193,7 @@ RUN mkdir /tmp/dummy && cd /tmp/dummy && \
 
 # Final sanity check and cache cleanup
 # ..................................
-RUN pwsh -NoProfile -Command "Write-Host 'Verifying installations...'; dotnet --version; nuget help | select -First 1; rustc --version; go version; elixir --version" && \
+RUN pwsh -NoProfile -Command "Write-Host 'Verifying installations...'; dotnet --version; nuget help | select -First 1; rustc --version; go version; elixir --version; erl -noshell -eval 'io:format(\"~s~n\", [erlang:system_info(otp_release)]), halt().' ; dart --version; pnpm --version; yarn --version" && \
     rm -rf /root/.cache /root/.local/share/NuGet /tmp/*
 
 CMD ["pwsh"]

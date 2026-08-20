@@ -156,6 +156,7 @@ image-cleanup:
 generate-runtime-badge:
   stage: notify
   image: sgkens/phellams-automator:$AUTOMATOR_VERSION
+  needs: [image-cleanup]
   rules:
     - when: always
   tags:
