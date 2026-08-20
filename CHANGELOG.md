@@ -1,22 +1,16 @@
-# **CHANGELOG**
+# CHANGELOG
 
 ## unpublised
 
-> date
-
 **Changed**
 
-- Updated **dotnet** version from `v10.0.301` to `v10.0.400`
-- Updated **dotnet** version from `v8.0.412` to `v8.0.424`
-- updated **powershell** from `v7.6.4` to `v7.6.5`
+- Updated dotnet version from `v10.0.301` to `v10.0.400`
+- Updated dotnet version from `v8.0.412` to `v8.0.424`
+- updated powershell from `v7.6.4` to `v7.6.5`
 
 **Added**
 
-- **Hugo** binary
-- **pnpm** binary
-- **yarn** binary
-- **erlang** binary
-- **dart** binary
+- Hugo binary
 
 ## **v2.16.0**
 
@@ -29,9 +23,7 @@
 - Replaced the full startup report with a two-line banner containing the Automator and PowerShell versions.
 - Moved the detailed environment report to the opt-in `Get-About` command and its `About` alias, and included the required script and banner assets in the container image.
 
-## **v2.15.0**
-
-> _Wednesday, 29 July 2026_
+## **v2.15.0** _Wednesday, 29 July 2026_
 
 **Notes:**
 
@@ -39,7 +31,7 @@
 - Updated the profile's binaries table to calculate its row count from the available entries.
 - Updated the README image manifest, container usage examples, and bundled command reference.
 
-## **v2.14.0**
+## **v2.14.0** _Wednesday, 29 July 2026_
 
 **Notes:**
 
@@ -73,8 +65,6 @@ Notes
 
 ## **v2.11.0**
 
-> Wednesday, 15 July 2026 2:40:00 AM
-
 **Notes**
 
 - Add **GUI, Graphics & AppImage build dependencies** to the Docker build:
@@ -89,11 +79,11 @@ Notes
     - Implement dynamic version normalized registry object parsing for all binary and module versions (matching `v0.0.0` / `v0.0` formats including pre-releases like `-rc1` or `.beta-rc1`).
     - Added version checks for **jq**, **yq**, **inkscape**, **magick**, and **photino** (reading photino from local NuGet package cache).
 
+> Wednesday, 15 July 2026 2:40:00 AM
+
 ---
 
 ## **v2.10.1**
-
-> Friday, 19 June 2026 9:51:49 PM
 
 **Notes**
 
@@ -106,11 +96,11 @@ Notes
 - Ajusted parsing logic for some binary version retrevers
 - Added `Generate-Badge` to generate build times for CI jobs `scripts/generate-badge.ps1`
 
+> Friday, 19 June 2026 9:51:49 PM
+
 ---
 
-## **v2.9.0**
-
-> `Friday, 19 June 2026 7:04:06 PM`
+## **v2.9**
 
 **Notes**
 
@@ -119,6 +109,8 @@ Notes
 - Update DevOps Tools: **Codecov** + **Coveralls**
 - Update: base binaries to `apt-get install -y --no-install-recommends`: **tar**, **perl**
 - Add `ENV` for `COMPOSER_HOME`, `BUNDLE_SILENCE_ROOT_WARNING`, `BUNDLE_PATH`, `BUNDLE_APP_CONFIG`
+
+> `Friday, 19 June 2026 7:04:06 PM`
 
 ---
 

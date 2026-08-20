@@ -29,9 +29,8 @@
 
 - **.NET:** Native execution support for `dotnet build` and `dotnet pack` targetting SDK v8 and v10 (including AOT compilation targets).
 - **Package Management:** Native `nuget pack` capabilities coupled with custom **Nupsforge** cmdlets for multi-repository distribution (GitLab, Chocolatey, ProGet).
-- **JavaScript / TypeScript:** Native execution through **Bun**, **Node.js**, **npm**, **pnpm**, and **Yarn**.
-- **Systems Languages:** Built-in toolchains for **Rust**, **Go**, **Elixir**, and **Erlang/OTP**.
-- **Dart:** Dart SDK support for Dart application and package workflows.
+- **JavaScript / TypeScript:** Native execution handled via **Bun** for high-velocity runtime performance (replacing standard Node.js).
+- **Systems Languages:** Built-in toolchains for **Rust**, **Go**, and **Elixir**.
 - **Ruby / Jekyll:** Optimized runner configuration featuring integrated **Bundler** with CI hardening policies:
 - Overridden `BUNDLE_SILENCE_ROOT_WARNING: "1"`
 - Enforced deterministic dependency pathing via `BUNDLE_PATH: "vendor/bundle"`
@@ -44,16 +43,16 @@
 
 ### **Feature Matrix & Roadmap**
 
-| Capability                 | Component / Runtime                         |
-| -------------------------- | ------------------------------------------- |
-| **PowerShell Core**        | Module packaging, testing, and distribution |
-| **.NET Toolchain**         | Compilation, packing, and AOT support       |
-| **Bun Runtime**            | JavaScript and TypeScript execution         |
-| **Node.js Runtime**        | Node.js and npm                             |
-| **Inkscape & ImageMagick** | Media conversion and export                 |
-| **DevOps Pipelines**       | Codecov and Coveralls clients               |
-| **PHP 8 Ecosystem**        | PHP, Composer, and Xdebug                   |
-| **Python Runtime**         | Python 3 runtime                            |
+| Capability                 | Component / Runtime                         | Status |
+| -------------------------- | ------------------------------------------- | ------ |
+| **PowerShell Core**        | Module packaging, testing, and distribution | Available |
+| **.NET Toolchain**         | Compilation, packing, and AOT support       | Available |
+| **Bun Runtime**            | JavaScript and TypeScript execution         | Available |
+| **Node.js Runtime**        | Node.js and npm                              | Available |
+| **Inkscape & ImageMagick** | Media conversion and export                 | Available |
+| **DevOps Pipelines**       | Codecov and Coveralls clients               | Available |
+| **PHP 8 Ecosystem**        | PHP, Composer, and Xdebug                    | Available |
+| **Python Runtime**         | Python 3 runtime                             | Available |
 
 ---
 
@@ -65,13 +64,10 @@
 - **[PowerShell Core 7.6.4](https://github.com/PowerShell/PowerShell)**
 - **[Bun Runtime](https://bun.sh)**
 - **[Node & NPM Runtime](https://nodejs.org)**
-- **[pnpm](https://pnpm.io)** and **[Yarn](https://yarnpkg.com)**
 - **[NuGet 6.x](https://www.nuget.org/)** _(via Mono)_
 - **[Go Compiler](https://go.dev)**
 - **[Rust Toolchain](https://www.rust-lang.org)**
 - **[Elixir Runtime](https://elixir-lang.org)**
-- **[Erlang/OTP](https://www.erlang.org)**
-- **[Dart SDK](https://dart.dev)**
 - **[Ruby & Jekyll](https://www.ruby-lang.org)** _(with hardened Bundler toolset)_
 - **[PHP & Composer](https://www.php.net/)** _(Native PHP8 runtime & package manager)_
 - **[ImageMagick & Inkscape](https://imagemagick.org)** _(Media conversion & high-fidelity graphics)_
@@ -203,18 +199,18 @@ docker run --rm \
 
 The bundled custom modules export the following commands:
 
-| Module                      | Exported commands                                                                                       |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `ColorConsole`              | `New-ColorConsole`, `Write-Color`                                                                       |
-| `ConventionalCommitVersion` | `Get-ConventionalCommitVersion`                                                                         |
-| `CSVerify`                  | `New-CheckSum`, `New-VerificationFile`, `Read-CheckSum`, `Test-Verification`                            |
-| `GitAutoVersion`            | `Get-GitAutoVersion`                                                                                    |
-| `Nupsforge`                 | `New-ChocoNuspecFile`, `New-ChocoPackage`, `New-NupkgIcon`, `New-NupkgPackage`, `New-NuspecPackageFile` |
-| `PHWriter`                  | `New-PHWriter`, `Write-PHAsciiLogo`                                                                     |
-| `Psmpacker`                 | `Build-Module`                                                                                          |
-| `Quicklog`                  | `Get-QuicklogTypes`, `New-Quicklog`, `Write-Quicklog`, `Write-QuicklogProgress`                         |
-| `ShellDock`                 | `New-ShellDock`                                                                                         |
-| `Tadpol`                    | `Clear-Prelines`, `Get-TPThemes`, `New-TPObject`, `Write-TPProgress`                                    |
+| Module | Exported commands |
+| ------ | ----------------- |
+| `ColorConsole` | `New-ColorConsole`, `Write-Color` |
+| `ConventionalCommitVersion` | `Get-ConventionalCommitVersion` |
+| `CSVerify` | `New-CheckSum`, `New-VerificationFile`, `Read-CheckSum`, `Test-Verification` |
+| `GitAutoVersion` | `Get-GitAutoVersion` |
+| `Nupsforge` | `New-ChocoNuspecFile`, `New-ChocoPackage`, `New-NupkgIcon`, `New-NupkgPackage`, `New-NuspecPackageFile` |
+| `PHWriter` | `New-PHWriter`, `Write-PHAsciiLogo` |
+| `Psmpacker` | `Build-Module` |
+| `Quicklog` | `Get-QuicklogTypes`, `New-Quicklog`, `Write-Quicklog`, `Write-QuicklogProgress` |
+| `ShellDock` | `New-ShellDock` |
+| `Tadpol` | `Clear-Prelines`, `Get-TPThemes`, `New-TPObject`, `Write-TPProgress` |
 
 Inspect a command's syntax and examples before using it:
 
@@ -245,12 +241,6 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace \
 docker run --rm -v "$(pwd):/workspace" -w /workspace \
   docker.io/sgkens/phellams-automator:latest npm test
 
-# pnpm and Yarn
-docker run --rm -v "$(pwd):/workspace" -w /workspace \
-  docker.io/sgkens/phellams-automator:latest pnpm install
-docker run --rm -v "$(pwd):/workspace" -w /workspace \
-  docker.io/sgkens/phellams-automator:latest yarn install
-
 # Go
 docker run --rm -v "$(pwd):/workspace" -w /workspace \
   docker.io/sgkens/phellams-automator:latest go test ./...
@@ -262,14 +252,6 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace \
 # Elixir
 docker run --rm -v "$(pwd):/workspace" -w /workspace \
   docker.io/sgkens/phellams-automator:latest elixir --version
-
-# Erlang/OTP
-docker run --rm -v "$(pwd):/workspace" -w /workspace \
-  docker.io/sgkens/phellams-automator:latest erl -noshell -eval 'io:format("~s~n", [erlang:system_info(otp_release)]), halt().'
-
-# Dart
-docker run --rm -v "$(pwd):/workspace" -w /workspace \
-  docker.io/sgkens/phellams-automator:latest dart --version
 
 # Ruby and Jekyll
 docker run --rm -v "$(pwd):/workspace" -w /workspace \
@@ -306,8 +288,8 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace \
 
 `phellams-automator-local-builder.ps1` accepts one mandatory parameter:
 
-| Parameter    | Type   | Accepted values | Description                                                     |
-| ------------ | ------ | --------------- | --------------------------------------------------------------- |
+| Parameter | Type | Accepted values | Description |
+| --------- | ---- | --------------- | ----------- |
 | `-BuildMode` | String | `Base`, `choco` | Selects the Dockerfile and local image tag used by the builder. |
 
 ---
