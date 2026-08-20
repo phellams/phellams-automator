@@ -15,7 +15,6 @@
 - Refined the Docker image toolchain installation and final verification steps.
 - Refreshed the README image manifest, usage examples, and navigation documentation.
 - Reworked the terminal screenshot asset and removed the obsolete raster screenshot.
-- Extended the local builder with `about`, `clean`, and `deep-clean` modes for diagnostics and Docker image cleanup.
 
 **Added**
 
@@ -24,7 +23,6 @@
 - **yarn** binary
 - **erlang** binary
 - **dart** binary
-- Repository-specific automation guidance in `CONTEXT-SOURCE/learned-knowleade.md`.
 
 ## **v2.16.0**
 
