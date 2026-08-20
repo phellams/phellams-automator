@@ -1,51 +1,48 @@
 variables:
-  GIT_DEPTH: 0
+    GIT_DEPTH: 0
 
 default:
-  before_script:
-    - git config --global --add safe.directory "$CI_PROJECT_DIR"
-    - git fetch --all
+    before_script:
+        - git config --global --add safe.directory "$CI_PROJECT_DIR"
+        - git fetch --all
 
 stages:
-  - build
-  - test
-  - deploy # on main only
-  - notify
-
+    - build
+    - test
+    - deploy # on main only
+    - notify
 
 # ----------STAGE: BUILD----------
-----
 build-image-commit_sha:
-  stage: build
-  tags:
-    - linux-shell
-  # before_script:
-  script:
-    - | # docker buildx build -t phellams-automator:localbuild -f phellams-automator.dockerfile .
-      echo "BUILD -> build-image-commit_sha"
-      echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-      docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
-      docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
-      docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
-  # artifacts:
-  #   reports:
-  #     dotenv: build.env
+    stage: build
+    tags:
+        - linux-shell
+    # before_script:
+    script:
+        - | # docker buildx build -t phellams-automator:localbuild -f phellams-automator.dockerfile .
+            echo "BUILD -> build-image-commit_sha"
+            echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+            docker buildx build -t phellams-automator -f phellams-automator.dockerfile .
+            docker tag phellams-automator "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+            docker push "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+    # artifacts:
+    #   reports:
+    #     dotenv: build.env
 
 # ----------STAGE: TEST----------
 
 test-image-commit_sha:
-  stage: test
-  image: $DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA
-  needs: [build-image-commit_sha]
-  tags:
-    - docker
-  script:
-    - |
-      echo "TEST -> test-image-commit_sha"
-      pwsh -c '$PSVersionTable.PSVersion.ToString()'
-      pwsh -c 'nuget help | Select-Object -First 1'
-      pwsh -c 'dotnet --info'
-
+    stage: test
+    image: $DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA
+    needs: [build-image-commit_sha]
+    tags:
+        - docker
+    script:
+        - |
+            echo "TEST -> test-image-commit_sha"
+            pwsh -c '$PSVersionTable.PSVersion.ToString()'
+            pwsh -c 'nuget help | Select-Object -First 1'
+            pwsh -c 'dotnet --info'
 
 # ----------STAGE: DEPLOY----------
 # docker login with: echo "$PROGET_API_KEY" | docker login --username "admin" --password-stdin $PROGET_HOST fails
@@ -73,58 +70,59 @@ test-image-commit_sha:
 #     - docker push "$PROGET_HOST/docker/phellams-automator:$VERSION"
 
 deploy-image-dockerhub:
-  stage: deploy
-  # dependencies:
-  #   - build-image-commit_sha # load build.env from build-image-commit_sha
-  needs: [build-image-commit_sha, test-image-commit_sha]
-    # - job: build-image-commit_sha
-    #   artifacts: false
-    # - job: test-image-commit_sha
-    #   artifacts: false
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  before_script:
-    - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-  after_script:
-    - docker logout
-  tags:
-    - linux-shell
-  script:
-  # git fetch --all required to pull down full commit history for semver generation
-    - |
-      git fetch --all
-      echo "GENERATE -> SEMVER version from git history"
-      semver=$(pwsh -noprofile -c "Import-Module ./includes/modules/conventionalcommitversion/conventionalcommitversion.psd1; (Get-ConventionalCommitVersion).Version") # Capture version
-      echo "GENERATED -> SEMVER -> $semver"
-      SEMVER_VERSION=$semver
-      docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
-      docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:latest"
-      docker push "$DOCKERHUB_USER/phellams-automator:latest"
-      docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
-      docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
-      echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
-      pwsh -noprofile -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "flat" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-flat.svg"
-      pwsh -noprofile -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "for-the-badge" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-for-the-badge.svg"
-  artifacts:
-    paths:
-      - version-badge-flat.svg
-      - version-badge-for-the-badge.svg
-    expire_in: 1 week
+    stage: deploy
+    # dependencies:
+    #   - build-image-commit_sha # load build.env from build-image-commit_sha
+    needs:
+        [build-image-commit_sha, test-image-commit_sha]
+        # - job: build-image-commit_sha
+        #   artifacts: false
+        # - job: test-image-commit_sha
+        #   artifacts: false
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+    before_script:
+        - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+    after_script:
+        - docker logout
+    tags:
+        - linux-shell
+    script:
+        # git fetch --all required to pull down full commit history for semver generation
+        - |
+            git fetch --all
+            echo "GENERATE -> SEMVER version from git history"
+            semver=$(pwsh -noprofile -c "Import-Module ./includes/modules/conventionalcommitversion/conventionalcommitversion.psd1; (Get-ConventionalCommitVersion).Version") # Capture version
+            echo "GENERATED -> SEMVER -> $semver"
+            SEMVER_VERSION=$semver
+            docker pull "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA"
+            docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:latest"
+            docker push "$DOCKERHUB_USER/phellams-automator:latest"
+            docker tag "$DOCKERHUB_USER/phellams-automator:$CI_COMMIT_SHA" "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
+            docker push "$DOCKERHUB_USER/phellams-automator:$SEMVER_VERSION"
+            echo "Pushed to DockerHub: $DOCKERHUB_USER/phellams-automator:latest"
+            pwsh -noprofile -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "flat" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-flat.svg"
+            pwsh -noprofile -File ./scripts/Generate-Badge.ps1 -Label "version" -Message "$SEMVER_VERSION" -Style "for-the-badge" -LabelColor "#555" -MessageColor "#4c1" -OutputPath "version-badge-for-the-badge.svg"
+    artifacts:
+        paths:
+            - version-badge-flat.svg
+            - version-badge-for-the-badge.svg
+        expire_in: 1 week
 
 image-cleanup:
-  stage: deploy
-  needs: [deploy-image-dockerhub]
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  # before_script:
-  #   - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
-  # after_script:
-  #   - docker logout
-  tags:
-    - linux-shell
-  script:
-    - chmod +x ./scripts/docker_sha_cleanup.sh
-    - bash -c ./scripts/docker_sha_cleanup.sh
+    stage: deploy
+    needs: [deploy-image-dockerhub]
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+    # before_script:
+    #   - echo "$DOCKERHUB_API_KEY" | docker login --username "$DOCKERHUB_USER" --password-stdin
+    # after_script:
+    #   - docker logout
+    tags:
+        - linux-shell
+    script:
+        - chmod +x ./scripts/docker_sha_cleanup.sh
+        - bash -c ./scripts/docker_sha_cleanup.sh
 
 # generate-runtime-badge:
 #   stage: notify
@@ -154,38 +152,39 @@ image-cleanup:
 #     expire_in: never
 
 generate-runtime-badge:
-  stage: notify
-  image: sgkens/phellams-automator:$AUTOMATOR_VERSION
-  rules:
-    - when: always
-  tags:
-    - docker
-  script:
-    - chmod +x ./scripts/Calculate-Runtime.ps1 ./scripts/Generate-Badge.ps1
-    - |
-      pwsh -NoProfile -Command '
-        $runtime = & ./scripts/Calculate-Runtime.ps1
+    stage: notify
+    image: sgkens/phellams-automator:$AUTOMATOR_VERSION
+    needs: [image-cleanup]
+    rules:
+        - when: always
+    tags:
+        - docker
+    script:
+        - chmod +x ./scripts/Calculate-Runtime.ps1 ./scripts/Generate-Badge.ps1
+        - |
+            pwsh -NoProfile -Command '
+              $runtime = & ./scripts/Calculate-Runtime.ps1
 
-        ./scripts/Generate-Badge.ps1 `
-          -Label "runtime" `
-          -Message $runtime `
-          -Style "flat" `
-          -IncludeIcon `
-          -LabelColor "#555" `
-          -MessageColor "#007acc" `
-          -OutputPath "runtime-badge-flat.svg"
+              ./scripts/Generate-Badge.ps1 `
+                -Label "runtime" `
+                -Message $runtime `
+                -Style "flat" `
+                -IncludeIcon `
+                -LabelColor "#555" `
+                -MessageColor "#007acc" `
+                -OutputPath "runtime-badge-flat.svg"
 
-        ./scripts/Generate-Badge.ps1 `
-          -Label "runtime" `
-          -Message $runtime `
-          -Style "for-the-badge" `
-          -IncludeIcon `
-          -LabelColor "#555" `
-          -MessageColor "#007acc" `
-          -OutputPath "runtime-badge-for-the-badge.svg"
-      '
-  artifacts:
-    paths:
-      - runtime-badge-flat.svg
-      - runtime-badge-for-the-badge.svg
-    expire_in: never
+              ./scripts/Generate-Badge.ps1 `
+                -Label "runtime" `
+                -Message $runtime `
+                -Style "for-the-badge" `
+                -IncludeIcon `
+                -LabelColor "#555" `
+                -MessageColor "#007acc" `
+                -OutputPath "runtime-badge-for-the-badge.svg"
+            '
+    artifacts:
+        paths:
+            - runtime-badge-flat.svg
+            - runtime-badge-for-the-badge.svg
+        expire_in: never
