@@ -1,20 +1,20 @@
                   ___
-              ........
-        .    ..xxxxxx...   .
-          ≡-«( •)xx( •)»-≡                    _  _
-              ..xxxx..                 /     // //
-               x[─-]x.            _   /_  _ // // __.  ______  _
+              ........          
+        .    ..xxxxxx...   .   
+          ≡-«( •)xx( •)»-≡                    _  _ 
+              ..xxxx..                 /     // //  
+               x[─-]x.            _   /_  _ // // __.  ______  _  
             ....xxxx....         /_)_/ /_</_</_</_(_/|_/ / / <_/_)_
           ...xxxxxxxxxx...      / [P]owers[HELL][A]uto[M]ation[S]
        .... .xxxxxxxxxx. ....  `
-      ...   .xxxxxxxxxx.   ...
-      ..    ..x......x..    ..
-     ....    .x.    .x.    ....
+      ...   .xxxxxxxxxx.   ...  
+      ..    ..x......x..    ..  
+     ....    .x.    .x.    .... 
     .////.  ..x.    .x... .    .
     ..//.    .x.    .x.   ./=/..
-      /     .:x.    .x:. -| ■ Phellam Automator v[automator-version]
+      /     .:x.    .x:. -| ■ Phellam Automator v[automator-version]   
       ┋    ../..    ..\..-| ■ [ MIT ][ License ]
-      ┋    -----    ----- | ■ Debian image
+      ┋    -----    ----- | ■ Debian image                  
       ┋     / INFO \
       ┋─────├▣ Shell    ─• pwsh            │ ├▣ Release  ─• [base-distro-release]
       ┋     └▣ Kernel   ─• [kernel-version]
@@ -25,22 +25,20 @@
       ┋     ├─▣ coveralls      ✜─ •> [coveralls-version] │ ├─▣ git        ✜─ •> [git-version]
       ┋     ├─▣ Ruby           ✜─ •> [ruby-version]     │ ├─▣ RubyGems   ✜─ •> [rubygems-version]
       ┋     ├─▣ Go             ✜─ •> [go-version]       │ ├─▣ Rust       ✜─ •> [rust-version]
-      ┋     ├─▣ Elixir         ✜─ •> [elixir-version]   │ ├─▣ Erlang     ✜─ •> [erlang-version]
-      ┋     ├─▣ Bun            ✜─ •> [bun-version]      │ ├─▣ Node       ✜─ •> [node-version]
-      ┋     ├─▣ NPM            ✜─ •> [npm-version]      │ ├─▣ pnpm       ✜─ •> [pnpm-version]
-      ┋     ├─▣ Yarn           ✜─ •> [yarn-version]     │ ├─▣ Dart       ✜─ •> [dart-version]
-      ┋     ├─▣ php            ✜─ •> [php-version]      │ ├─▣ composer   ✜─ •> [composer-version]
-      ┋     ├─▣ jq             ✜─ •> [jq-version]       │ ├─▣ yq         ✜─ •> [yq-version]
-      ┋     ├─▣ inkscape       ✜─ •> [inkscape-version] │ ├─▣ magick     ✜─ •> [magick-version]
-      ┋     └─▣ photino        ✜─ •> [photino-version]
+      ┋     ├─▣ Elixir         ✜─ •> [elixir-version]   │ ├─▣ Bun        ✜─ •> [bun-version]
+      ┋     ├─▣ Node           ✜─ •> [node-version]     │ ├─▣ NPM        ✜─ •> [npm-version]
+       ┋     ├─▣ php            ✜─ •> [php-version]      │ ├─▣ composer   ✜─ •> [composer-version]
+       ┋     ├─▣ jq             ✜─ •> [jq-version]       │ ├─▣ yq         ✜─ •> [yq-version]
+       ┋     ├─▣ inkscape       ✜─ •> [inkscape-version] │ ├─▣ magick     ✜─ •> [magick-version]
+       ┋     └─▣ photino        ✜─ •> [photino-version]
       ┋
       ┋     / PSMODULES \
-      ┋─────├─▣ PSScriptAnalyzer     ✜─ •> [psscriptanalyzer-version]      │ ├─▣ Pester        ✜─ •> [pester-version]
-      ┋     ├─▣ PowerShell-Yaml      ✜─ •> [powerShell-yaml-version]       │ ├─▣ ColorConsole  ✜─ •> [colorconsole-version]
-      ┋     ├─▣ Quicklog             ✜─ •> [quicklog-version]              │ ├─▣ Nupsforge     ✜─ •> [nupsforge-version]
-      ┋     ├─▣ Psmpacker            ✜─ •> [psmpacker-version]             │ ├─▣ Csverify      ✜─ •> [csverify-version]
-      ┋     ├─▣ ShellDock            ✜─ •> [shelldock-version]             │ ├─▣ TadPol        ✜─ •> [tadpol-version]
-      ┋     ├─▣ PHWriter             ✜─ •> [phwriter-version]              │ └─▣ CCVersion     ✜─ •> [conventionalcommitversion-version]
+      ┋─────├─▣ PSScriptAnalyzer ✜─ •> [psscriptanalyzer-version]      │ ├─▣ Pester        ✜─ •> [pester-version]
+      ┋     ├─▣ PowerShell-Yaml      ✜─ •> [powerShell-yaml-version]      │ ├─▣ ColorConsole  ✜─ •> [colorconsole-version]
+      ┋     ├─▣ Quicklog             ✜─ •> [quicklog-version]      │ ├─▣ Nupsforge     ✜─ •> [nupsforge-version]
+      ┋     ├─▣ Psmpacker            ✜─ •> [psmpacker-version]      │ ├─▣ Csverify      ✜─ •> [csverify-version]
+      ┋     ├─▣ ShellDock            ✜─ •> [shelldock-version]      │ ├─▣ TadPol        ✜─ •> [tadpol-version]
+      ┋     ├─▣ PHWriter             ✜─ •> [phwriter-version]      │ └─▣ CCVersion     ✜─ •> [conventionalcommitversion-version]
       ┋     └─▣ GitAutoVersion       ✜─ •> [gitautoversion-version]
       ┋
   ┌───┴───┐

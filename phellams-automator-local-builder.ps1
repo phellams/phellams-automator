@@ -1,6 +1,6 @@
 param (
     [Parameter(Mandatory = $true)]
-    [ValidateSet("Base", "choco", "about", 'clean', 'deep-clean')]
+    [ValidateSet("Base", "choco")]
     [string]$buildMode
 )
 
@@ -27,12 +27,14 @@ Switch ($buildMode) {
     'Base' {
         # Build the Docker image
         docker buildx build -t phellams-automator:localbuild -f phellams-automator.dockerfile .
+        # test the image output with a simple command
+        docker run phellams-automator:localbuild pwsh -c get-module -list
         # push to proget - Currently Accessing proget via password passed in via stdin fails
         # normal login works however: docker login -u user
         # --------------
         # $ENV:PROGET_API_KEY | docker login -u admin --password-stdin $ENV:PROGET_HOST
-        # # tag with latestabout
-        # docker tag phellams-psm-buphellams-automator-local-builderilder $ENV:PROGET_HOST/docker/phellams-psm-builder:latest
+        # # tag with latest
+        # docker tag phellams-psm-builder $ENV:PROGET_HOST/docker/phellams-psm-builder:latest
         # # tag with gitautoversion
         # docker tag phellams-psm-builder $ENV:PROGET_HOST/docker/phellams-psm-builder:$semver
         # # push latest
@@ -54,23 +56,6 @@ Switch ($buildMode) {
         # docker push sgkens/phellams-psm-builder:latest
         # docker logout
     }
-    'about' {
-        # Test image output with get-about
-        docker run phellams-automator:localbuild pwsh -c get-about
-        # test the image output with a simple command
-        docker run phellams-automator:localbuild pwsh -c get-module -list
-    }
-    'clean' {
-        # remove all local images matching the tag 'phellams-automator:localbuild'
-        docker rmi -f $(docker images --filter "reference=sgkens/phellams-automator:*" -q)
-    }
-    'deep-clean' {
-        # remove all local images matching the tag 'phellams-automator:localbuild'
-        docker rmi -f $(docker images --filter "reference=sgkens/phellams-automator:*" -q)
-        # remove all dangling images (those without a tag)
-        docker image prune -f  # removes ALL dangling images, not scoped to phellams-automator
-    }
-
     default {
         [console]::write("Please choose a valid build mode: choco or Base`n")
     }
