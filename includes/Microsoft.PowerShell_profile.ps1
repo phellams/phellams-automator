@@ -42,6 +42,44 @@ if ([System.IO.File]::Exists($versionPath)) {
 if ([System.IO.File]::Exists($minimalLogoPath)) {
     $minimalLogo = [System.IO.File]::ReadAllText($minimalLogoPath)
     $minimalLogo = $minimalLogo.Replace('[automator-version]', $automatorVersion)
-    $minimalLogo = $minimalLogo.Replace('[pwsh-version]', $PSVersionTable.PSVersion.ToString())
+
+    # Get-About resolves these values once when the profile dot-sources it.
+    # Strip the detailed report's leading v for compact binary/module entries.
+    $profileBinaries = [ordered]@{
+        pwsh = 'pwsh'; dotnet8 = 'dotnet8'; dotnet10 = 'dotnet10'; nuget = 'nuget'
+        codecov = 'codecov'; coveralls = 'coveralls'; git = 'git'; ruby = 'ruby'
+        rubygems = 'rubygems'; go = 'go'; rust = 'rust'; elixir = 'elixir'
+        erlang = 'erlang'; node = 'node'; npm = 'npm'; pnpm = 'pnpm'; yarn = 'yarn'
+        bun = 'bun'; hugo = 'hugo'; sass = 'sass'; dart = 'dart'; php = 'php'
+        composer = 'composer'; jq = 'jq'; yq = 'yq'; inkscape = 'inkscape'
+        magick = 'magick'; photino = 'photino'
+    }
+
+    $binaryValues = [System.Collections.Generic.List[string]]::new()
+    foreach ($binaryKey in $profileBinaries.Keys) {
+        $binaryVersion = if ($resolvedVersions.Contains($binaryKey)) { $resolvedVersions[$binaryKey] } else { 'Unknown' }
+        if ([string]::IsNullOrWhiteSpace($binaryVersion)) { $binaryVersion = 'Unknown' }
+        $binaryVersion = $binaryVersion -replace '^v', ''
+        [void]$binaryValues.Add("$($profileBinaries[$binaryKey]) $binaryVersion")
+    }
+
+    $profileModules = [ordered]@{
+        Pester = 'pester'; PSScriptAnalyzer = 'psscriptanalyzer'; PowerShell-Yaml = 'powershell-yaml'
+        ColorConsole = 'colorconsole'; Quicklog = 'quicklog'; Nupsforge = 'nupsforge'
+        Psmpacker = 'psmpacker'; Csverify = 'csverify'; ShellDock = 'shelldock'; TadPol = 'tadpol'
+        PHWriter = 'phwriter'; CCVersion = 'conventionalcommitversion'; GitAutoVersion = 'gitautoversion'
+    }
+
+    $moduleValues = [System.Collections.Generic.List[string]]::new()
+    foreach ($moduleName in $profileModules.Keys) {
+        $moduleKey = $profileModules[$moduleName]
+        $moduleVersion = if ($resolvedVersions.Contains($moduleKey)) { $resolvedVersions[$moduleKey] } else { 'Unknown' }
+        if ([string]::IsNullOrWhiteSpace($moduleVersion)) { $moduleVersion = 'Unknown' }
+        $moduleVersion = $moduleVersion -replace '^v', ''
+        [void]$moduleValues.Add("$moduleName $moduleVersion")
+    }
+
+    $minimalLogo = $minimalLogo.Replace('[binary-versions]', ($binaryValues -join ', '))
+    $minimalLogo = $minimalLogo.Replace('[module-versions]', ($moduleValues -join ', '))
     [Console]::WriteLine($minimalLogo.TrimEnd())
 }

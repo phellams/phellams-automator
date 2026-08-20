@@ -20,11 +20,13 @@ Describe 'PowerShell profile banner' {
         )
     }
 
-    It 'uses a compact banner no longer than two lines' {
+    It 'uses a compact banner with separate binary and module lines' {
         $minimalLogoLines = [System.IO.File]::ReadAllLines($minimalLogoPath)
 
-        $minimalLogoLines.Count | Should -BeIn 1, 2
+        $minimalLogoLines.Count | Should -Be 3
         $minimalLogoLines | Should -Not -Contain ''
+        $minimalLogoLines[1] | Should -Match '\[binary-versions\]'
+        $minimalLogoLines[2] | Should -Match '\[module-versions\]'
     }
 
     It 'loads the detailed report from the scripts directory' {
@@ -39,5 +41,7 @@ Describe 'PowerShell profile banner' {
 
         $aboutScriptContent | Should -Match 'function\s+Get-About'
         $aboutScriptContent | Should -Match 'Set-Alias\s+-Name\s+About\s+-Value\s+Get-About'
+        $aboutScriptContent | Should -Match 'Key = "hugo"'
+        $aboutScriptContent | Should -Match 'Key = "sass"'
     }
 }

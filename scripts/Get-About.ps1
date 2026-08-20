@@ -149,9 +149,15 @@ $versionSpecs = @(
     @{ Key = "go";                 Type = "Binary"; Command = { go version 2>$null | ForEach-Object { $_.split(" ")[2] } } }
     @{ Key = "rust";               Type = "Binary"; Command = { rustc --version 2>$null | ForEach-Object { $_.split(" ")[1] } } }
     @{ Key = "elixir";             Type = "Binary"; Command = { elixir --version 2>$null | select-string -pattern "Elixir" | ForEach-Object { if ($_ -match "Elixir\s+([\d\.]+)") { $Matches[1] } } } }
+    @{ Key = "erlang";             Type = "Binary"; Command = { erl -noshell -eval 'io:format("~s", [erlang:system_info(otp_release)]), halt().' 2>$null } }
     @{ Key = "node";               Type = "Binary"; Command = { node --version 2>$null } }
     @{ Key = "npm";                Type = "Binary"; Command = { npm --version 2>$null } }
+    @{ Key = "pnpm";               Type = "Binary"; Command = { pnpm --version 2>$null } }
+    @{ Key = "yarn";               Type = "Binary"; Command = { yarn --version 2>$null } }
     @{ Key = "bun";                Type = "Binary"; Command = { bun --version 2>$null } }
+    @{ Key = "hugo";               Type = "Binary"; Command = { hugo version 2>$null } }
+    @{ Key = "sass";               Type = "Binary"; Command = { sass --version 2>$null } }
+    @{ Key = "dart";               Type = "Binary"; Command = { dart --version 2>&1 } }
     @{ Key = "php";                Type = "Binary"; Command = { php -v 2>$null | select -First 1 | ForEach-Object { $_.split(" ")[1] } } }
     @{ Key = "composer";           Type = "Binary"; Command = { composer --version 2>$null } }
     @{ Key = "jq";                 Type = "Binary"; Command = { jq --version 2>$null } }
@@ -332,9 +338,15 @@ $binariesList = @(
     @("Go", $resolvedVersions["go"]),
     @("Rust", $resolvedVersions["rust"]),
     @("Elixir", $resolvedVersions["elixir"]),
+    @("Erlang", $resolvedVersions["erlang"]),
     @("Bun", $resolvedVersions["bun"]),
+    @("Hugo", $resolvedVersions["hugo"]),
+    @("Sass", $resolvedVersions["sass"]),
     @("Node", $resolvedVersions["node"]),
     @("NPM", $resolvedVersions["npm"]),
+    @("pnpm", $resolvedVersions["pnpm"]),
+    @("Yarn", $resolvedVersions["yarn"]),
+    @("Dart", $resolvedVersions["dart"]),
     @("php", $resolvedVersions["php"]),
     @("composer", $resolvedVersions["composer"]),
     @("jq", $resolvedVersions["jq"]),

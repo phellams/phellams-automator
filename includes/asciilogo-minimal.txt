@@ -1,2 +1,3 @@
 [ PHELLAMS AUTOMATOR [automator-version] ]
-[ pwsh [pwsh-version] | details: Get-About ]
+[ [binary-versions] ]
+[ modules [module-versions] | details: Get-About ]
