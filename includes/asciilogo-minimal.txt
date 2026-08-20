@@ -1,3 +1,11 @@
-[ PHELLAMS AUTOMATOR [automator-version] ]
-[ [binary-versions] ]
-[ modules [module-versions] | details: Get-About ]
+▖  ▖  ▜ ▗ ▘  ▄▖              ▄   ▘▜  ▌  ▄▖    ▜
+▛▖▞▌▌▌▐ ▜▘▌▄▖▙▌▌▌▛▘▛▌▛▌▛▘█▌  ▙▘▌▌▌▐ ▛▌  ▐ ▛▌▛▌▐
+▌▝ ▌▙▌▐▖▐▖▌  ▌ ▙▌▌ ▙▌▙▌▄▌▙▖  ▙▘▙▌▌▐▖▙▌  ▐ ▙▌▙▌▐▖
+                   ▌
+╞ PHELLAMS AUTOMATOR [automator-version] ▶ ▶ ▶
+╞ [binary-versions] ]
+╞ modules [module-versions] | details: Get-About ]
+└─────╖
+  ┌───┴───┐
+  ▙ Shell ▟
+──── ─ ••• ─ ─ ─────────────────────

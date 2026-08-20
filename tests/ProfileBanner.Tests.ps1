@@ -23,10 +23,11 @@ Describe 'PowerShell profile banner' {
     It 'uses a compact banner with separate binary and module lines' {
         $minimalLogoLines = [System.IO.File]::ReadAllLines($minimalLogoPath)
 
-        $minimalLogoLines.Count | Should -Be 3
+        $minimalLogoLines.Count | Should -BeGreaterThan 0
         $minimalLogoLines | Should -Not -Contain ''
-        $minimalLogoLines[1] | Should -Match '\[binary-versions\]'
-        $minimalLogoLines[2] | Should -Match '\[module-versions\]'
+        ($minimalLogoLines -join "`n") | Should -Match '\[binary-versions\]'
+        ($minimalLogoLines -join "`n") | Should -Match '\[module-versions\]'
+        ($minimalLogoLines -join "`n") | Should -Match '▶ ▶ ▶'
     }
 
     It 'loads the detailed report from the scripts directory' {
@@ -50,5 +51,8 @@ Describe 'PowerShell profile banner' {
         $profileContent = [System.IO.File]::ReadAllText($profilePath)
 
         $profileContent | Should -Match 'Get-About\s+-ReturnVersions'
+        $profileContent | Should -Match 'New-ColorConsole\s+-string.*-color cyan'
+        $profileContent | Should -Match 'New-ColorConsole\s+-string.*-color darkgray'
+        $profileContent | Should -Match '38;5;117m'
     }
 }

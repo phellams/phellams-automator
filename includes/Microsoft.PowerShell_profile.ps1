@@ -47,6 +47,12 @@ if ([System.IO.File]::Exists($minimalLogoPath)) {
     $minimalLogo = [System.IO.File]::ReadAllText($minimalLogoPath)
     $minimalLogo = $minimalLogo.Replace('[automator-version]', $automatorVersion)
 
+    # The product title uses xterm-256 light blue (117) with bold emphasis.
+    # ColorConsole provides the named cyan/darkgray styles used below.
+    $esc = [char]27
+    $title = "${esc}[1;38;5;117mPHELLAMS AUTOMATOR${esc}[0m"
+    $minimalLogo = $minimalLogo.Replace('PHELLAMS AUTOMATOR', $title)
+
     # Get-About resolves these values once when the profile dot-sources it.
     # Strip the detailed report's leading v for compact binary/module entries.
     $profileBinaries = [ordered]@{
@@ -64,7 +70,17 @@ if ([System.IO.File]::Exists($minimalLogoPath)) {
         $binaryVersion = if ($resolvedVersions.Contains($binaryKey)) { $resolvedVersions[$binaryKey] } else { 'Unknown' }
         if ([string]::IsNullOrWhiteSpace($binaryVersion)) { $binaryVersion = 'Unknown' }
         $binaryVersion = $binaryVersion -replace '^v', ''
-        [void]$binaryValues.Add("$($profileBinaries[$binaryKey]) $binaryVersion")
+        $binaryName = try {
+            New-ColorConsole -string $profileBinaries[$binaryKey] -color cyan
+        } catch {
+            $profileBinaries[$binaryKey]
+        }
+        $binaryValue = try {
+            New-ColorConsole -string $binaryVersion -color darkgray
+        } catch {
+            $binaryVersion
+        }
+        [void]$binaryValues.Add("$binaryName $binaryValue")
     }
 
     $profileModules = [ordered]@{
@@ -80,7 +96,17 @@ if ([System.IO.File]::Exists($minimalLogoPath)) {
         $moduleVersion = if ($resolvedVersions.Contains($moduleKey)) { $resolvedVersions[$moduleKey] } else { 'Unknown' }
         if ([string]::IsNullOrWhiteSpace($moduleVersion)) { $moduleVersion = 'Unknown' }
         $moduleVersion = $moduleVersion -replace '^v', ''
-        [void]$moduleValues.Add("$moduleName $moduleVersion")
+        $moduleTitle = try {
+            New-ColorConsole -string $moduleName -color cyan
+        } catch {
+            $moduleName
+        }
+        $moduleValue = try {
+            New-ColorConsole -string $moduleVersion -color darkgray
+        } catch {
+            $moduleVersion
+        }
+        [void]$moduleValues.Add("$moduleTitle $moduleValue")
     }
 
     $minimalLogo = $minimalLogo.Replace('[binary-versions]', ($binaryValues -join ', '))
