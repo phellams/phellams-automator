@@ -20,11 +20,14 @@ Describe 'PowerShell profile banner' {
         )
     }
 
-    It 'uses a compact banner no longer than two lines' {
+    It 'uses a compact banner with separate binary and module lines' {
         $minimalLogoLines = [System.IO.File]::ReadAllLines($minimalLogoPath)
 
-        $minimalLogoLines.Count | Should -BeIn 1, 2
+        $minimalLogoLines.Count | Should -BeGreaterThan 0
         $minimalLogoLines | Should -Not -Contain ''
+        ($minimalLogoLines -join "`n") | Should -Match '\[binary-versions\]'
+        ($minimalLogoLines -join "`n") | Should -Match '\[module-versions\]'
+        ($minimalLogoLines -join "`n") | Should -Match '▶ ▶ ▶'
     }
 
     It 'loads the detailed report from the scripts directory' {
@@ -39,5 +42,21 @@ Describe 'PowerShell profile banner' {
 
         $aboutScriptContent | Should -Match 'function\s+Get-About'
         $aboutScriptContent | Should -Match 'Set-Alias\s+-Name\s+About\s+-Value\s+Get-About'
+        $aboutScriptContent | Should -Match '\[switch\]\$ReturnVersions'
+        $aboutScriptContent | Should -Match 'Key = "hugo"'
+        $aboutScriptContent | Should -Match 'Key = "sass"'
+        $aboutScriptContent | Should -Match '\$binaryContentStart'
+        $aboutScriptContent | Should -Match '\$moduleContentStart'
+        $aboutScriptContent | Should -Match '\$footerStart'
+        $aboutScriptContent | Should -Match '-End @\(255, 128, 0\)'
+    }
+
+    It 'requests the shared version registry for the minimal banner' {
+        $profileContent = [System.IO.File]::ReadAllText($profilePath)
+
+        $profileContent | Should -Match 'Get-About\s+-ReturnVersions'
+        $profileContent | Should -Match 'New-ColorConsole\s+-string.*-color cyan'
+        $profileContent | Should -Match 'New-ColorConsole\s+-string.*-color darkgray'
+        $profileContent | Should -Match '38;5;117m'
     }
 }

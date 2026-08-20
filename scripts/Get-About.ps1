@@ -66,7 +66,9 @@ function Get-About {
     About is an alias for Get-About.
     #>
     [CmdletBinding()]
-    param()
+    param(
+        [switch]$ReturnVersions
+    )
 
 # Function to extract module versions
 function gmv($name) {
@@ -149,9 +151,15 @@ $versionSpecs = @(
     @{ Key = "go";                 Type = "Binary"; Command = { go version 2>$null | ForEach-Object { $_.split(" ")[2] } } }
     @{ Key = "rust";               Type = "Binary"; Command = { rustc --version 2>$null | ForEach-Object { $_.split(" ")[1] } } }
     @{ Key = "elixir";             Type = "Binary"; Command = { elixir --version 2>$null | select-string -pattern "Elixir" | ForEach-Object { if ($_ -match "Elixir\s+([\d\.]+)") { $Matches[1] } } } }
+    @{ Key = "erlang";             Type = "Binary"; Command = { erl -noshell -eval 'io:format("~s", [erlang:system_info(otp_release)]), halt().' 2>$null } }
     @{ Key = "node";               Type = "Binary"; Command = { node --version 2>$null } }
     @{ Key = "npm";                Type = "Binary"; Command = { npm --version 2>$null } }
+    @{ Key = "pnpm";               Type = "Binary"; Command = { pnpm --version 2>$null } }
+    @{ Key = "yarn";               Type = "Binary"; Command = { yarn --version 2>$null } }
     @{ Key = "bun";                Type = "Binary"; Command = { bun --version 2>$null } }
+    @{ Key = "hugo";               Type = "Binary"; Command = { hugo version 2>$null } }
+    @{ Key = "sass";               Type = "Binary"; Command = { sass --version 2>$null } }
+    @{ Key = "dart";               Type = "Binary"; Command = { dart --version 2>&1 } }
     @{ Key = "php";                Type = "Binary"; Command = { php -v 2>$null | select -First 1 | ForEach-Object { $_.split(" ")[1] } } }
     @{ Key = "composer";           Type = "Binary"; Command = { composer --version 2>$null } }
     @{ Key = "jq";                 Type = "Binary"; Command = { jq --version 2>$null } }
@@ -203,6 +211,10 @@ foreach ($spec in $versionSpecs) {
     $resolvedVersions[$spec.Key] = $val
 }
 # Removed magick override to allow actual version to display
+
+if ($ReturnVersions) {
+    return $resolvedVersions
+}
 
 # Load Template
 $templatePath = Join-Path $home ".config/powershell/acsiilogo-template.txt"
@@ -332,9 +344,15 @@ $binariesList = @(
     @("Go", $resolvedVersions["go"]),
     @("Rust", $resolvedVersions["rust"]),
     @("Elixir", $resolvedVersions["elixir"]),
+    @("Erlang", $resolvedVersions["erlang"]),
     @("Bun", $resolvedVersions["bun"]),
+    @("Hugo", $resolvedVersions["hugo"]),
+    @("Sass", $resolvedVersions["sass"]),
     @("Node", $resolvedVersions["node"]),
     @("NPM", $resolvedVersions["npm"]),
+    @("pnpm", $resolvedVersions["pnpm"]),
+    @("Yarn", $resolvedVersions["yarn"]),
+    @("Dart", $resolvedVersions["dart"]),
     @("php", $resolvedVersions["php"]),
     @("composer", $resolvedVersions["composer"]),
     @("jq", $resolvedVersions["jq"]),
@@ -370,6 +388,8 @@ for ($r = 0; $r -lt $binaryRowCount; $r++) {
     $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $bin_w1_name $bin_w1_ver $bin_w2_name $bin_w2_ver $bin_w3_name $bin_w3_ver))
 }
 $plainLines.Add("      ┋     ╰$binBottomDashes╯")
+$binaryContentStart = 16
+$binaryContentEnd = $binaryContentStart + $binaryRowCount - 1
 
 # Line 24: Spacer
 $plainLines.Add("      ┋")
@@ -404,7 +424,8 @@ $modTopDashes = New-Object System.String ('─', ($mod_total_w - 12))
 $modBottomDashes = New-Object System.String ('─', ($mod_total_w - 2))
 
 $plainLines.Add("      ┋─────╭─ Modules $modTopDashes╮")
-for ($r = 0; $r -lt 5; $r++) {
+$moduleRowCount = [Math]::Ceiling($modulesList.Count / 3)
+for ($r = 0; $r -lt $moduleRowCount; $r++) {
     $idx1 = $r * 3
     $idx2 = $idx1 + 1
     $idx3 = $idx1 + 2
@@ -416,11 +437,14 @@ for ($r = 0; $r -lt 5; $r++) {
     $plainLines.Add("      ┋     " + (Get-FormattedRow $c1 $c2 $c3 $mod_w1_name $mod_w1_ver $mod_w2_name $mod_w2_ver $mod_w3_name $mod_w3_ver))
 }
 $plainLines.Add("      ┋     ╰$modBottomDashes╯")
+$moduleContentStart = $binaryContentEnd + 4
+$moduleContentEnd = $moduleContentStart + $moduleRowCount - 1
 
 # Spacer and Footer lines
 $plainLines.Add("      ┋")
-if ($templateLines.Count -ge 45) {
-    for ($i = 42; $i -lt 45; $i++) {
+if ($templateLines.Count -ge 3) {
+    $footerStart = $templateLines.Count - 3
+    for ($i = $footerStart; $i -lt $templateLines.Count; $i++) {
         $plainLines.Add($templateLines[$i])
     }
 } else {
@@ -432,7 +456,7 @@ if ($templateLines.Count -ge 45) {
 # Run Tokenizer on the plain text lines to get the vertical border gradient
 $tokens = ConvertTo-AsciiTokens -Lines $plainLines.ToArray() -Connectivity 8
 
-# Generate Color Map for the vertical gradient (Cyan ➔ Magenta)
+# Generate Color Map for the vertical gradient (Cyan ➔ Orange)
 $esc = [char]27
 $gradientColorMode = if ([string]::IsNullOrEmpty($env:GITLAB_CI)) {
     'TrueColor'
@@ -442,7 +466,7 @@ $gradientColorMode = if ([string]::IsNullOrEmpty($env:GITLAB_CI)) {
 $colorMap = New-Object 'string[,]' $tokens.Height, $tokens.Width
 for ($y = 0; $y -lt $tokens.Height; $y++) {
     $t = if ($tokens.Height -gt 1) { $y / ($tokens.Height - 1) } else { 0 }
-    $rowColor = Get-GradientColor -T $t -Start @(0, 180, 255) -End @(255, 60, 180)
+    $rowColor = Get-GradientColor -T $t -Start @(0, 180, 255) -End @(255, 128, 0)
     $rowForegroundSgr = Get-AnsiForegroundSgr -Rgb $rowColor -ColorMode $gradientColorMode
     for ($x = 0; $x -lt $tokens.Width; $x++) {
         $colorMap[$y, $x] = $rowForegroundSgr
@@ -483,7 +507,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                     # Keep border gradient
                 }
                 # Name area (index 38 to 49)
-                elseif ($x -ge 38 -and $x -le 49) {
+                elseif ($x -ge 38 -and $x -le 49 -and $c -ne ' ') {
                     $isOverridden = $true
                     $overrideColor = Get-NameColorChar -idx ($x - 38) -length 12
                 }
@@ -505,8 +529,10 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
             }
         }
         # 2. Content rows of Binaries and Modules (Lines 15 onwards)
-        elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -like "*│*") {
-            $isBinRow = ($y -ge 16 -and $y -le 22)
+        elseif ($y -ge 15 -and $c -ne ' ' -and $plainLines[$y] -like "*│*" -and
+            (($y -ge $binaryContentStart -and $y -le $binaryContentEnd) -or
+             ($y -ge $moduleContentStart -and $y -le $moduleContentEnd))) {
+            $isBinRow = ($y -ge $binaryContentStart -and $y -le $binaryContentEnd)
 
             $w1_n = if ($isBinRow) { $bin_w1_name } else { $mod_w1_name }
             $w1_v = if ($isBinRow) { $bin_w1_ver } else { $mod_w1_ver }
@@ -526,7 +552,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 # Keep border gradient
             }
             # Column 1 Name
-            elseif ($xo -ge 2 -and $xo -le (2 + $w1_n - 1)) {
+            elseif ($xo -ge 2 -and $xo -le (2 + $w1_n - 1) -and $c -ne ' ') {
                 $isOverridden = $true
                 $overrideColor = Get-NameColorChar -idx ($xo - 2) -length $w1_n
             }
@@ -546,7 +572,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 2 Name
-            elseif ($xo -ge ($del1 + 2) -and $xo -le ($del1 + 2 + $w2_n - 1)) {
+            elseif ($xo -ge ($del1 + 2) -and $xo -le ($del1 + 2 + $w2_n - 1) -and $c -ne ' ') {
                 $isOverridden = $true
                 $overrideColor = Get-NameColorChar -idx ($xo - ($del1 + 2)) -length $w2_n
             }
@@ -566,7 +592,7 @@ for ($y = 0; $y -lt $tokens.Height; $y++) {
                 }
             }
             # Column 3 Name
-            elseif ($xo -ge ($del2 + 2) -and $xo -le ($del2 + 2 + $w3_n - 1)) {
+            elseif ($xo -ge ($del2 + 2) -and $xo -le ($del2 + 2 + $w3_n - 1) -and $c -ne ' ') {
                 $isOverridden = $true
                 $overrideColor = Get-NameColorChar -idx ($xo - ($del2 + 2)) -length $w3_n
             }

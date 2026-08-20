@@ -1,2 +1,11 @@
-[ PHELLAMS AUTOMATOR [automator-version] ]
-[ pwsh [pwsh-version] | details: Get-About ]
+▖  ▖  ▜ ▗ ▘  ▄▖              ▄   ▘▜  ▌  ▄▖    ▜
+▛▖▞▌▌▌▐ ▜▘▌▄▖▙▌▌▌▛▘▛▌▛▌▛▘█▌  ▙▘▌▌▌▐ ▛▌  ▐ ▛▌▛▌▐
+▌▝ ▌▙▌▐▖▐▖▌  ▌ ▙▌▌ ▙▌▙▌▄▌▙▖  ▙▘▙▌▌▐▖▙▌  ▐ ▙▌▙▌▐▖
+                   ▌
+╞ PHELLAMS AUTOMATOR [automator-version] ▶ ▶ ▶
+╞ [binary-versions] ]
+╞ modules [module-versions] | details: Get-About ]
+└─────╖
+  ┌───┴───┐
+  ▙ Shell ▟
+──── ─ ••• ─ ─ ─────────────────────
