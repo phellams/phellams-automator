@@ -24,7 +24,6 @@
 - **yarn** binary
 - **erlang** binary
 - **dart** binary
-- Repository-specific automation guidance in `CONTEXT-SOURCE/learned-knowleade.md`.
 
 ## **v2.16.0**
 
