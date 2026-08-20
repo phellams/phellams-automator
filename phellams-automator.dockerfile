@@ -32,7 +32,7 @@ RUN apt update && \
 # ...........................
 RUN mkdir -p /root/.dotnet && \
     # .NET 8
-    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.412/dotnet-sdk-8.0.424-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
+    wget -q https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.424/dotnet-sdk-8.0.424-linux-x64.tar.gz -O /tmp/dotnet8.tar.gz && \
     tar zxf /tmp/dotnet8.tar.gz -C /root/.dotnet && \
     # .NET 10
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.400 --install-dir /root/.dotnet && \
