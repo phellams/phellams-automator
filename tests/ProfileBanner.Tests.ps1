@@ -45,6 +45,10 @@ Describe 'PowerShell profile banner' {
         $aboutScriptContent | Should -Match '\[switch\]\$ReturnVersions'
         $aboutScriptContent | Should -Match 'Key = "hugo"'
         $aboutScriptContent | Should -Match 'Key = "sass"'
+        $aboutScriptContent | Should -Match '\$binaryContentStart'
+        $aboutScriptContent | Should -Match '\$moduleContentStart'
+        $aboutScriptContent | Should -Match '\$footerStart'
+        $aboutScriptContent | Should -Match '-End @\(255, 128, 0\)'
     }
 
     It 'requests the shared version registry for the minimal banner' {
