@@ -66,7 +66,9 @@ function Get-About {
     About is an alias for Get-About.
     #>
     [CmdletBinding()]
-    param()
+    param(
+        [switch]$ReturnVersions
+    )
 
 # Function to extract module versions
 function gmv($name) {
@@ -209,6 +211,10 @@ foreach ($spec in $versionSpecs) {
     $resolvedVersions[$spec.Key] = $val
 }
 # Removed magick override to allow actual version to display
+
+if ($ReturnVersions) {
+    return $resolvedVersions
+}
 
 # Load Template
 $templatePath = Join-Path $home ".config/powershell/acsiilogo-template.txt"

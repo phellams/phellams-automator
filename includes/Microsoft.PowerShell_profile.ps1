@@ -15,6 +15,10 @@ if (-not [System.IO.File]::Exists($aboutScriptPath)) {
 }
 . $aboutScriptPath
 
+# Resolve the same registry used by Get-About without rendering the full
+# report. The registry is local to the function and must be requested explicitly.
+$resolvedVersions = try { Get-About -ReturnVersions } catch { [ordered]@{} }
+
 # Keep startup and CI logs compact. The detailed ASCII report is available via
 # Get-About (or its About alias).
 $minimalLogoPath = [System.IO.Path]::Combine(
@@ -64,7 +68,7 @@ if ([System.IO.File]::Exists($minimalLogoPath)) {
     }
 
     $profileModules = [ordered]@{
-        Pester = 'pester'; PSScriptAnalyzer = 'psscriptanalyzer'; PowerShell-Yaml = 'powershell-yaml'
+        Pester = 'pester'; PSScriptAnalyzer = 'psscriptanalyzer'; 'PowerShell-Yaml' = 'powershell-yaml'
         ColorConsole = 'colorconsole'; Quicklog = 'quicklog'; Nupsforge = 'nupsforge'
         Psmpacker = 'psmpacker'; Csverify = 'csverify'; ShellDock = 'shelldock'; TadPol = 'tadpol'
         PHWriter = 'phwriter'; CCVersion = 'conventionalcommitversion'; GitAutoVersion = 'gitautoversion'

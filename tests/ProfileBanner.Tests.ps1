@@ -41,7 +41,14 @@ Describe 'PowerShell profile banner' {
 
         $aboutScriptContent | Should -Match 'function\s+Get-About'
         $aboutScriptContent | Should -Match 'Set-Alias\s+-Name\s+About\s+-Value\s+Get-About'
+        $aboutScriptContent | Should -Match '\[switch\]\$ReturnVersions'
         $aboutScriptContent | Should -Match 'Key = "hugo"'
         $aboutScriptContent | Should -Match 'Key = "sass"'
+    }
+
+    It 'requests the shared version registry for the minimal banner' {
+        $profileContent = [System.IO.File]::ReadAllText($profilePath)
+
+        $profileContent | Should -Match 'Get-About\s+-ReturnVersions'
     }
 }
